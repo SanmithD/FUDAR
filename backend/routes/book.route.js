@@ -21,6 +21,7 @@ bookRouter.get('/driver/bookings/:driver', bookingController.getDriverBookings);
 // Staff routes
 bookRouter.patch('/staff/bookings/:driver/monthly-salary', bookingController.updateMonthlySalary);
 bookRouter.get('/staff/bookings/all', bookingController.getAllBookings);
-bookRouter.patch('/staff/bookings/:driver/complete', bookingController.completeBooking);
+// bookRouter.patch('/staff/bookings/:driver/complete', bookingController.completeBooking);
+bookRouter.put("/completeBooking/:driverId", bookingController.completeBooking);
 
 export default bookRouter;

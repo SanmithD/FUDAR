@@ -45,6 +45,8 @@ export const bookingController = {
       // Update vehicle status
       vehicle.status = "unavailable";
       await vehicle.save();
+      driver.status = "unavailable";
+      await driver.save();
       await newBooking.save();
 
       res.status(201).json({
@@ -67,27 +69,29 @@ export const bookingController = {
     try {
       const { driver } = req.params;
       const { month, amount } = req.body;
-  
-      const updatedBooking = await bookModel.findOneAndUpdate(
-        { driver },
-        { 
-          $push: { 
-            monthlySalaries: { 
-              month, 
-              amount 
-            } 
-          } 
-        },
-        { new: true }
-      ).populate("driver staffVehicle");
-  
+
+      const updatedBooking = await bookModel
+        .findOneAndUpdate(
+          { driver },
+          {
+            $push: {
+              monthlySalaries: {
+                month,
+                amount,
+              },
+            },
+          },
+          { new: true }
+        )
+        .populate("driver staffVehicle");
+
       if (!updatedBooking) {
         return res.status(404).json({
           success: false,
           message: "Booking not found",
         });
       }
-  
+
       res.json({
         success: true,
         message: "Monthly salary updated successfully",
@@ -151,38 +155,46 @@ export const bookingController = {
   },
 
   // Complete booking and make vehicle available
-  completeBooking: async (req, res) => {
-    try {
-      const { driver } = req.params;
+  // In bookingController.js
+completeBooking: async (req, res) => {
+  try {
+    const { driverId } = req.params;
 
-      const booking = await bookModel
-        .findOneAndUpdate({driver}, { status: "completed" }, { new: true })
-        .populate("staffVehicle");
+    const booking = await bookModel.findOneAndUpdate(
+      { driver: driverId, status: "active" },
+      { status: "completed" },
+      { new: true }
+    ).populate("staffVehicle driver");
 
-      if (!booking) {
-        return res.status(404).json({
-          success: false,
-          message: "Booking not found",
-        });
-      }
-
-      // Update vehicle status
-      await staffVehicleModel.findByIdAndUpdate(booking.staffVehicle._id, {
-        status: "available",
-      });
-
-      res.json({
-        success: true,
-        message: "Booking marked as completed",
-        booking,
-      });
-    } catch (error) {
-      console.error("Complete Booking Error:", error);
-      res.status(500).json({
+    if (!booking) {
+      return res.status(404).json({
         success: false,
-        message: "Failed to complete booking",
-        error: error.message,
+        message: "Active booking not found",
       });
     }
-  },
+
+    // Update driver status
+    await driverModel.findByIdAndUpdate(driverId, {
+      status: "available"
+    });
+
+    // Update vehicle status
+    await staffVehicleModel.findByIdAndUpdate(booking.staffVehicle._id, {
+      status: "available"
+    });
+
+    res.json({
+      success: true,
+      message: "Booking completed and statuses updated",
+      booking,
+    });
+  } catch (error) {
+    console.error("Complete Booking Error:", error);
+    res.status(500).json({
+      success: false,
+      message: "Failed to complete booking",
+      error: error.message,
+    });
+  }
+}
 };

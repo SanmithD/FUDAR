@@ -84,6 +84,11 @@ const driverSchema = new mongoose.Schema({
     type: String,
     required: true
   },
+  status: {
+    type: String,
+    enum: ["available", "unavailable"],
+    default: "available"
+  },
   // Reference to Vehicle model (optional)
   vehicle: {
     type: mongoose.Schema.Types.ObjectId,

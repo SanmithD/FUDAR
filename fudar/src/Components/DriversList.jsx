@@ -12,6 +12,7 @@ function DriversList() {
         const response = await axios.get('http://localhost:8080/api/driver/getAllDriver');
         if (response.data.success) {
           setDrivers(response.data.details);
+          console.log(response.data)
         } else {
           setError('Failed to fetch drivers');
         }

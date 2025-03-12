@@ -1,5 +1,5 @@
 import { Router } from 'express';
-import userProfile, { getUserProfile, requestOTP, verifyOTP } from '../controllers/user.controllers.js';
+import { getUserProfile, requestOTP, userProfile, verifyOTP } from '../controllers/user.controllers.js';
 import userMiddleware from '../middlewares/user.middleware.js';
 const router = Router();
 
