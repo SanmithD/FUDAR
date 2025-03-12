@@ -15,11 +15,12 @@ bookRouter.post('/driver/book/:staffVehicleId',
   bookingController.createBooking
 );
 
-bookRouter.get('/driver/bookings/:driverId', bookingController.getDriverBookings);
+bookRouter.get('/driver/bookings/:driver', bookingController.getDriverBookings);
+// bookRouter.get('/driver/bookings/:staffVehicle', bookingController.getDriverBookings);
 
 // Staff routes
-bookRouter.patch('/staff/bookings/:bookingId/monthly-salary', bookingController.updateMonthlySalary);
+bookRouter.patch('/staff/bookings/:driver/monthly-salary', bookingController.updateMonthlySalary);
 bookRouter.get('/staff/bookings/all', bookingController.getAllBookings);
-bookRouter.patch('/staff/bookings/:bookingId/complete', bookingController.completeBooking);
+bookRouter.patch('/staff/bookings/:driver/complete', bookingController.completeBooking);
 
 export default bookRouter;

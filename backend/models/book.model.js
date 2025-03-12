@@ -21,10 +21,10 @@ const bookingSchema = new mongoose.Schema({
     back: { type: String, required: true },
     side: { type: String, required: true }
   },
-  monthlySalary: {
-    type: Number,
-    default: null
-  },
+  monthlySalaries: [{
+    month: { type: String, required: true },
+    amount: { type: Number, required: true }
+  }],
   status: {
     type: String,
     enum: ['active', 'completed'],

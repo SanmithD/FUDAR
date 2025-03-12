@@ -145,7 +145,6 @@ const DriverManagement = () => {
         setSuccess(
           isEditing ? "Driver updated successfully" : "Driver created successfully"
         );
-        fetchDrivers();
         resetForm();
       }
     } catch (error) {

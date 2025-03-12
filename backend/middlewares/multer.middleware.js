@@ -16,7 +16,7 @@ const storage = new CloudinaryStorage({
   cloudinary: cloudinary,
   params: {
     folder: 'FUDAR',
-    allowed_formats: ['jpg', 'png', 'jpeg'], // specify allowed file formats
+    allowed_formats: ['jpg', 'png', 'jpeg'], 
   },
 });
 

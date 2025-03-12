@@ -12,6 +12,8 @@ function BookingList() {
         const response = await axios.get('http://localhost:8080/api/book/staff/bookings/all');
         if (response.data.success) {
           setBookings(response.data.bookings);
+          console.log(response.data.bookings.driver._id);
+          
         } else {
           setError('Failed to fetch bookings');
         }
@@ -45,14 +47,14 @@ function BookingList() {
                 textAlign: 'left',
               }}
             >
-              <h3 style={{ margin: '5px 0' }}>Booking ID: {booking._id}</h3>
+              <h3 style={{ margin: '5px 0' }}>Booking ID: {booking.driver._id}</h3>
               <p style={{ margin: '5px 0', color: '#6B7280' }}>Driver: {booking.driver.driverName}</p>
               <p style={{ margin: '5px 0', color: '#6B7280' }}>Vehicle: {booking.staffVehicle.vehicleNumber}</p>
               <p style={{ margin: '5px 0', color: '#6B7280' }}>Monthly Salary: {booking.monthlySalary || 'Not specified'}</p>
               <p style={{ margin: '5px 0', color: '#6B7280' }}>Status: {booking.status}</p>
               <div style={{ display: 'flex', gap: '10px', marginTop: '10px' }}>
                 <a
-                  href={`/update-salary/${booking._id}`}
+                  href={`/update-salary/${booking.driver._id}`}
                   style={{
                     padding: '5px 10px',
                     backgroundColor: '#007bff',
@@ -66,7 +68,7 @@ function BookingList() {
                   Update Monthly Salary
                 </a>
                 <a
-                  href={`/complete-booking/${booking._id}`}
+                  href={`/complete-booking/${booking.driver._id}`}
                   style={{
                     padding: '5px 10px',
                     backgroundColor: '#28a745',

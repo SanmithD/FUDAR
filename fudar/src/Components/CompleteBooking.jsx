@@ -4,7 +4,7 @@ import React, { useEffect, useState } from 'react';
 import { useParams } from 'react-router-dom';
 
 function CompleteBooking() {
-  const { bookingId } = useParams();
+  const { driver } = useParams();
   const [error, setError] = useState(null);
   const [successMessage, setSuccessMessage] = useState('');
   const [bookingDetails, setBookingDetails] = useState(null);
@@ -12,9 +12,10 @@ function CompleteBooking() {
   useEffect(() => {
     const fetchBooking = async () => {
       try {
-        const response = await axios.get(`http://localhost:8080/api/book/staff/bookings/${bookingId}`);
+        const response = await axios.get(`http://localhost:8080/api/book/driver/bookings/${driver}`);
         if (response.data.success) {
-          setBookingDetails(response.data.booking);
+          setBookingDetails(response.data.bookings);
+          console.log(response.data)
         } else {
           setError('Failed to fetch booking details');
         }
@@ -25,13 +26,13 @@ function CompleteBooking() {
     };
 
     fetchBooking();
-  }, [bookingId]);
+  }, [driver]);
 
   const handleComplete = async () => {
     if (window.confirm('Are you sure you want to complete this booking?')) {
       try {
         const response = await axios.patch(
-          `http://localhost:8080/api/book/staff/bookings/${bookingId}/complete`
+          `http://localhost:8080/api/book/staff/bookings/${driver}/complete`
         );
         
         if (response.data.success) {
@@ -52,7 +53,7 @@ function CompleteBooking() {
 
   return (
     <div style={{ padding: '20px', backgroundColor: '#f4f4f4' }}>
-      <h2 style={{ textAlign: 'center', marginBottom: '20px' }}>Complete Booking {bookingId}</h2>
+      <h2 style={{ textAlign: 'center', marginBottom: '20px' }}>Complete Booking {driver}</h2>
       {error && <p style={{ color: 'red', textAlign: 'center' }}>{error}</p>}
       {successMessage && <p style={{ color: 'green', textAlign: 'center' }}>{successMessage}</p>}
       <div style={{ maxWidth: '500px', margin: '0 auto' }}>

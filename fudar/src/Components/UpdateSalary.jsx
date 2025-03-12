@@ -3,19 +3,19 @@ import axios from 'axios';
 import React, { useEffect, useState } from 'react';
 import { useParams } from 'react-router-dom';
 
-function UpdateMonthlySalary() {
-  const { bookingId } = useParams();
-  const [monthlySalary, setMonthlySalary] = useState('');
+function UpdateSalary() {
+  const { driver } = useParams();
+  const [month, setMonth] = useState('');
+  const [amount, setAmount] = useState('');
   const [error, setError] = useState(null);
   const [bookingDetails, setBookingDetails] = useState(null);
 
   useEffect(() => {
     const fetchBooking = async () => {
       try {
-        const response = await axios.get(`http://localhost:8080/api/book/staff/bookings/${bookingId}`);
+        const response = await axios.get(`http://localhost:8080/api/book/driver/bookings/${driver}`);
         if (response.data.success) {
-          setBookingDetails(response.data.booking);
-          setMonthlySalary(response.data.booking.monthlySalary || '');
+          setBookingDetails(response.data.bookings);
         } else {
           setError('Failed to fetch booking details');
         }
@@ -26,7 +26,7 @@ function UpdateMonthlySalary() {
     };
 
     fetchBooking();
-  }, [bookingId]);
+  }, [driver]);
 
   const handleSubmit = async (e) => {
     e.preventDefault();
@@ -34,13 +34,13 @@ function UpdateMonthlySalary() {
 
     try {
       const response = await axios.patch(
-        `http://localhost:8080/api/book/staff/bookings/${bookingId}/monthly-salary`,
-        { monthlySalary }
+        `http://localhost:8080/api/book/staff/bookings/${driver}/monthly-salary`,
+        { month, amount }
       );
       
       if (response.data.success) {
         alert('Monthly salary updated successfully');
-        setMonthlySalary(response.data.booking.monthlySalary);
+        // You might want to refetch the booking details here
       } else {
         setError('Failed to update monthly salary');
       }
@@ -56,18 +56,25 @@ function UpdateMonthlySalary() {
 
   return (
     <div style={{ padding: '20px', backgroundColor: '#f4f4f4' }}>
-      <h2 style={{ textAlign: 'center', marginBottom: '20px' }}>Update Monthly Salary for Booking {bookingId}</h2>
+      <h2 style={{ textAlign: 'center', marginBottom: '20px' }}>Update Monthly Salary for Booking</h2>
       {error && <p style={{ color: 'red', textAlign: 'center' }}>{error}</p>}
       <form onSubmit={handleSubmit} style={{ maxWidth: '500px', margin: '0 auto' }}>
         <div style={{ marginBottom: '15px' }}>
-          <label style={{ display: 'block', marginBottom: '5px' }}>Current Monthly Salary: {bookingDetails.monthlySalary || 'Not specified'}</label>
+          <label style={{ display: 'block', marginBottom: '5px' }}>Month:</label>
+          <input
+            type="month"
+            value={month}
+            onChange={(e) => setMonth(e.target.value)}
+            style={{ width: '100%', padding: '8px', boxSizing: 'border-box' }}
+            required
+          />
         </div>
         <div style={{ marginBottom: '15px' }}>
-          <label style={{ display: 'block', marginBottom: '5px' }}>New Monthly Salary:</label>
+          <label style={{ display: 'block', marginBottom: '5px' }}>Amount:</label>
           <input
             type="number"
-            value={monthlySalary}
-            onChange={(e) => setMonthlySalary(e.target.value)}
+            value={amount}
+            onChange={(e) => setAmount(e.target.value)}
             style={{ width: '100%', padding: '8px', boxSizing: 'border-box' }}
             required
           />
@@ -88,8 +95,21 @@ function UpdateMonthlySalary() {
           Update Monthly Salary
         </button>
       </form>
+      
+      {bookingDetails.monthlySalaries && bookingDetails.monthlySalaries.length > 0 && (
+        <div style={{ marginTop: '20px' }}>
+          <h3 style={{ textAlign: 'center' }}>Salary History</h3>
+          <ul style={{ listStyle: 'none', padding: 0 }}>
+            {bookingDetails.monthlySalaries.map((salary, index) => (
+              <li key={index} style={{ padding: '10px', border: '1px solid #ddd', margin: '5px 0' }}>
+                <strong>{salary.month}</strong>: ₹{salary.amount}
+              </li>
+            ))}
+          </ul>
+        </div>
+      )}
     </div>
   );
 }
 
-export default UpdateMonthlySalary;
+export default UpdateSalary;

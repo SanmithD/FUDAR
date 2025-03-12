@@ -18,6 +18,19 @@ const VehicleList = () => {
     fetchVehicles();
   }, []);
 
+  const handleDelete = async (id) => {
+    if (window.confirm('Are you sure you want to delete this vehicle?')) {
+      try {
+        await axios.delete(`/api/staffVehicle/${id}`);
+        alert('Vehicle deleted successfully');
+        window.location.reload();
+      } catch (error) {
+        alert('Failed to delete vehicle');
+        console.error(error);
+      }
+    }
+  };
+
   return (
     <div className="container">
       <h2>Staff Vehicles</h2>
@@ -42,6 +55,13 @@ const VehicleList = () => {
                 <a href={`/vehicleDetails/${vehicle._id}`}>View</a>
                 <a href={`/updateVehicle/${vehicle._id}`}>Edit</a>
                 <button onClick={() => handleDelete(vehicle._id)}>Delete</button>
+                {vehicle.status === "available" ? (
+                  <Link to={`/create-booking/${vehicle._id}`} style={{ marginLeft: '10px' }}>
+                    <button>Book</button>
+                  </Link>
+                ) : (
+                  <span style={{ color: 'red', marginLeft: '10px' }}>Not Available</span>
+                )}
               </td>
             </tr>
           ))}
@@ -49,19 +69,6 @@ const VehicleList = () => {
       </table>
     </div>
   );
-};
-
-const handleDelete = async (id) => {
-  if (window.confirm('Are you sure you want to delete this vehicle?')) {
-    try {
-      await axios.delete(`/api/staffVehicle/${id}`);
-      alert('Vehicle deleted successfully');
-      window.location.reload();
-    } catch (error) {
-      alert('Failed to delete vehicle');
-      console.error(error);
-    }
-  }
 };
 
 export default VehicleList;

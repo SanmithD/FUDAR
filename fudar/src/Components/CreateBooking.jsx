@@ -1,13 +1,18 @@
-// components/CreateBooking.jsx
 import axios from 'axios';
-import React, { useState } from 'react';
+import React, { useEffect, useState } from 'react';
+import { useParams } from 'react-router-dom';
 
-function CreateBooking({ staffVehicleId }) {
+function CreateBooking() {
+  const { vehicleId } = useParams();
   const [driverId, setDriverId] = useState('');
   const [frontImage, setFrontImage] = useState(null);
   const [backImage, setBackImage] = useState(null);
   const [sideImage, setSideImage] = useState(null);
   const [error, setError] = useState(null);
+
+  useEffect(()=>{
+    console.log(vehicleId)
+  },[])
 
   const handleSubmit = async (e) => {
     e.preventDefault();
@@ -20,11 +25,12 @@ function CreateBooking({ staffVehicleId }) {
     formData.append('side', sideImage);
 
     try {
-      const response = await axios.post(`http://localhost:8080/api/book/driver/book/${staffVehicleId}`, formData, {
+      const response = await axios.post(`http://localhost:8080/api/book/driver/book/${vehicleId}`, formData, {
         headers: {
           'Content-Type': 'multipart/form-data',
         },
       });
+      
       
       if (response.data.success) {
         alert('Booking created successfully');

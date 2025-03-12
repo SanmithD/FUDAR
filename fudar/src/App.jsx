@@ -9,6 +9,7 @@ import DriverCard from "./Components/DriverCard";
 import DriverDetails from "./Components/DriverDetails";
 import DriverManagement from "./Components/DriverManagement ";
 import DriversList from "./Components/DriversList";
+import Navbar from "./Components/Navbar";
 import UpdateSalary from "./Components/UpdateSalary";
 import UpdateVehicle from "./Components/UpdateVehicle";
 import VehicleDetails from "./Components/VehicleDetails";
@@ -17,6 +18,7 @@ import VehicleList from "./Components/VehicleList ";
 function App() {
   return (
     <>
+    <Navbar/>
       <Routes>
         <Route path="/" element={<DriverManagement />} />
         <Route path="/staffVehicle" element={<VehicleList />} />
@@ -28,10 +30,11 @@ function App() {
         <Route path="/driverCard" element={<DriverCard />} />
         <Route path="/bookingList" element={<BookingList />} />
         <Route path="/driverBooking/:driverId" element={<DriverBookings />} />
+        <Route path="/create-booking/:vehicleId" element={<CreateBooking />} />
         <Route path="/create-booking" element={<CreateBooking />} />
-        <Route path="/update-salary/:bookingId" element={<UpdateSalary />} />
+        <Route path="/update-salary/:driver" element={<UpdateSalary />} />
         <Route
-          path="/complete-booking/:bookingId"
+          path="/complete-booking/:driver"
           element={<CompleteBooking />}
         />
       </Routes>
