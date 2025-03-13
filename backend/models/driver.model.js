@@ -26,10 +26,15 @@ const vehicleSchema = new mongoose.Schema({
   vehicleImage:{
     type: String,
     required: true
+  },
+  userId:{
+    type: mongoose.Schema.Types.ObjectId,
+    ref: 'User',
+    required: false
   }
 }, { timestamps: true });
 
-export const Vehicle = mongoose.model('Vehicle', vehicleSchema);
+export const vehicleModel = mongoose.model('Vehicle', vehicleSchema);
 
 const driverSchema = new mongoose.Schema({
   userId: {

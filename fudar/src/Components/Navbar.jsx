@@ -106,6 +106,21 @@ const Navbar = () => {
             Create Booking
           </NavLink>
         </li>
+        <li>
+          <NavLink
+            to="/vehicleManage"
+            style={({ isActive }) => ({
+              color: isActive ? '#fff' : '#fff',
+              textDecoration: 'none',
+              padding: '0.5rem 1rem',
+              borderRadius: '4px',
+              backgroundColor: isActive ? '#4CAF50' : '#333',
+              transition: 'background-color 0.3',
+            })}
+          >
+            Driver Vehicle
+          </NavLink>
+        </li>
       </ul>
     </nav>
   );

@@ -12,7 +12,6 @@ function DriversList() {
         const response = await axios.get('http://localhost:8080/api/driver/getAllDriver');
         if (response.data.success) {
           setDrivers(response.data.details);
-          console.log(response.data)
         } else {
           setError('Failed to fetch drivers');
         }
@@ -28,6 +27,7 @@ function DriversList() {
   return (
     <div style={{ padding: '20px', backgroundColor: '#f4f4f4' }}>
       <h2 style={{ textAlign: 'center', marginBottom: '20px' }}>Drivers List</h2>
+      <h1>{drivers.length} </h1>
       {error && <p style={{ color: 'red', textAlign: 'center' }}>{error}</p>}
       {drivers.length === 0 ? (
         <p style={{ textAlign: 'center', color: '#6B7280' }}>No drivers found</p>

@@ -14,6 +14,7 @@ import UpdateSalary from "./Components/UpdateSalary";
 import UpdateVehicle from "./Components/UpdateVehicle";
 import VehicleDetails from "./Components/VehicleDetails";
 import VehicleList from "./Components/VehicleList ";
+import VehicleManagement from "./Components/VehicleManagement ";
 
 function App() {
   return (
@@ -33,6 +34,7 @@ function App() {
         <Route path="/create-booking/:vehicleId" element={<CreateBooking />} />
         <Route path="/create-booking" element={<CreateBooking />} />
         <Route path="/update-salary/:driver" element={<UpdateSalary />} />
+        <Route path="/vehicleManage" element={<VehicleManagement />} />
         <Route
           path="/complete-booking/:driver"
           element={<CompleteBooking />}
