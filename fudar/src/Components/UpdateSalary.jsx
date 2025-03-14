@@ -40,7 +40,6 @@ function UpdateSalary() {
       
       if (response.data.success) {
         alert('Monthly salary updated successfully');
-        // You might want to refetch the booking details here
       } else {
         setError('Failed to update monthly salary');
       }

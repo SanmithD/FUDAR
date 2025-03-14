@@ -1,29 +1,38 @@
 import axios from 'axios';
 import React, { useEffect, useState } from 'react';
+import { AiFillDelete } from "react-icons/ai";
 
 function BookingList() {
   const [bookings, setBookings] = useState([]);
   const [error, setError] = useState(null);
 
-  useEffect(() => {
-    const fetchBookings = async () => {
-      try {
-        const response = await axios.get('http://localhost:8080/api/book/staff/bookings/all');
-        if (response.data.success) {
-          setBookings(response.data.bookings);
-          console.log(response.data.bookings);
-          
-        } else {
-          setError('Failed to fetch bookings');
-        }
-      } catch (error) {
+  
+  const fetchBookings = async () => {
+    try {
+      const response = await axios.get('http://localhost:8080/api/book/staff/bookings/all');
+      if (response.data.success) {
+        setBookings(response.data.bookings);
+        
+      } else {
         setError('Failed to fetch bookings');
-        console.error(error);
       }
-    };
-
+    } catch (error) {
+      setError('Failed to fetch bookings');
+      console.error(error);
+    }
+  };
+  useEffect(() => {
+    
     fetchBookings();
   }, []);
+  const handleDelete = (id) =>{
+    try {
+      const response = axios.delete(`http://localhost:8080/api/book/deleteCompleteBooking/${id}`);
+      fetchBookings();
+    } catch (error) {
+      console.log(error);
+    }
+  }
 
   return (
     <div style={{ padding: '20px', backgroundColor: '#f4f4f4' }}>
@@ -51,6 +60,7 @@ function BookingList() {
               <p style={{ margin: '5px 0', color: '#6B7280' }}>Vehicle: {booking?.staffVehicle?.vehicleNumber || 'Not specified'}</p>
               <p style={{ margin: '5px 0', color: '#6B7280' }}>Monthly Salary: {booking?.monthlySalary || 'Not specified'}</p>
               <p style={{ margin: '5px 0', color: '#6B7280' }}>Status: {booking?.status || 'Not specified'}</p>
+              <button onClick={()=> handleDelete(booking?._id)} style={{ fontSize: 24, backgroundColor: '#3d3d3d' }} ><AiFillDelete /></button>
               {booking?.driver?._id && (
                 <div style={{ display: 'flex', gap: '10px', marginTop: '10px' }}>
                   <a

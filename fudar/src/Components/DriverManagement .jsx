@@ -81,13 +81,11 @@ const DriverManagement = () => {
     const formDataToSend = new FormData();
     formDataToSend.append("driverName", formData.driverName);
     
-    // Correctly format driverNumber
     const driverNumberData = {
       primaryNumber: formData.driverNumber.primaryNumber,
       secondaryNumber: formData.driverNumber.secondaryNumber
     };
     
-    // Either stringify the object or send as separate fields as expected by backend
     formDataToSend.append("driverNumber[primaryNumber]", formData.driverNumber.primaryNumber);
     formDataToSend.append("driverNumber[secondaryNumber]", formData.driverNumber.secondaryNumber);
     
@@ -95,7 +93,6 @@ const DriverManagement = () => {
     formDataToSend.append("driverIFSC", formData.driverIFSC);
     formDataToSend.append("driverBankAddress", formData.driverBankAddress);
   
-    // Add files only if they exist
     if (files.driverImage) {
       formDataToSend.append("driverImage", files.driverImage);
     }
@@ -109,7 +106,6 @@ const DriverManagement = () => {
       formDataToSend.append("drivingLicence", files.drivingLicence);
     }
   
-    // Debug what's actually in the formData
     console.log("Form data being sent:");
     for (let pair of formDataToSend.entries()) {
       console.log(pair[0] + ': ' + (pair[1] instanceof File ? pair[1].name : pair[1]));

@@ -16,7 +16,6 @@ const VehicleDetails = () => {
         setLoading(true);
         const response = await axios.get(`http://localhost:8080/api/staffVehicle/viewStaffVehicle/${id}`);
         setVehicle(response.data.vehicle);
-        console.log(response.data);
       } catch (error) {
         console.error("Error fetching vehicle details:", error);
         setError("Failed to load vehicle details");

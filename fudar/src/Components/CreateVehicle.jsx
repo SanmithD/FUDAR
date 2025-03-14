@@ -45,7 +45,6 @@ const CreateVehicle = () => {
         },
       });
       alert('Vehicle created successfully');
-      console.log(response.data);
     } catch (error) {
       alert('Failed to create vehicle');
       console.error(error);

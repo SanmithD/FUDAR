@@ -14,7 +14,6 @@ function CompleteBooking() {
         const response = await axios.get(`http://localhost:8080/api/book/driver/bookings/${driver}`);
         if (response.data.success) {
           setBookingDetails(response.data.bookings);
-          console.log(response.data);
         } else {
           setError('Failed to fetch booking details');
         }
@@ -49,7 +48,6 @@ function CompleteBooking() {
     return <div style={{ padding: '20px' }}>Loading...</div>;
   }
 
-  // Access the first booking safely
   const booking = bookingDetails[0] || {};
 
   return (
@@ -58,7 +56,6 @@ function CompleteBooking() {
       {error && <p style={{ color: 'red', textAlign: 'center' }}>{error}</p>}
       {successMessage && <p style={{ color: 'green', textAlign: 'center' }}>{successMessage}</p>}
       <div style={{ maxWidth: '500px', margin: '0 auto' }}>
-        {/* Use booking.driver as the ID since driverName isn't available */}
         <p style={{ margin: '5px 0', color: '#6B7280' }}>Driver ID: {booking.driver || 'N/A'}</p>
         <p style={{ margin: '5px 0', color: '#6B7280' }}>
           Vehicle: {booking.staffVehicle?.vehicleNumber || 'N/A'}
