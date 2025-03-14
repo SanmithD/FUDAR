@@ -1,4 +1,5 @@
 backend/node_modules
 fudar/node_modules
+vehicle/node_modules
 
 backend/.env

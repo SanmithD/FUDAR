@@ -123,7 +123,7 @@ export async function verifyOTP(req, res) {
     await user.save();
     
     const token = jwt.sign(
-      { userId: user._id, phoneNumber: user.phoneNumber },
+      { driverId: user._id, phoneNumber: user.phoneNumber },
       process.env.JWT_SECRET,
       { expiresIn: '7d' }
     );
@@ -187,8 +187,8 @@ export async function userProfile(req, res) {
   }
   
   try {
-    const { userId } = jwt.verify(token, process.env.JWT_SECRET);
-    const userData = await userModel.findById(userId);
+    const { driverId } = jwt.verify(token, process.env.JWT_SECRET);
+    const userData = await userModel.findById(driverId);
     
     if (!userData) {
       return res.status(404).json({

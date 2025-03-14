@@ -1,16 +1,16 @@
-// controllers/bookingController.js
+import 'dotenv/config';
+import jwt from 'jsonwebtoken';
 import { bookModel } from "../models/book.model.js";
 import { driverModel } from "../models/driver.model.js";
 import staffVehicleModel from "../models/staff.model.js";
 
 export const bookingController = {
-  // Driver books a vehicle
   createBooking: async (req, res) => {
+    const token = req.headers.authorization?.split(" ")[1];
+    const JWT = process.env.SECRET;
     try {
-      const { driverId } = req.body;
       const { staffVehicleId } = req.params;
 
-      // Check vehicle availability
       const vehicle = await staffVehicleModel.findById(staffVehicleId);
       if (!vehicle || vehicle.status !== "available") {
         return res.status(400).json({
@@ -19,7 +19,8 @@ export const bookingController = {
         });
       }
 
-      // Check driver existence
+      const { driverId } = jwt.verify(token, JWT);
+
       const driver = await driverModel.findById(driverId);
       if (!driver) {
         return res.status(404).json({
@@ -28,21 +29,18 @@ export const bookingController = {
         });
       }
 
-      // Handle file uploads
       const vehicleImages = {
         front: req.files["front"][0].path,
         back: req.files["back"][0].path,
         side: req.files["side"][0].path,
       };
 
-      // Create new booking
       const newBooking = new bookModel({
         staffVehicle: staffVehicleId,
         driver: driverId,
         vehicleImages,
       });
 
-      // Update vehicle status
       vehicle.status = "unavailable";
       await vehicle.save();
       driver.status = "unavailable";
@@ -64,7 +62,6 @@ export const bookingController = {
     }
   },
 
-  // Staff updates monthly salary
   updateMonthlySalary: async (req, res) => {
     try {
       const { driver } = req.params;
@@ -107,8 +104,6 @@ export const bookingController = {
     }
   },
 
-  // Staff views all bookings
-  // Staff views all bookings
   getAllBookings: async (req, res) => {
     try {
       const bookings = await bookModel
@@ -131,7 +126,6 @@ export const bookingController = {
     }
   },
 
-  // Driver views their bookings
   getDriverBookings: async (req, res) => {
     try {
       const { driver } = req.params;
@@ -154,47 +148,89 @@ export const bookingController = {
     }
   },
 
-  // Complete booking and make vehicle available
-  // In bookingController.js
-completeBooking: async (req, res) => {
-  try {
-    const { driverId } = req.params;
-
-    const booking = await bookModel.findOneAndUpdate(
-      { driver: driverId, status: "active" },
-      { status: "completed" },
-      { new: true }
-    ).populate("staffVehicle driver");
-
-    if (!booking) {
-      return res.status(404).json({
+  completeBooking: async (req, res) => {
+    try {
+      const { driverId } = req.params;
+  
+      const booking = await bookModel.findOneAndUpdate(
+        { driver: driverId, status: "active" },
+        { status: "completed" },
+        { new: true }
+      ).populate("staffVehicle driver");
+  
+      if (!booking) {
+        return res.status(404).json({
+          success: false,
+          message: "Active booking not found",
+        });
+      }
+  
+      await driverModel.findByIdAndUpdate(driverId, {
+        status: "available"
+      });
+  
+      await staffVehicleModel.findByIdAndUpdate(booking.staffVehicle._id, {
+        status: "available"
+      });
+  
+      res.json({
+        success: true,
+        message: "Booking completed and statuses updated",
+        booking,
+      });
+    } catch (error) {
+      console.error("Complete Booking Error:", error);
+      res.status(500).json({
         success: false,
-        message: "Active booking not found",
+        message: "Failed to complete booking",
+        error: error.message,
       });
     }
+  },
 
-    // Update driver status
-    await driverModel.findByIdAndUpdate(driverId, {
-      status: "available"
-    });
+  deleteCompleteBooking: async (req, res) => {
+    try {
+      const { id } = req.params;
+  
+      const booking = await bookModel.findOneAndDelete(id);
+  
+      if (!booking) {
+        return res.status(404).json({
+          success: false,
+          message: "Active booking not found",
+        });
+      }
+  
+      await driverModel.findByIdAndUpdate(driverId, {
+        status: "available"
+      });
+  
+      await staffVehicleModel.findByIdAndUpdate(booking.staffVehicle._id, {
+        status: "available"
+      });
+  
+      res.json({
+        success: true,
+        message: "Booking Deleted and statuses updated",
+        booking,
+      });
+    } catch (error) {
+      console.error("Complete Booking Error:", error);
+      res.status(500).json({
+        success: false,
+        message: "Failed to complete booking",
+        error: error.message,
+      });
+    }
+  },
 
-    // Update vehicle status
-    await staffVehicleModel.findByIdAndUpdate(booking.staffVehicle._id, {
-      status: "available"
-    });
-
-    res.json({
-      success: true,
-      message: "Booking completed and statuses updated",
-      booking,
-    });
+  getActiveBookings : async (req, res) => {
+  try {
+    const activeBookings = await bookModel.find({ status: 'active' });
+    res.status(200).json(activeBookings);
   } catch (error) {
-    console.error("Complete Booking Error:", error);
-    res.status(500).json({
-      success: false,
-      message: "Failed to complete booking",
-      error: error.message,
-    });
+    res.status(500).json({ message: "Error fetching active bookings", error });
   }
 }
+
 };

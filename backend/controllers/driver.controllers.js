@@ -361,7 +361,7 @@ const updateDriverInfo = async (req, res) => {
     });
   }
 };
-// Create a new vehicle
+
 const createVehicle = async (req, res) => {
   const {
     vehicleType,
@@ -390,7 +390,6 @@ const createVehicle = async (req, res) => {
   }
 
   try {
-    // Check if vehicle number or RC already exists
     const existingVehicle = await vehicleModel.findOne({
       $or: [{ vehicleNumber: vehicleNumber }, { vehicleRC: vehicleRC }],
     });
@@ -402,7 +401,6 @@ const createVehicle = async (req, res) => {
       });
     }
 
-    // Create new vehicle
     const newVehicle = new vehicleModel({
       vehicleType,
       vehicleNumber,
@@ -412,7 +410,6 @@ const createVehicle = async (req, res) => {
       vehicleImage,
     });
 
-    // If a driver ID is provided, assign the vehicle to the driver
     const { userId } = jwt.verify(token, JWT);
     if (userId) {
       const driver = await driverModel.findById(userId);
@@ -423,11 +420,9 @@ const createVehicle = async (req, res) => {
         });
       }
 
-      // Assign vehicle to driver
       newVehicle.userId = driver.userId;
       await newVehicle.save();
 
-      // Update driver with vehicle reference
       driver.vehicle = newVehicle._id;
       await driver.save();
 
@@ -455,7 +450,6 @@ const createVehicle = async (req, res) => {
   }
 };
 
-// Get all vehicles
 const getAllVehicles = async (req, res) => {
   try {
     const vehicles = await vehicleModel.find();
@@ -474,7 +468,6 @@ const getAllVehicles = async (req, res) => {
   }
 };
 
-// Get vehicle by ID
 const getVehicleById = async (req, res) => {
   const { id } = req.params;
 
@@ -510,7 +503,6 @@ const getVehicleById = async (req, res) => {
   }
 };
 
-// Update vehicle by ID
 const updateVehicleById = async (req, res) => {
   const { id } = req.params;
   const {
@@ -541,7 +533,6 @@ const updateVehicleById = async (req, res) => {
       });
     }
 
-    // Check if vehicle number or RC already exists (excluding the current vehicle)
     if (
       vehicleNumber !== vehicle.vehicleNumber ||
       vehicleRC !== vehicle.vehicleRC
@@ -559,7 +550,6 @@ const updateVehicleById = async (req, res) => {
       }
     }
 
-    // Update vehicle fields
     const updateData = {
       vehicleType: vehicleType || vehicle.vehicleType,
       vehicleNumber: vehicleNumber || vehicle.vehicleNumber,
@@ -639,7 +629,6 @@ const deleteVehicleById = async (req, res) => {
       });
     }
 
-    // If vehicle is assigned to a driver, remove the reference
     if (vehicle.userId) {
       const driver = await driverModel.findOne({ vehicle: vehicle._id });
       if (driver) {
@@ -664,7 +653,6 @@ const deleteVehicleById = async (req, res) => {
   }
 };
 
-// Assign vehicle to driver
 const assignVehicleToDriver = async (req, res) => {
   const { vehicleId, driverId } = req.body;
 
@@ -692,7 +680,6 @@ const assignVehicleToDriver = async (req, res) => {
       });
     }
 
-    // If vehicle is already assigned to another driver, remove the reference
     if (vehicle.userId) {
       const previousDriver = await driverModel.findOne({
         vehicle: vehicle._id,
@@ -703,7 +690,6 @@ const assignVehicleToDriver = async (req, res) => {
       }
     }
 
-    // If driver already has a vehicle, remove the reference
     if (driver.vehicle) {
       const previousVehicle = await vehicleModel.findById(driver.vehicle);
       if (previousVehicle) {
@@ -712,7 +698,6 @@ const assignVehicleToDriver = async (req, res) => {
       }
     }
 
-    // Assign vehicle to driver
     vehicle.userId = driver.userId;
     await vehicle.save();
 
@@ -735,7 +720,6 @@ const assignVehicleToDriver = async (req, res) => {
   }
 };
 
-// Unassign vehicle from driver
 const unassignVehicleFromDriver = async (req, res) => {
   const { vehicleId } = req.body;
 
@@ -755,7 +739,6 @@ const unassignVehicleFromDriver = async (req, res) => {
       });
     }
 
-    // If vehicle is assigned to a driver, remove the reference
     if (vehicle.userId) {
       const driver = await driverModel.findOne({ vehicle: vehicle._id });
       if (driver) {
@@ -782,7 +765,6 @@ const unassignVehicleFromDriver = async (req, res) => {
   }
 };
 
-// Get vehicle by driver ID
 const getVehicleByDriverId = async (req, res) => {
   const { driverId } = req.params;
 
@@ -832,8 +814,8 @@ const getVehicleByDriverId = async (req, res) => {
   }
 };
 
+
 export {
-  assignVehicleToDriver, createVehicle, deleteDriverById,
-  deleteDriverInfo, deleteVehicleById, getAllDriverDetails, getAllVehicles, getDriverById, getVehicleByDriverId, getVehicleById, postDriverInfo, unassignVehicleFromDriver, updateDriverInfo, updateVehicleById, viewDriverInfo
+  assignVehicleToDriver, createVehicle, deleteDriverById, deleteDriverInfo, deleteVehicleById, getAllDriverDetails, getAllVehicles, getDriverById, getVehicleByDriverId, getVehicleById, postDriverInfo, unassignVehicleFromDriver, updateDriverInfo, updateVehicleById, viewDriverInfo
 };
 

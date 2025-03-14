@@ -1,19 +1,19 @@
 import express from "express";
 import {
-    assignVehicleToDriver,
-    createVehicle,
-    deleteVehicleById,
-    getAllVehicles,
-    getVehicleByDriverId,
-    getVehicleById,
-    unassignVehicleFromDriver,
-    updateVehicleById,
+  assignVehicleToDriver,
+  createVehicle,
+  deleteVehicleById,
+  getAllVehicles,
+  getVehicleByDriverId,
+  getVehicleById,
+  unassignVehicleFromDriver,
+  updateVehicleById
 } from "../controllers/driver.controllers.js";
+import { staffAssignVehicle } from "../controllers/staffAssign.controllers.js";
 import upload from "../middlewares/multer.middleware.js";
 
 const vehicleRouter = express.Router();
 
-// Create a new vehicle
 vehicleRouter.post(
   "/create",
   upload.fields([
@@ -25,13 +25,10 @@ vehicleRouter.post(
   createVehicle
 );
 
-// Get all vehicles
 vehicleRouter.get("/all", getAllVehicles);
 
-// Get vehicle by ID
 vehicleRouter.get("/:id", getVehicleById);
 
-// Update vehicle by ID
 vehicleRouter.put(
   "/:id",
   upload.fields([
@@ -54,5 +51,8 @@ vehicleRouter.post("/unassign", unassignVehicleFromDriver);
 
 // Get vehicle by driver ID
 vehicleRouter.get("/driver/:driverId", getVehicleByDriverId);
+// vehicle routes
+
+vehicleRouter.post("/staffAssign", staffAssignVehicle);
 
 export default vehicleRouter;

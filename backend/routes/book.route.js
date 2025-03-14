@@ -23,5 +23,8 @@ bookRouter.patch('/staff/bookings/:driver/monthly-salary', bookingController.upd
 bookRouter.get('/staff/bookings/all', bookingController.getAllBookings);
 // bookRouter.patch('/staff/bookings/:driver/complete', bookingController.completeBooking);
 bookRouter.put("/completeBooking/:driverId", bookingController.completeBooking);
+bookRouter.delete("/deleteCompleteBooking/:driverId", bookingController.deleteCompleteBooking);
+bookRouter.get("/active", bookingController.getActiveBookings);
+
 
 export default bookRouter;
