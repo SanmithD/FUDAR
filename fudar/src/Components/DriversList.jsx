@@ -6,12 +6,13 @@ function DriversList() {
   const [drivers, setDrivers] = useState([]);
   const [error, setError] = useState(null);
 
-  useEffect(() => {
+  useEffect(() => {  
     const fetchDrivers = async () => {
       try {
         const response = await axios.get('http://localhost:8080/api/driver/getAllDriver');
         if (response.data.success) {
           setDrivers(response.data.details);
+          console.log(response.data)
         } else {
           setError('Failed to fetch drivers');
         }
