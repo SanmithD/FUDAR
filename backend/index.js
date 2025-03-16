@@ -14,7 +14,7 @@ connectDB();
 app.use(cors());
 app.use(bodyParser.json());
 
-app.use('/api/login', router );
+app.use('/api/user', router );
 app.use('/api/driver', driverRouter );
 app.use('/api/staffVehicle', staffVehicleRouter );
 app.use('/api/book', bookRouter );

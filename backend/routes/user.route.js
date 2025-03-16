@@ -1,12 +1,10 @@
-import { Router } from 'express';
-import { getUserProfile, requestOTP, userProfile, verifyOTP } from '../controllers/user.controllers.js';
-import userMiddleware from '../middlewares/user.middleware.js';
-const router = Router();
+import express from 'express';
+import { userLogin, userProfile, userSignup } from '../controllers/user.controllers.js';
 
-router.post('/request-otp', requestOTP);
-router.post('/verify-otp', verifyOTP);
+const router = express.Router();
 
-router.get('/driverProfile/:id', userMiddleware, getUserProfile);
+router.post('/signup', userSignup);
+router.post('/login', userLogin);
 router.get('/profile', userProfile);
 
-export default router;
+export default router
