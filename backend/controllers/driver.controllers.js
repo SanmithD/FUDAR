@@ -731,6 +731,7 @@ const unassignVehicleFromDriver = async (req, res) => {
   }
 
   try {
+    // Find the vehicle by ID
     const vehicle = await vehicleModel.findById(vehicleId);
     if (!vehicle) {
       return res.status(404).json({
@@ -739,13 +740,17 @@ const unassignVehicleFromDriver = async (req, res) => {
       });
     }
 
+    // Check if the vehicle is currently assigned to a driver
     if (vehicle.userId) {
+      // Find the driver who is currently assigned to this vehicle
       const driver = await driverModel.findOne({ vehicle: vehicle._id });
       if (driver) {
+        // Remove the vehicle reference from the driver
         driver.vehicle = null;
         await driver.save();
       }
 
+      // Remove the driver reference from the vehicle
       vehicle.userId = null;
       await vehicle.save();
     }
