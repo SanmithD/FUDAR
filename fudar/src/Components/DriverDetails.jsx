@@ -1,12 +1,42 @@
-import axios from 'axios';
-import React, { useEffect, useState } from 'react';
-import { Link, useParams } from 'react-router-dom';
+import axios from "axios";
+import {
+  CategoryScale,
+  Chart as ChartJS,
+  Filler,
+  Legend,
+  LinearScale,
+  LineElement,
+  PointElement,
+  Title,
+  Tooltip,
+} from "chart.js";
+import { useEffect, useRef, useState } from "react";
+import { Line } from "react-chartjs-2";
+import { useNavigate, useParams } from "react-router-dom";
+import UpdateSalary from "./UpdateSalary";
+
+// Register ChartJS components globally, including Filler
+ChartJS.register(
+  CategoryScale,
+  LinearScale,
+  PointElement,
+  LineElement,
+  Title,
+  Tooltip,
+  Legend,
+  Filler
+);
 
 function DriverDetails() {
   const { id } = useParams();
   const [driver, setDriver] = useState(null);
-  const [salary, setSalary] = useState(null);
+  const [salary, setSalary] = useState([]);
   const [error, setError] = useState(null);
+  const [refreshChart, setRefreshChart] = useState(false);
+  const navigate = useNavigate();
+  const chartRef = useRef(null);
+
+  const handleSalaryUpdate = () => setRefreshChart((prev) => !prev);
 
   useEffect(() => {
     const fetchDriver = async () => {
@@ -14,101 +44,165 @@ function DriverDetails() {
         const response = await axios.get(`http://localhost:8080/api/driver/getInfoById/${id}`);
         if (response.data.success) {
           setDriver(response.data.details);
-          setSalary(response.data.salary);
+          setSalary(response.data.salary || []);
         } else {
-          setError('Failed to fetch driver details');
+          setError("Failed to fetch driver details");
         }
       } catch (error) {
-        setError('Failed to fetch driver details');
+        setError("Failed to fetch driver details");
         console.error(error);
       }
     };
 
     fetchDriver();
-  }, [id]);
+  }, [id, refreshChart]);
 
-  if (error) return <p style={{ color: 'red', textAlign: 'center' }}>{error}</p>;
-  if (!driver) return <p style={{ textAlign: 'center', color: '#6B7280' }}>Loading...</p>;
+  // Cleanup chart instance only on unmount
+  useEffect(() => {
+    return () => {
+      if (chartRef.current) {
+        chartRef.current.destroy();
+      }
+    };
+  }, []); // Empty dependency array for mount/unmount only
+
+  const options = {
+    responsive: true,
+    maintainAspectRatio: false,
+    plugins: {
+      legend: { position: "top" },
+      title: { display: true, text: "Salary History" },
+    },
+    scales: {
+      y: { beginAtZero: true, title: { display: true, text: "Amount (₹)" } },
+      x: { title: { display: true, text: "Month" } },
+    },
+  };
+
+  const data = {
+    labels: salary.map((item) => item.month),
+    datasets: [
+      {
+        label: "Salary Amount",
+        data: salary.map((item) => item.amount),
+        borderColor: "black",
+        backgroundColor: "rgba(0, 0, 0, 0.1)",
+        fill: true,  // Works now with Filler plugin
+        tension: 0.4,
+      },
+    ],
+  };
+
+  if (error) return <div className="flex justify-center items-center min-h-screen bg-gray-100 text-red-500">{error}</div>;
+  if (!driver) return <div className="flex justify-center items-center min-h-screen bg-gray-100 text-gray-500">Loading...</div>;
 
   return (
-    <div style={{ padding: '20px', backgroundColor: '#f4f4f4' }}>
-      <h2 style={{ textAlign: 'center', marginBottom: '20px' }}>Driver Details</h2>
-      <Link to='/driverList' style={{ display: 'block', marginBottom: '20px' }}>Back</Link>
-      <div style={{ display: 'flex', flexDirection: 'column', alignItems: 'center' }}>
-        <img
-          src={driver.driverImage}
-          alt={driver.driverName}
-          style={{ width: '150px', height: '150px', borderRadius: '75px', objectFit: 'cover', marginBottom: '20px' }}
-        />
-        <h3 style={{ margin: '5px 0' }}>{driver.driverName}</h3>
-        
-        <div style={{ width: '100%', maxWidth: '600px' }}>
-          <p style={{ margin: '5px 0', color: '#6B7280' }}>Primary Number: {driver.driverNumber[0]?.primaryNumber}</p>
-          <p style={{ margin: '5px 0', color: '#6B7280' }}>Secondary Number: {driver.driverNumber[0]?.secondaryNumber}</p>
-          <p style={{ margin: '5px 0', color: '#6B7280' }}>Bank Number: {driver.driverBankNumber}</p>
-          <p style={{ margin: '5px 0', color: '#6B7280' }}>IFSC: {driver.driverIFSC}</p>
-          
-          <div style={{ margin: '10px 0' }}>
-            <h4 style={{ margin: '5px 0', color: '#1F2937' }}>Salary History</h4>
-            {salary.map((item, index) => (
-              <p key={index} style={{ margin: '5px 0', color: '#6B7280' }}>
-                {item.month}: ₹{item.amount}
+    <div className="min-h-screen bg-gray-50">
+      <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8">
+        <div className="bg-white p-8 rounded-xl shadow-lg border border-gray-200">
+          <div className="flex items-center justify-between mb-6">
+            <h2 className="text-2xl font-bold text-black">Driver Details</h2>
+            <button
+              onClick={() => navigate(-1)}
+              className="inline-flex items-center px-4 py-2 border border-gray-300 rounded-md shadow-sm text-sm font-medium text-gray-700 hover:bg-gray-50 transition duration-150 ease-in-out"
+            >
+              Back
+            </button>
+          </div>
+
+          <div className="flex flex-col md:flex-row items-center md:items-start">
+            <div className="md:w-1/4 text-center md:text-left mb-6 md:mb-0">
+              <a href={driver.driverImage} target="_blank" rel="noopener noreferrer">
+                <img src={driver.driverImage} alt={driver.driverName} className="w-32 h-32 rounded-full mx-auto md:mx-0 object-cover" />
+              </a>
+            </div>
+            <div className="md:w-3/4">
+              <h3 className="text-xl font-semibold text-black mb-2">{driver.driverName}</h3>
+              <p className="text-gray-600 mb-4">
+                Status: <span className={`px-2 py-1 rounded-md text-xs font-medium ${driver.status === "assigned" ? "bg-gray-100 text-gray-800" : "bg-gray-200 text-gray-800"}`}>{driver.status}</span>
               </p>
-            ))}
+
+              <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
+                <div>
+                  <p className="text-sm text-gray-500 mb-1">Primary Number</p>
+                  <p className="text-gray-800">{driver.driverNumber[0]?.primaryNumber || "N/A"}</p>
+                </div>
+                <div>
+                  <p className="text-sm text-gray-500 mb-1">Secondary Number</p>
+                  <p className="text-gray-800">{driver.driverNumber[0]?.secondaryNumber || "N/A"}</p>
+                </div>
+                <div>
+                  <p className="text-sm text-gray-500 mb-1">Bank Number</p>
+                  <p className="text-gray-800">{driver.driverBankNumber || "N/A"}</p>
+                </div>
+                <div>
+                  <p className="text-sm text-gray-500 mb-1">IFSC</p>
+                  <p className="text-gray-800">{driver.driverIFSC || "N/A"}</p>
+                </div>
+                <div className="col-span-2">
+                  <p className="text-sm text-gray-500 mb-1">Bank Address</p>
+                  <p className="text-gray-800">{driver.driverBankAddress || "N/A"}</p>
+                </div>
+              </div>
+
+              <div className="mt-6">
+                <h4 className="text-lg font-medium text-black mb-3">Salary History</h4>
+                <div className="space-y-2 h-[150px] overflow-scroll">
+                  {salary.length > 0 ? (
+                    salary.map((item) => (
+                      <div key={item.month} className="flex justify-between items-center text-sm text-gray-600">
+                        <span>{item.month}</span>
+                        <span>₹{item.amount}</span>
+                      </div>
+                    ))
+                  ) : (
+                    <p className="text-gray-500 text-sm">No salary history available</p>
+                  )}
+                </div>
+              </div>
+
+              <div className="mt-8 grid grid-cols-1 md:grid-cols-3 gap-4">
+                <div className="border border-gray-200 rounded-md p-2">
+                  <p className="text-xs text-gray-500 mb-1">Aadhaar</p>
+                  <a href={driver.driverAdhaar} target="_blank" rel="noopener noreferrer">
+                    <img src={driver.driverAdhaar} alt="Aadhaar" className="w-full h-24 object-contain" />
+                  </a>
+                </div>
+                <div className="border border-gray-200 rounded-md p-2">
+                  <p className="text-xs text-gray-500 mb-1">PAN</p>
+                  <a href={driver.driverPan} target="_blank" rel="noopener noreferrer">
+                    <img src={driver.driverPan} alt="PAN" className="w-full h-24 object-contain" />
+                  </a>
+                </div>
+                <div className="border border-gray-200 rounded-md p-2">
+                  <p className="text-xs text-gray-500 mb-1">Driving Licence</p>
+                  <a href={driver.drivingLicence} target="_blank" rel="noopener noreferrer">
+                    <img src={driver.drivingLicence} alt="Driving Licence" className="w-full h-24 object-contain" />
+                  </a>
+                </div>
+              </div>
+
+              <div className="mt-8 text-sm text-gray-500 space-y-2">
+                <p>Created At: {new Date(driver.createdAt).toLocaleString()}</p>
+                <p>Updated At: {new Date(driver.updatedAt).toLocaleString()}</p>
+              </div>
+            </div>
           </div>
-          
-          <p style={{ margin: '5px 0', color: '#6B7280' }}>Status: {driver.status}</p>
-          <p style={{ margin: '5px 0', color: '#6B7280' }}>Bank Address: {driver.driverBankAddress}</p>
-          
-          <div style={{ display: 'flex', flexWrap: 'wrap', gap: '20px', justifyContent: 'center' }}>
-            <div style={{ textAlign: 'center' }}>
-              <p style={{ margin: '5px 0', color: '#6B7280' }}>Adhaar</p>
-              <img 
-                src={driver.driverAdhaar} 
-                alt="Adhaar" 
-                style={{ 
-                  width: '100px', 
-                  height: '100px', 
-                  objectFit: 'contain',
-                  border: '1px solid #e5e7eb',
-                  padding: '5px'
-                }} 
-              />
-            </div>
-            
-            <div style={{ textAlign: 'center' }}>
-              <p style={{ margin: '5px 0', color: '#6B7280' }}>Pan</p>
-              <img 
-                src={driver.driverPan} 
-                alt="Pan" 
-                style={{ 
-                  width: '100px', 
-                  height: '100px', 
-                  objectFit: 'contain',
-                  border: '1px solid #e5e7eb',
-                  padding: '5px'
-                }} 
-              />
-            </div>
-            
-            <div style={{ textAlign: 'center' }}>
-              <p style={{ margin: '5px 0', color: '#6B7280' }}>Driving Licence</p>
-              <img 
-                src={driver.drivingLicence} 
-                alt="Driving Licence" 
-                style={{ 
-                  width: '100px', 
-                  height: '100px', 
-                  objectFit: 'contain',
-                  border: '1px solid #e5e7eb',
-                  padding: '5px'
-                }} 
-              />
-            </div>
+
+          <div className="mt-8">
+            <h4 className="text-lg font-medium text-black mb-3">Salary Trend</h4>
+            {salary.length > 0 ? (
+              <div className="w-full h-[400px]">
+                <Line ref={chartRef} options={options} data={data} />
+              </div>
+            ) : (
+              <p className="text-gray-500 text-sm">No salary data available for chart</p>
+            )}
           </div>
-          
-          <p style={{ margin: '5px 0', color: '#6B7280' }}>Created At: {new Date(driver.createdAt).toLocaleString()}</p>
-          <p style={{ margin: '5px 0', color: '#6B7280' }}>Updated At: {new Date(driver.updatedAt).toLocaleString()}</p>
+
+          <div className="flex justify-center mt-8">
+            <UpdateSalary driver={id} onUpdate={handleSalaryUpdate} />
+          </div>
         </div>
       </div>
     </div>

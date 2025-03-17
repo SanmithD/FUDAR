@@ -2,7 +2,7 @@ import axios from 'axios';
 import React, { useState } from 'react';
 import { Link } from 'react-router-dom';
 
-const CreateVehicle = () => {
+const Vehicles = () => {
   const [formData, setFormData] = useState({
     vehicleType: '',
     vehicleNumber: '',
@@ -52,99 +52,114 @@ const CreateVehicle = () => {
   };
 
   return (
-    <div className="container">
-      <h2>Create New Staff Vehicle</h2>
-      <Link to='/staffVehicle'>View</Link>
-      <form onSubmit={handleSubmit}>
-        <div>
-          <label>Vehicle Type:</label>
+    <div className="container mx-auto p-8  text-black">
+      <div className='flex justify-between' >
+      <h2 className="text-3xl font-bold mb-4">Create New Staff Vehicle</h2>
+      <Link to='/allVehicles' className="text-blue-500 border-2 border-black-500 p-2 text-xl rounded hover:underline mb-8 inline-block">View</Link>
+      </div>
+      <form onSubmit={handleSubmit} className="bg-white p-8 rounded-lg shadow-md flex flex-col gap-[10px] ">
+        <div className="mb-4">
+          <label className="block text-sm font-medium mb-2">Vehicle Type:</label>
           <input
             type="text"
             name="vehicleType"
             value={formData.vehicleType}
             onChange={handleChange}
             required
+            className="w-full px-4 py-2 border border-gray-700 rounded-lg  text-black"
           />
         </div>
-        <div>
-          <label>Vehicle Number:</label>
+        <div className="mb-4">
+          <label className="block text-sm font-medium mb-2">Vehicle Number:</label>
           <input
             type="text"
             name="vehicleNumber"
             value={formData.vehicleNumber}
             onChange={handleChange}
             required
+            className="w-full px-4 py-2 border border-gray-700 rounded-lg  text-black"
           />
         </div>
-        <div>
-          <label>Status:</label>
+        <div className="mb-4">
+          <label className="block text-sm font-medium mb-2">Status:</label>
           <select
             name="status"
             value={formData.status}
             onChange={handleChange}
+            className="w-full px-4 py-2 border border-gray-700 rounded-lg  text-black"
           >
             <option value="available">Available</option>
             <option value="unavailable">Unavailable</option>
           </select>
         </div>
-        <div>
-          <label>Vehicle Image Front:</label>
+        <div className='grid grid-cols-3 gap-[20px]' >
+        <div className="mb-4">
+          <label className="block text-sm font-medium mb-2">Vehicle Image Front:</label>
           <input
             type="file"
             name="vehicleImageFront"
             onChange={handleFileChange}
             required
+            className="w-full px-4 py-2 border border-gray-700 rounded-lg  text-black"
           />
         </div>
-        <div>
-          <label>Vehicle Image Back:</label>
+        <div className="mb-4">
+          <label className="block text-sm font-medium mb-2">Vehicle Image Back:</label>
           <input
             type="file"
             name="vehicleImageBack"
             onChange={handleFileChange}
             required
+            className="w-full px-4 py-2 border border-gray-700 rounded-lg  text-black"
           />
         </div>
-        <div>
-          <label>Vehicle Image Side:</label>
+        <div className="mb-4">
+          <label className="block text-sm font-medium mb-2">Vehicle Image Side:</label>
           <input
             type="file"
             name="vehicleImageSide"
             onChange={handleFileChange}
             required
+            className="w-full px-4 py-2 border border-gray-700 rounded-lg  text-black"
           />
         </div>
-        <div>
-          <label>Vehicle RC:</label>
+        <div className="mb-4">
+          <label className="block text-sm font-medium mb-2">Vehicle RC:</label>
           <input
             type="file"
             name="staffVehicleRC"
             onChange={handleFileChange}
             required
+            className="w-full px-4 py-2 border border-gray-700 rounded-lg  text-black"
           />
         </div>
-        <div>
-          <label>Vehicle Emission:</label>
+        <div className="mb-4">
+          <label className="block text-sm font-medium mb-2">Vehicle Emission:</label>
           <input
             type="file"
             name="staffVehicleEmission"
             onChange={handleFileChange}
             required
+            className="w-full px-4 py-2 border border-gray-700 rounded-lg  text-black"
           />
         </div>
-        <div>
-          <label>Vehicle Insurance:</label>
+        <div className="mb-4">
+          <label className="block text-sm font-medium mb-2">Vehicle Insurance:</label>
           <input
             type="file"
             name="staffVehicleInsurance"
             onChange={handleFileChange}
             required
+            className="w-full px-4 py-2 border border-gray-700 rounded-lg  text-black"
           />
         </div>
-        <button type="submit">Create Vehicle</button>
+        </div>
+        <button type="submit" className="bg-black text-white px-4 py-2 rounded-lg cursor-pointer  hover:bg-gray-600">
+          Create Vehicle
+        </button>
       </form>
     </div>
   );
 };
 
-export default CreateVehicle;
+export default Vehicles;

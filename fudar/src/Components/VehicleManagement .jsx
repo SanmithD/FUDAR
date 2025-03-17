@@ -23,6 +23,7 @@ const VehicleManagement = () => {
   const [availableVehicles, setAvailableVehicles] = useState([]);
   const [assignMode, setAssignMode] = useState(false);
   const [selectedAssignVehicle, setSelectedAssignVehicle] = useState("");
+  const [staffVehicleId, setStaffVehicleId] = useState(null);
 
   useEffect(() => {
     fetchVehicles();
@@ -38,6 +39,8 @@ const VehicleManagement = () => {
       
       try {
         const bookings = await axios.get("http://localhost:8080/api/book/active");
+        console.log(bookings.data[0].staffVehicle);
+        setStaffVehicleId(bookings.data[0].staffVehicle);
         assignedVehicleIds = bookings.data.map(booking => booking.staffVehicle.toString());
       } catch (bookingErr) {
         console.warn("No active bookings found or endpoint unavailable", bookingErr);
@@ -56,6 +59,7 @@ const VehicleManagement = () => {
     try {
       const res = await axios.get("http://localhost:8080/api/staffVehicle/all");
       setVehicles(res.data.vehicles || []);
+      console.log(res.data)
     } catch (err) {
       setError("Failed to fetch vehicles: " + err.message);
     }
@@ -94,19 +98,13 @@ const VehicleManagement = () => {
 
     try {
       if (selectedVehicle) {
-        await axios.put(
+        const response = await axios.put(
           `http://localhost:8080/api/vehicle/${selectedVehicle._id}`,
           formDataToSend,
           { headers: { "Content-Type": "multipart/form-data" } }
         );
         setSuccess("Vehicle updated successfully");
-      } else {
-        await axios.post(
-          "http://localhost:8080/api/vehicle/create",
-          formDataToSend,
-          { headers: { "Content-Type": "multipart/form-data" } }
-        );
-        setSuccess("Vehicle created successfully");
+        console.log(response.data)
       }
       resetState();
       fetchVehicles();
@@ -120,7 +118,7 @@ const VehicleManagement = () => {
   const handleDelete = async (id) => {
     if (window.confirm("Delete this vehicle?")) {
       try {
-        await axios.delete(`http://localhost:8080/api/vehicle/${id}`);
+        await axios.delete(`http://localhost:8080/api/vehicle/unassign/${id}`);
         setSuccess("Vehicle deleted successfully");
         fetchVehicles();
       } catch (err) {
@@ -187,111 +185,54 @@ const VehicleManagement = () => {
   };
 
   return (
-    <div style={{ padding: "20px", maxWidth: "1200px", margin: "0 auto" }}>
-      <h1 style={{ fontSize: "2rem", marginBottom: "20px", color: "#333" }}>
-        Vehicle Management
-      </h1>
+    <div className="max-w-4xl mx-auto p-6 bg-gray-100 min-h-screen">
+      <h1 className="text-3xl font-bold mb-6 text-gray-800">Vehicle Management</h1>
   
       {error && (
-        <div
-          style={{
-            backgroundColor: "#ffebee",
-            color: "#b71c1c",
-            padding: "10px",
-            marginBottom: "20px",
-            borderRadius: "4px",
-          }}
-        >
+        <div className="bg-red-100 text-red-800 p-4 mb-6 rounded-lg">
           {error}
         </div>
       )}
   
       {success && (
-        <div
-          style={{
-            backgroundColor: "#e8f5e9",
-            color: "#2e7d32",
-            padding: "10px",
-            marginBottom: "20px",
-            borderRadius: "4px",
-          }}
-        >
+        <div className="bg-green-100 text-green-800 p-4 mb-6 rounded-lg">
           {success}
         </div>
       )}
   
-      <div style={{ marginBottom: "20px", display: "flex", gap: "10px" }}>
+      <div className="mb-6 flex gap-2">
         <button
           onClick={() => setViewMode("list")}
-          style={{
-            padding: "8px 16px",
-            backgroundColor: viewMode === "list" ? "#2196f3" : "#eee",
-            color: viewMode === "list" ? "white" : "#333",
-            border: "none",
-            borderRadius: "4px",
-            cursor: "pointer",
-          }}
+          className={`px-4 py-2 rounded-md transition-colors ${
+            viewMode === "list" 
+              ? "bg-blue-600 text-white"
+              : "bg-gray-200 text-gray-800 hover:bg-gray-300"
+          }`}
         >
           View All
         </button>
         <button
-          onClick={() => setViewMode("form")}
-          style={{
-            padding: "8px 16px",
-            backgroundColor: viewMode === "form" ? "#4caf50" : "#eee",
-            color: viewMode === "form" ? "white" : "#333",
-            border: "none",
-            borderRadius: "4px",
-            cursor: "pointer",
-          }}
-        >
-          {selectedVehicle ? "Edit Vehicle" : "Add New"}
-        </button>
-        <button
           onClick={() => setAssignMode(true)}
-          style={{
-            padding: "8px 16px",
-            backgroundColor: assignMode ? "#4caf50" : "#eee",
-            color: assignMode ? "white" : "#333",
-            border: "none",
-            borderRadius: "4px",
-            cursor: "pointer",
-          }}
+          className={`px-4 py-2 rounded-md transition-colors ${
+            assignMode 
+              ? "bg-green-600 text-white"
+              : "bg-gray-200 text-gray-800 hover:bg-gray-300"
+          }`}
         >
           Assign Vehicle
         </button>
       </div>
   
       {assignMode && (
-        <div
-          style={{
-            backgroundColor: "#f5f5f5",
-            padding: "20px",
-            borderRadius: "8px",
-            marginBottom: "20px",
-          }}
-        >
-          <h2>Assign Vehicle to Driver</h2>
-          <div style={{ display: "flex", gap: "20px", marginBottom: "20px" }}>
-            <div>
-              <label
-                style={{
-                  display: "block",
-                  marginBottom: "8px",
-                  fontWeight: "500",
-                }}
-              >
-                Select Vehicle
-              </label>
+        <div className="bg-white p-6 rounded-lg mb-6">
+          <h2 className="text-2xl font-semibold mb-6">Assign Vehicle to Driver</h2>
+          <div className="flex gap-6 mb-6">
+            <div className="w-1/2">
+              <label className="block mb-2 font-medium text-gray-700">Select Vehicle</label>
               <select
                 value={selectedAssignVehicle}
                 onChange={(e) => setSelectedAssignVehicle(e.target.value)}
-                style={{
-                  padding: "8px",
-                  borderRadius: "4px",
-                  border: "1px solid #ddd",
-                  width: "200px",
-                }}
+                className="w-full p-2 border border-gray-300 rounded-md"
               >
                 <option value="">Select Vehicle</option>
                 {availableVehicles.map((vehicle) => (
@@ -302,25 +243,12 @@ const VehicleManagement = () => {
               </select>
             </div>
   
-            <div>
-              <label
-                style={{
-                  display: "block",
-                  marginBottom: "8px",
-                  fontWeight: "500",
-                }}
-              >
-                Select Driver
-              </label>
+            <div className="w-1/2">
+              <label className="block mb-2 font-medium text-gray-700">Select Driver</label>
               <select
                 value={formData.driverId}
                 onChange={(e) => setFormData({ ...formData, driverId: e.target.value })}
-                style={{
-                  padding: "8px",
-                  borderRadius: "4px",
-                  border: "1px solid #ddd",
-                  width: "200px",
-                }}
+                className="w-full p-2 border border-gray-300 rounded-md"
               >
                 <option value="">Select Driver</option>
                 {drivers
@@ -334,18 +262,11 @@ const VehicleManagement = () => {
             </div>
           </div>
   
-          <div style={{ display: "flex", gap: "10px" }}>
+          <div className="flex justify-end gap-2">
             <button
               onClick={handleStaffAssign}
               disabled={loading}
-              style={{
-                padding: "10px 20px",
-                backgroundColor: "#4caf50",
-                color: "white",
-                border: "none",
-                borderRadius: "4px",
-                cursor: "pointer",
-              }}
+              className="px-4 py-2 bg-green-600 text-white rounded-md hover:bg-green-700"
             >
               {loading ? "Assigning..." : "Assign"}
             </button>
@@ -355,14 +276,7 @@ const VehicleManagement = () => {
                 setSelectedAssignVehicle("");
                 setFormData({ ...formData, driverId: "" });
               }}
-              style={{
-                padding: "10px 20px",
-                backgroundColor: "#f44336",
-                color: "white",
-                border: "none",
-                borderRadius: "4px",
-                cursor: "pointer",
-              }}
+              className="px-4 py-2 bg-red-600 text-white rounded-md hover:bg-red-700"
             >
               Cancel
             </button>
@@ -371,102 +285,40 @@ const VehicleManagement = () => {
       )}
   
       {viewMode === "list" && (
-        <div style={{ overflowX: "auto" }}>
-          <table style={{ width: "100%", borderCollapse: "collapse" }}>
+        <div className="overflow-x-auto">
+          <table className="w-full border-collapse">
             <thead>
-              <tr style={{ backgroundColor: "#f5f5f5" }}>
-                <th
-                  style={{
-                    padding: "12px",
-                    textAlign: "left",
-                    borderBottom: "1px solid #ddd",
-                  }}
-                >
-                  Type
-                </th>
-                <th
-                  style={{
-                    padding: "12px",
-                    textAlign: "left",
-                    borderBottom: "1px solid #ddd",
-                  }}
-                >
-                  Number
-                </th>
-                <th
-                  style={{
-                    padding: "12px",
-                    textAlign: "left",
-                    borderBottom: "1px solid #ddd",
-                  }}
-                >
-                  Assigned Driver
-                </th>
-                <th
-                  style={{
-                    padding: "12px",
-                    textAlign: "left",
-                    borderBottom: "1px solid #ddd",
-                  }}
-                >
-                  Actions
-                </th>
+              <tr className="bg-gray-200">
+                <th className="p-4 text-left">Type</th>
+                <th className="p-4 text-left">Number</th>
+                <th className="p-4 text-left">Assigned Driver</th>
+                <th className="p-4 text-left">Actions</th>
               </tr>
             </thead>
             <tbody>
               {vehicles.map((vehicle) => (
                 <tr
                   key={vehicle._id}
-                  style={{ borderBottom: "1px solid #ddd" }}
+                  className="border-b border-gray-200"
                 >
-                  <td style={{ padding: "12px" }}>{vehicle.vehicleType}</td>
-                  <td style={{ padding: "12px" }}>{vehicle.vehicleNumber}</td>
-                  <td style={{ padding: "12px" }}>
+                  <td className="p-4">{vehicle.vehicleType}</td>
+                  <td className="p-4">{vehicle.vehicleNumber}</td>
+                  <td className="p-4">
                     {drivers.find((d) => d.vehicle === vehicle._id)?.driverName || "Unassigned"}
                   </td>
-                  <td style={{ padding: "12px", display: "flex", gap: "8px" }}>
+                  <td className="p-4 flex gap-2">
                     <button
                       onClick={() => {
                         setSelectedVehicle(vehicle);
                         setViewMode("details");
                       }}
-                      style={{
-                        padding: "6px 12px",
-                        backgroundColor: "#2196f3",
-                        color: "white",
-                        border: "none",
-                        borderRadius: "4px",
-                        cursor: "pointer",
-                      }}
+                      className="px-3 py-2 bg-blue-600 text-white rounded-md hover:bg-blue-700"
                     >
                       View
                     </button>
                     <button
-                      onClick={() => {
-                        setSelectedVehicle(vehicle);
-                        setViewMode("form");
-                      }}
-                      style={{
-                        padding: "6px 12px",
-                        backgroundColor: "#ffc107",
-                        color: "black",
-                        border: "none",
-                        borderRadius: "4px",
-                        cursor: "pointer",
-                      }}
-                    >
-                      Edit
-                    </button>
-                    <button
                       onClick={() => handleDelete(vehicle._id)}
-                      style={{
-                        padding: "6px 12px",
-                        backgroundColor: "#f44336",
-                        color: "white",
-                        border: "none",
-                        borderRadius: "4px",
-                        cursor: "pointer",
-                      }}
+                      className="px-3 py-2 bg-red-600 text-white rounded-md hover:bg-red-700"
                     >
                       Delete
                     </button>
@@ -478,180 +330,89 @@ const VehicleManagement = () => {
         </div>
       )}
   
-      {viewMode === "form" && (
+      {viewMode === "form" && selectedVehicle && (
         <form
           onSubmit={handleCreateUpdate}
-          style={{
-            backgroundColor: "#f5f5f5",
-            padding: "20px",
-            borderRadius: "8px",
-          }}
+          className="bg-white p-6 rounded-lg"
         >
-          <div
-            style={{
-              display: "grid",
-              gridTemplateColumns: "repeat(2, 1fr)",
-              gap: "20px",
-              marginBottom: "20px",
-            }}
-          >
+          <div className="grid grid-cols-2 gap-6 mb-6">
             <div>
-              <label
-                style={{
-                  display: "block",
-                  marginBottom: "8px",
-                  fontWeight: "500",
-                }}
-              >
-                Vehicle Type
-              </label>
+              <label className="block mb-2 font-medium text-gray-700">Vehicle Type</label>
               <input
                 type="text"
                 name="vehicleType"
                 value={formData.vehicleType}
                 onChange={handleInputChange}
                 required
-                style={{
-                  width: "100%",
-                  padding: "8px",
-                  border: "1px solid #ddd",
-                  borderRadius: "4px",
-                }}
+                className="w-full p-2 border border-gray-300 rounded-md"
               />
             </div>
   
             <div>
-              <label
-                style={{
-                  display: "block",
-                  marginBottom: "8px",
-                  fontWeight: "500",
-                }}
-              >
-                Vehicle Number
-              </label>
+              <label className="block mb-2 font-medium text-gray-700">Vehicle Number</label>
               <input
                 type="text"
                 name="vehicleNumber"
                 value={formData.vehicleNumber}
                 onChange={handleInputChange}
                 required
-                style={{
-                  width: "100%",
-                  padding: "8px",
-                  border: "1px solid #ddd",
-                  borderRadius: "4px",
-                }}
+                className="w-full p-2 border border-gray-300 rounded-md"
               />
             </div>
   
             <div>
-              <label
-                style={{
-                  display: "block",
-                  marginBottom: "8px",
-                  fontWeight: "500",
-                }}
-              >
-                Vehicle Image
-              </label>
+              <label className="block mb-2 font-medium text-gray-700">Vehicle Image</label>
               <input
                 type="file"
                 name="vehicleImage"
                 onChange={handleFileChange}
-                style={{ width: "100%" }}
-                required={!selectedVehicle}
+                className="w-full"
               />
             </div>
   
             <div>
-              <label
-                style={{
-                  display: "block",
-                  marginBottom: "8px",
-                  fontWeight: "500",
-                }}
-              >
-                Emission Test
-              </label>
+              <label className="block mb-2 font-medium text-gray-700">Emission Test</label>
               <input
                 type="file"
                 name="emissionTest"
                 onChange={handleFileChange}
-                style={{ width: "100%" }}
-                required={!selectedVehicle}
+                className="w-full"
               />
             </div>
   
             <div>
-              <label
-                style={{
-                  display: "block",
-                  marginBottom: "8px",
-                  fontWeight: "500",
-                }}
-              >
-                Vehicle RC
-              </label>
+              <label className="block mb-2 font-medium text-gray-700">Vehicle RC</label>
               <input
                 type="file"
                 name="vehicleRC"
                 onChange={handleFileChange}
-                style={{ width: "100%" }}
-                required={!selectedVehicle}
+                className="w-full"
               />
             </div>
   
             <div>
-              <label
-                style={{
-                  display: "block",
-                  marginBottom: "8px",
-                  fontWeight: "500",
-                }}
-              >
-                Vehicle Insurance
-              </label>
+              <label className="block mb-2 font-medium text-gray-700">Vehicle Insurance</label>
               <input
                 type="file"
                 name="vehicleInsurance"
                 onChange={handleFileChange}
-                style={{ width: "100%" }}
-                required={!selectedVehicle}
+                className="w-full"
               />
             </div>
           </div>
   
-          <div style={{ display: "flex", gap: "10px" }}>
+          <div className="flex justify-end gap-2">
             <button
               type="submit"
               disabled={loading}
-              style={{
-                padding: "10px 20px",
-                backgroundColor: "#4caf50",
-                color: "white",
-                border: "none",
-                borderRadius: "4px",
-                cursor: "pointer",
-              }}
+              className="px-4 py-2 bg-green-600 text-white rounded-md hover:bg-green-700"
             >
-              {loading
-                ? "Processing..."
-                : selectedVehicle
-                ? "Update Vehicle"
-                : "Create Vehicle"}
+              {loading ? "Processing..." : "Update Vehicle"}
             </button>
             <button
               type="button"
               onClick={resetState}
-              style={{
-                padding: "10px 20px",
-                backgroundColor: "#f44336",
-                color: "white",
-                border: "none",
-                borderRadius: "4px",
-                cursor: "pointer",
-              }}
+              className="px-4 py-2 bg-red-600 text-white rounded-md hover:bg-red-700"
             >
               Cancel
             </button>
@@ -660,90 +421,88 @@ const VehicleManagement = () => {
       )}
   
       {viewMode === "details" && selectedVehicle && (
-        <div
-          style={{
-            backgroundColor: "#f5f5f5",
-            padding: "20px",
-            borderRadius: "8px",
-          }}
-        >
-          <h2 style={{ fontSize: "1.5rem", marginBottom: "20px" }}>
-            Vehicle Details
-          </h2>
+        <div className="bg-white p-6 rounded-lg flex flex-col gap-[20px] ">
+          <div className="flex gap[20px]" >
+
+          <div className="flex gap-[20px]" >
   
-          <div
-            style={{
-              display: "grid",
-              gridTemplateColumns: "repeat(2, 1fr)",
-              gap: "20px",
-              marginBottom: "20px",
-            }}
-          >
-            <div>
-              <p style={{ fontWeight: "500" }}>
-                Type: {selectedVehicle.vehicleType}
-              </p>
-              <p style={{ fontWeight: "500" }}>
-                Number: {selectedVehicle.vehicleNumber}
-              </p>
-              <p style={{ fontWeight: "500" }}>
+          <div className="gap-6 mb-6 flex flex-col w-[30%] ">
+          <h2 className="text-2xl font-semibold mb-6">Vehicle Details</h2>
+            <div >
+              <p className="font-medium mb-2">Type: {selectedVehicle.vehicleType}</p>
+              <p className="font-medium mb-2">Number: {selectedVehicle.vehicleNumber}</p>
+              <p className="font-medium mb-2">
                 Assigned Driver:{" "}
                 {drivers.find((d) => d.vehicle === selectedVehicle._id)?.driverName || "None"}
               </p>
             </div>
+          </div>
   
-            <div>
-              <h3 style={{ fontWeight: "500", marginBottom: "10px" }}>
-                Documents:
-              </h3>
-              <p>
-                Vehicle Image:{" "}
-                <img
-                  src={selectedVehicle.vehicleImage}
-                  alt={selectedVehicle.vehicleImage}
-                  height="200px"
-                  width="250px"
-                />
-              </p>
-              <p>
+            <div >
+              <h3 className="font-medium mb-4 text-[30px] ">Documents:</h3>
+              <div className="flex gap-[30px] " >
+              <div>
+              <p className="mb-4">
                 Emission Test:{" "}
                 <img
-                  src={selectedVehicle.emissionTest}
-                  alt={selectedVehicle.emissionTest}
-                  height="200px"
-                  width="250px"
+                  src={selectedVehicle.staffVehicleEmission}
+                  alt={selectedVehicle.staffVehicleEmission}
+                  className="h-48 w-64 object-cover"
                 />
               </p>
-              <p>
+              <p className="mb-4">
                 Vehicle RC:{" "}
                 <img
-                  src={selectedVehicle.vehicleRC}
-                  alt={selectedVehicle.vehicleRC}
-                  height="200px"
-                  width="250px"
+                  src={selectedVehicle.staffVehicleRC}
+                  alt={selectedVehicle.staffVehicleRC}
+                  className="h-48 w-64 object-cover"
                 />
               </p>
               <p>
                 Insurance:{" "}
                 <img
-                  src={selectedVehicle.vehicleInsurance}
-                  alt={selectedVehicle.vehicleInsurance}
-                  height="200px"
-                  width="250px"
+                  src={selectedVehicle.staffVehicleInsurance}
+                  alt={selectedVehicle.staffVehicleInsurance}
+                  className="h-48 w-64 object-cover"
                 />
               </p>
+              </div>
+              <div>
+              <p className="mb-4">
+                Front View:{" "}
+                <img
+                  src={selectedVehicle.vehicleImage[0].front}
+                  alt={selectedVehicle.vehicleImage.back}
+                  className="h-48 w-64 object-cover"
+                />
+              </p>
+              <p className="mb-4">
+                Back View:{" "}
+                <img
+                  src={selectedVehicle.vehicleImage[0].back}
+                  alt={selectedVehicle.vehicleImage.back}
+                  className="h-48 w-64 object-cover"
+                />
+              </p>
+              <p className="mb-4">
+                Side View:{" "}
+                <img
+                  src={selectedVehicle.vehicleImage[0].side}
+                  alt={selectedVehicle.vehicleImage.side}
+                  className="h-48 w-64 object-cover"
+                />
+              </p>
+              </div>
+              </div>
             </div>
           </div>
   
-          <div style={{ display: "flex", gap: "10px", marginBottom: "20px" }}>
+          </div>
+          <div className="flex items-center gap-2 mb-6">
             <select
               value={formData.driverId}
               onChange={(e) => setFormData({ ...formData, driverId: e.target.value })}
-              style={{
-                padding: "8px",
-                borderRadius: "4px",
-                border: "1px solid #ddd",
-              }}
+              className="p-2 border border-gray-300 rounded-md"
             >
               <option value="">Select Driver</option>
               {drivers
@@ -755,33 +514,19 @@ const VehicleManagement = () => {
                 ))}
             </select>
             <button
-              onClick={() => handleUnassignDriver(selectedVehicle._id)}
-              style={{
-                padding: "8px 16px",
-                backgroundColor: "#f44336",
-                color: "white",
-                border: "none",
-                borderRadius: "4px",
-                cursor: "pointer",
-              }}
+              onClick={() => handleUnassignDriver(staffVehicleId)}
+              className="px-4 py-2 bg-red-600 text-white rounded-md hover:bg-red-700"
             >
               Unassign Driver
             </button>
           </div>
-  
           <button
             onClick={() => setViewMode("list")}
-            style={{
-              padding: "8px 16px",
-              backgroundColor: "#2196f3",
-              color: "white",
-              border: "none",
-              borderRadius: "4px",
-              cursor: "pointer",
-            }}
+            className="px-4 py-2 bg-blue-600 text-white rounded-md hover:bg-blue-700"
           >
             Back to List
           </button>
+  
         </div>
       )}
     </div>

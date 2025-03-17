@@ -1,46 +1,53 @@
-import { Route, Routes } from "react-router-dom";
-import "./App.css";
-import BookingList from "./Components/BookingList";
-import CompleteBooking from "./Components/CompleteBooking";
-import CreateBooking from "./Components/CreateBooking";
-import CreateVehicle from "./Components/CreateVehicle";
-import DriverBookings from "./Components/DriverBookings ";
-import DriverCard from "./Components/DriverCard";
-import DriverDetails from "./Components/DriverDetails";
-import DriverManagement from "./Components/DriverManagement ";
-import DriversList from "./Components/DriversList";
-import Navbar from "./Components/Navbar";
-import UpdateSalary from "./Components/UpdateSalary";
-import UpdateVehicle from "./Components/UpdateVehicle";
-import VehicleDetails from "./Components/VehicleDetails";
-import VehicleList from "./Components/VehicleList ";
-import VehicleManagement from "./Components/VehicleManagement ";
+import React from 'react';
+import { Route, Routes } from 'react-router-dom';
+import './App.css';
+import Admin from './Components/Admin.jsx';
+import AllVehicles from './Components/AllVehicles.jsx';
+import Dashboard from './Components/Dashboard.jsx';
+import DriverDetails from './Components/DriverDetails.jsx';
+import DriverManagement from './Components/DriverManagement.jsx';
+import Drivers from './Components/Drivers.jsx';
+import DriverSignIn from './Components/DriverSignIn.jsx';
+import DriversList from './Components/DriversList.jsx';
+import Login from './Components/Login.jsx';
+import LoginAdmin from './Components/LoginAdmin.jsx';
+import LoginDrivers from './Components/LoginDrivers.jsx';
+import LoginStaff from './Components/LoginStaff.jsx';
+import MainDashboard from './Components/MainDashboard.jsx';
+import PDriver from './Components/PDriver.jsx';
+import Register from './Components/Register.jsx';
+import Signup from './Components/Signup.jsx';
+import VehicleDetail from './Components/VehicleDetail.jsx';
+import VehicleManagement from './Components/VehicleManagement .jsx';
+import Vehicles from './Components/Vehicles.jsx';
+
 
 function App() {
   return (
-    <>
-    <Navbar/>
       <Routes>
-        <Route path="/" element={<DriverManagement />} />
-        <Route path="/staffVehicle" element={<VehicleList />} />
-        <Route path="/updateVehicle/:id" element={<UpdateVehicle />} />
-        <Route path="/vehicleDetails/:id" element={<VehicleDetails />} />
-        <Route path="/createVehicle" element={<CreateVehicle />} />
-        <Route path="/driverList" element={<DriversList />} />
-        <Route path="/driver/:id" element={<DriverDetails />} />
-        <Route path="/driverCard" element={<DriverCard />} />
-        <Route path="/bookingList" element={<BookingList />} />
-        <Route path="/driverBooking/:driverId" element={<DriverBookings />} />
-        <Route path="/create-booking/:vehicleId" element={<CreateBooking />} />
-        <Route path="/create-booking" element={<CreateBooking />} />
-        <Route path="/update-salary/:driver" element={<UpdateSalary />} />
-        <Route path="/vehicleManage" element={<VehicleManagement />} />
-        <Route
-          path="/complete-booking/:driver"
-          element={<CompleteBooking />}
-        />
+      <Route path="/login" element={<Login />} />
+      <Route path="/signup" element={<Signup />} />
+      <Route path="/" element={<Dashboard />}>
+      <Route path="/main" element={<MainDashboard />} />
+      <Route path="/LoginDrivers" element={<LoginDrivers />} />
+      <Route path="/DriverSignIn" element={<DriverSignIn />} />
+      <Route path="/Register" element={<Register />} />
+      
+      <Route path="/LoginStaff" element={<LoginStaff />} />
+      <Route path="/LoginAdmin" element={< LoginAdmin/>} />
+      
+      <Route path="/" element={<Drivers />} />
+      <Route path="/vehicles" element={<Vehicles />} />
+      <Route path="/vehicle/:id" element={<VehicleDetail />} />
+      <Route path='/newDriver' element={<DriverManagement/>}/>
+      <Route path='/driverDetails/:id' element={<DriverDetails/>}/>
+      <Route path='/allDrivers' element={<DriversList/>}/>
+      <Route path="/pdriver" element={<PDriver />} />
+      <Route path="/vehicleManage" element={<VehicleManagement />} />
+      <Route path="/allVehicles" element={<AllVehicles />} />
+      <Route path="/admin" element={<Admin />} />
+      </Route>
       </Routes>
-    </>
   );
 }
 

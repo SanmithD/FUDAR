@@ -1,13 +1,16 @@
 import axios from 'axios';
 import React, { useEffect, useState } from 'react';
+import { useNavigate } from 'react-router-dom';
 import DriverCard from './DriverCard';
 
 function DriversList() {
   const [drivers, setDrivers] = useState([]);
+  const [loading, setLoading] = useState(true);
   const [error, setError] = useState(null);
+  const navigate = useNavigate();
 
-  useEffect(() => {  
-    const fetchDrivers = async () => {
+  useEffect(() => {
+    const getAllDrivers = async () => {
       try {
         const response = await axios.get('http://localhost:8080/api/driver/getAllDriver');
         if (response.data.success) {
@@ -17,28 +20,50 @@ function DriversList() {
           setError('Failed to fetch drivers');
         }
       } catch (error) {
-        setError('Failed to fetch drivers');
+        setError('Error fetching drivers');
         console.error(error);
+      } finally {
+        setLoading(false);
       }
     };
 
-    fetchDrivers();
+    getAllDrivers();
   }, []);
 
+  const handleCardClick = (driverId) => {
+    navigate(`/driverDetails/${driverId}`);
+  };
+
+  if (loading) {
+    return (
+      <div className="flex justify-center items-center h-screen bg-gray-100 text-gray-500">
+        Loading...
+      </div>
+    );
+  }
+
+  if (error) {
+    return (
+      <div className="flex justify-center items-center h-screen bg-gray-100 text-red-500">
+        {error}
+      </div>
+    );
+  }
+
   return (
-    <div style={{ padding: '20px', backgroundColor: '#f4f4f4' }}>
-      <h2 style={{ textAlign: 'center', marginBottom: '20px' }}>Drivers List</h2>
-      <h1>{drivers.length} </h1>
-      {error && <p style={{ color: 'red', textAlign: 'center' }}>{error}</p>}
-      {drivers.length === 0 ? (
-        <p style={{ textAlign: 'center', color: '#6B7280' }}>No drivers found</p>
-      ) : (
-        <div style={{ display: 'flex', flexWrap: 'wrap', justifyContent: 'center', gap: '20px' }}>
-          {drivers.map(driver => (
-            <DriverCard key={driver._id} driver={driver} />
+    <div className="min-h-screen bg-gray-100 p-8">
+      <div className="max-w-7xl mx-auto">
+        <h1 className="text-3xl font-bold text-gray-800 mb-8">Drivers List</h1>
+        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+          {drivers.map((driver) => (
+            <DriverCard
+              key={driver._id}
+              driver={driver}
+              onClick={() => handleCardClick(driver._id)}
+            />
           ))}
         </div>
-      )}
+      </div>
     </div>
   );
 }
