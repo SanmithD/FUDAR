@@ -31,18 +31,18 @@ const Login = () => {
       localStorage.setItem('user', JSON.stringify(response.data.user));
       
       // Set default authorization header for future requests
-      axios.defaults.headers.common['Authorization'] = `Bearer ${response.data.token}`;
+      // axios.defaults.headers.common['Authorization'] = `Bearer ${response.data.token}`;
       
-      // Redirect based on login form type
-      if (loginForm === 'admin') { // Fixed comparison
-        navigate('/');
-      } else if (loginForm === 'driver') {
-        navigate('/driverPage');
-      } else if (loginForm === 'staff') {
-        navigate('/');
-      } else {
-        navigate('/login');
-      }
+      // // Redirect based on login form type
+      // if (loginForm === 'admin') { // Fixed comparison
+      //   navigate('/');
+      // } else if (loginForm === 'driver') {
+      //   navigate('/driverPage');
+      // } else if (loginForm === 'staff') {
+      //   navigate('/');
+      // } else {
+      //   navigate('/login');
+      // }
       
     } catch (err) {
       setError(err.response?.data?.message || 'Invalid credentials. Please try again.');
@@ -88,7 +88,7 @@ const Login = () => {
               required
             />
           </div>
-          <div>
+          {/* <div>
             <select 
               value={loginForm} 
               onChange={(e) => setLoginForm(e.target.value)} // Fixed onChange handler
@@ -98,7 +98,7 @@ const Login = () => {
               <option value="staff">Staff</option>
               <option value="admin">Admin</option>
             </select>
-          </div>
+          </div> */}
           <button
             type="submit"
             className="w-full bg-gray-800 text-white py-2 px-4 rounded-md hover:bg-gray-700 transition-colors"

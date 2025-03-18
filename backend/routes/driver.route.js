@@ -1,12 +1,13 @@
 import express from "express";
 import {
-    deleteDriverById,
-    deleteDriverInfo,
-    getAllDriverDetails,
-    getDriverById,
-    postDriverInfo,
-    updateDriverInfo,
-    viewDriverInfo,
+  deleteDriverById,
+  deleteDriverInfo,
+  getAllDriverDetails,
+  getDriverById,
+  getOwnData,
+  postDriverInfo,
+  updateDriverInfo,
+  viewDriverInfo,
 } from "../controllers/driver.controllers.js";
 import upload from "../middlewares/multer.middleware.js";
 
@@ -35,6 +36,7 @@ driverRouter.put(
 driverRouter.get("/getInfoById/:id", getDriverById);
 driverRouter.get("/getAllDriver", getAllDriverDetails);
 driverRouter.get("/viewDriverInfo", viewDriverInfo);
+driverRouter.get("/getOwn", getOwnData);
 driverRouter.delete("/deleteDriverInfo", deleteDriverInfo);
 driverRouter.delete("/deleteDriverById/:id", deleteDriverById);
 

@@ -17,6 +17,8 @@ const postDriverInfo = async (req, res) => {
   const driverAdhaar = req.files?.driverAdhaar?.[0]?.path;
   const driverPan = req.files?.driverPan?.[0]?.path;
   const drivingLicence = req.files?.drivingLicence?.[0]?.path;
+  const token = req.headers.authorization?.split(" ")[1];
+  const JWT = process.env.JWT_SECRET;
 
   if (
     !driverImage ||
@@ -65,7 +67,9 @@ const postDriverInfo = async (req, res) => {
   //     }
   //   }
   try {
+    const { id } = jwt.verify(token, JWT);
     const newDriver = new driverModel({
+      id: id,
       driverImage,
       driverName,
       driverNumber: [
@@ -826,8 +830,27 @@ const getVehicleByDriverId = async (req, res) => {
   }
 };
 
+const getOwnData = async(req, res) =>{
+  const token = req.headers.authorization?.split(" ")[1];
+  const JWT = process.env.JWT_SECRET;
+  try {
+    const { id } = jwt.verify(token, JWT);
+    const response = await driverModel.findById(id);
+    res.status(200).json({
+      success: true,
+      message: "Data",
+      response
+    })
+  } catch (error) {
+    res.status(500).json({
+      success: false,
+      message: "Server error"
+    });
+    console.log(error)
+  }
+}
 
 export {
-  assignVehicleToDriver, createVehicle, deleteDriverById, deleteDriverInfo, deleteVehicleById, getAllDriverDetails, getAllVehicles, getDriverById, getVehicleByDriverId, getVehicleById, postDriverInfo, unassignVehicleFromDriver, updateDriverInfo, updateVehicleById, viewDriverInfo
+  assignVehicleToDriver, createVehicle, deleteDriverById, deleteDriverInfo, deleteVehicleById, getAllDriverDetails, getAllVehicles, getDriverById, getOwnData, getVehicleByDriverId, getVehicleById, postDriverInfo, unassignVehicleFromDriver, updateDriverInfo, updateVehicleById, viewDriverInfo
 };
 

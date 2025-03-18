@@ -41,7 +41,7 @@ export default function Drivers() {
 
   const getAllDriverDetails = async() =>{
     try {
-      const response = await axios.get('https://fudar-dqqd.onrender.com/api/api/driver/getAllDriver');
+      const response = await axios.get('https://fudar-dqqd.onrender.com/api/driver/getAllDriver');
       setBookings(response.data);
       console.log(response.data);
     } catch (error) {
