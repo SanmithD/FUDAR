@@ -19,7 +19,7 @@ export default function Dashboard() {
   useEffect(() => {
     const getUser = async() => {
       try {
-        const response = await axios.get('http://localhost:8080/api/user/profile',{
+        const response = await axios.get('https://fudar-dqqd.onrender.com/api/user/profile',{
           headers: {
             Authorization: `Bearer ${localStorage.getItem('token')}`
           }
@@ -46,7 +46,7 @@ export default function Dashboard() {
 
   const handleProfile = async() => {
     try {
-      const responsive = await axios.get(`http://localhost:8080/api/driver/viewDriverInfo`,{
+      const responsive = await axios.get(`https://fudar-dqqd.onrender.com/api/driver/viewDriverInfo`,{
         headers: {
           Authorization: `Bearer ${localStorage.getItem('token')}`
         }

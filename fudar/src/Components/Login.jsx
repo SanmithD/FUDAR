@@ -21,7 +21,7 @@ const Login = () => {
       setLoading(true);
       
       // Call the login API endpoint
-      const response = await axios.post('http://localhost:8080/api/user/login', {
+      const response = await axios.post('https://fudar-dqqd.onrender.com/api/user/login', {
         phoneNumber,
         password
       });

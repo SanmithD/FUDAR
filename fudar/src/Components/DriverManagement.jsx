@@ -112,7 +112,7 @@ const DriverManagement = () => {
       if (isEditing && selectedDriver) {
         const token = localStorage.getItem('token');
         response = await axios.put(
-          `http://localhost:8080/api/driver/updateInfo`,
+          `https://fudar-dqqd.onrender.com/api/driver/updateInfo`,
           formDataToSend,
           {
             headers: {
@@ -123,7 +123,7 @@ const DriverManagement = () => {
         );
       } else {
         response = await axios.post(
-          "http://localhost:8080/api/driver/postInfo",
+          "https://fudar-dqqd.onrender.com/api/driver/postInfo",
           formDataToSend,
           {
             headers: {
@@ -148,7 +148,7 @@ const DriverManagement = () => {
     if (window.confirm("Are you sure you want to delete this driver?")) {
       try {
         const response = await axios.delete(
-          `http://localhost:8080/api/driver/deleteDriverById/${id}`
+          `https://fudar-dqqd.onrender.com/api/driver/deleteDriverById/${id}`
         );
         if (response.data.success) {
           setSuccess("Driver deleted successfully");
