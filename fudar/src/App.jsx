@@ -36,7 +36,7 @@ function App() {
         <Route path="/LoginStaff" element={<LoginStaff />} />
         <Route path="/LoginAdmin" element={<LoginAdmin />} />
 
-        <Route path="/" element={<Drivers />} />
+        <Route path="/driver" element={<Drivers />} />
         <Route path="/vehicles" element={<Vehicles />} />
         <Route path="/vehicle/:id" element={<VehicleDetail />} />
         <Route path="/newDriver" element={<DriverManagement />} />
