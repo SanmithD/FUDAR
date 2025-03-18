@@ -10,7 +10,7 @@ function UpdateSalary({ driver, onUpdate }) {
   useEffect(() => {
     const fetchBooking = async () => {
       try {
-        const response = await axios.get(`https://fudar-dqqd.onrender.com/api/book/driver/bookings/${driver}`);
+        const response = await axios.get(`http://localhost:8080/api/book/driver/bookings/${driver}`);
         if (response.data.success) setBookingDetails(response.data.bookings);
       } catch (error) { setError('Failed to fetch booking details'); }
     };
@@ -21,7 +21,7 @@ function UpdateSalary({ driver, onUpdate }) {
     e.preventDefault();
     setError(null);
     try {
-      const response = await axios.patch(`https://fudar-dqqd.onrender.com/api/book/staff/bookings/${driver}/monthly-salary`, { month, amount });
+      const response = await axios.patch(`http://localhost:8080/api/book/staff/bookings/${driver}/monthly-salary`, { month, amount });
       if (response.data.success) {
         onUpdate();
         setMonth('');

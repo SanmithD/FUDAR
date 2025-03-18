@@ -1,7 +1,9 @@
 import axios from "axios";
 import { Menu, X } from "lucide-react";
 import React, { useEffect, useState } from "react";
+import { useNavigate } from "react-router-dom";
 import DriverManagement from "./DriverManagement";
+import DriverProfile from "./DriverProfile ";
 
 const Dashboard = () => {
   const [activeSection, setActiveSection] = useState(null);
@@ -17,50 +19,13 @@ const Dashboard = () => {
   const [isLogoutModalOpen, setIsLogoutModalOpen] = useState(false);
   const [bookedVehicle, setBookedVehicle] = useState(null);
   const [showBookingDetails, setShowBookingDetails] = useState(false);
-
-  // Current logged-in driver (for demo purposes)
-  const currentDriver = {
-    id: 3,
-    name: "Priya Sharma",
-    salary: 29000,
-    bank: "SBI",
-    accountNo: "XXXX9012",
-    status: "Yet to Pay",
-    paymentDate: "15/03/2025",
-    driverID: "DRV-2023-103",
-  };
-  const [profileData, setProfileData] = useState(null);
-
-  // // Salary data state (would normally be fetched from backend)
-  // const [salaryData, setSalaryData] = useState([
-  //   { id: 1, name: "Rajesh Kumar", salary: 28000, bank: "HDFC Bank", accountNo: "XXXX1234", status: "Paid" },
-  //   { id: 2, name: "Amit Singh", salary: 26500, bank: "ICICI Bank", accountNo: "XXXX5678", status: "Paid" },
-  //   { id: 3, name: "Priya Sharma", salary: 29000, bank: "SBI", accountNo: "XXXX9012", status: "Yet to Pay" },
-  //   { id: 4, name: "Sunil Verma", salary: 27500, bank: "Axis Bank", accountNo: "XXXX3456", status: "Yet to Pay" },
-  //   { id: 5, name: "Deepak Patel", salary: 28500, bank: "Kotak Mahindra", accountNo: "XXXX7890", status: "Paid" },
-  // ]);
-
-  // // Vehicle list with updated statuses
-  // const [vehicles, setVehicles] = useState([
-  //   { id: 1, name: "Toyota Innova", model: "2022", type: "SUV", image: "src/assets/Toyota Innova.jpeg", status: "Available" },
-  //   { id: 2, name: "Maruti Swift", model: "2021", type: "Hatchback", image: "src/assets/Maruti Swift.jpeg", status: "Available" },
-  //   { id: 3, name: "Honda City", model: "2023", type: "Sedan", image: "src/assets/Honda City.jpeg", status: "Available" },
-  //   { id: 4, name: "Hyundai Creta", model: "2022", type: "SUV", image: "src/assets/Hyundai Creta.jpeg", status: "Available" },
-  //   { id: 5, name: "Mahindra XUV700", model: "2023", type: "SUV", image: "src/assets/Mahindra XUV700.jpeg", status: "Available" },
-  //   { id: 6, name: "Tata Nexon", model: "2022", type: "Compact SUV", image: "src/assets/Tata Nexon.jpeg", status: "Available" },
-  //   { id: 7, name: "Ford EcoSport", model: "2021", type: "Compact SUV", image:"src/assets/Ford EcoSport.jpeg", status: "Available" },
-  //   { id: 8, name: "Kia Seltos", model: "2023", type: "SUV", image: "src/assets/Kia Seltos.jpeg", status: "Available" },
-  //   { id: 9, name: "Renault Kwid", model: "2022", type: "Hatchback", image: "src/assets/Renault Kwid.jpeg", status: "Available" },
-  //   { id: 10, name: "MG Hector", model: "2023", type: "SUV", image: "src/assets/MG Hector.jpeg", status: "Available" },
-  //   { id: 11, name: "Skoda Octavia", model: "2022", type: "Sedan", image: "src/assets/Skoda Octavia.jpeg", status: "Available" },
-  //   { id: 12, name: "Volkswagen Polo", model: "2021", type: "Hatchback", image: "src/assets/Volkswagen Polo.jpeg", status: "Available" },
-  //   { id: 13, name: "Hyundai i20", model: "2022", type: "Hatchback", image: "src/assets/Hyundai i20.jpeg", status: "Available" },
-  // ]);
+  const navigate = useNavigate();
+  const [profileData, setProfileData] = useState();
 
   const profile = async () => {
     try {
       const response = await axios.get(
-        `https://fudar-dqqd.onrender.com/api/driver/getOwn`,
+        `http://localhost:8080/api/driver/getOwn`,
         {
           headers: {
             Authorization: `Bearer ${localStorage.getItem("token")}`,
@@ -109,15 +74,10 @@ const Dashboard = () => {
   const closeLogoutModal = () => setIsLogoutModalOpen(false);
 
   const handleLogout = () => {
-    // In a real application, you would handle logout logic here
-    // Such as clearing tokens, user session, redirect to login page, etc.
-    alert("You have been logged out successfully!");
-    closeLogoutModal();
-    // Normally would redirect to login page
-    // window.location.href = "/login";
+    localStorage.removeItem('token');
+    navigate('/login');
   };
 
-  // Handle menu item click to close sidebar on mobile
   const handleMenuClick = (section) => {
     setActiveSection(section);
     if (window.innerWidth < 768) {
@@ -180,12 +140,6 @@ const Dashboard = () => {
             >
               Salary
             </button>
-            {/* <button
-              onClick={() => handleDriverSectionClick("salary")}
-              className="w-full text-left px-4 py-2 bg-gray-400  rounded hover:bg-green-600"
-            >
-              Register
-            </button> */}
             <button
               onClick={() => handleDriverSectionClick("documents")}
               className="w-full text-left px-4 py-2 bg-gray-400 rounded hover:bg-green-600"
@@ -333,31 +287,7 @@ const Dashboard = () => {
                     <div className="p-3 font-medium text-gray-700">Amount</div>
                     <div className="p-3 font-medium text-gray-700">Date</div>
                     <div className="p-3 font-medium text-gray-700">Status</div>
-                  </div>
-
-                  {/* Just a single example row */}
-                  <div className="grid grid-cols-4 border-b">
-                    <div className="p-3">March 2025</div>
-                    <div className="p-3">₹29,000</div>
-                    <div className="p-3">15/03/2025</div>
-                    <div className="p-3">
-                      <span className="inline-block px-2 py-1 rounded-full text-xs font-semibold bg-yellow-100 text-yellow-800">
-                        Yet to Pay
-                      </span>
-                    </div>
-                  </div>
-
-                  {/* Previous month example */}
-                  <div className="grid grid-cols-4">
-                    <div className="p-3">February 2025</div>
-                    <div className="p-3">₹29,000</div>
-                    <div className="p-3">15/02/2025</div>
-                    <div className="p-3">
-                      <span className="inline-block px-2 py-1 rounded-full text-xs font-semibold bg-green-100 text-green-800">
-                        Paid
-                      </span>
-                    </div>
-                  </div>
+                  </div>                  
                 </div>
               </div>
             </div>
@@ -366,271 +296,7 @@ const Dashboard = () => {
 
         {/* Driver Documents Section */}
         {activeDriverSection === "documents" && (
-          <div className="mb-8">
-            <h2 className="text-xl font-bold mb-4">Driver Documents</h2>
-
-            <div className="bg-white rounded-lg shadow p-6">
-              {/* Driver Basic Information */}
-              <div className="mb-6">
-                <h3 className="text-lg font-semibold mb-3 text-blue-800 border-b pb-2">
-                  Personal Information
-                </h3>
-                <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
-                  <div>
-                    <p className="text-gray-600 text-sm">Full Name</p>
-                    <p className="font-medium">{currentDriver.name}</p>
-                  </div>
-                  <div>
-                    <p className="text-gray-600 text-sm">Driver ID</p>
-                    <p className="font-medium">{currentDriver.driverID}</p>
-                  </div>
-                  {/* <div>
-                      <p className="text-gray-600 text-sm">Phone Number</p>
-                      <p className="font-medium">+91 9876543210</p>
-                    </div>
-                    <div>
-                      <p className="text-gray-600 text-sm">Alternate Number</p>
-                      <p className="font-medium text-gray-500">Not provided</p>
-                    </div>
-                    <div>
-                      <p className="text-gray-600 text-sm">Email</p>
-                      <p className="font-medium">priya.sharma@example.com</p>
-                    </div>
-                    <div>
-                      <p className="text-gray-600 text-sm">Date of Birth</p>
-                      <p className="font-medium">15/06/1990</p>
-                    </div> */}
-                </div>
-              </div>
-
-              {/* Document Cards */}
-              <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
-                {/* Aadhaar Card */}
-                <div className="border rounded-lg overflow-hidden shadow-sm">
-                  <div className="bg-blue-50 p-3 border-b">
-                    <h3 className="font-semibold text-blue-800">
-                      Aadhaar Card
-                    </h3>
-                  </div>
-                  <div className="p-4">
-                    <div className="aspect-[16/9] bg-gray-100 rounded-lg mb-3 overflow-hidden">
-                      <img
-                        src={profileData.driverAdhaar}
-                        alt="Aadhaar Card"
-                        className="w-full h-full object-cover"
-                      />
-                    </div>
-                    <div className="space-y-2">
-                      <div className="flex justify-between text-sm">
-                        <span className="text-gray-600">Aadhaar Number:</span>
-                        <span className="font-medium">XXXX XXXX 4567</span>
-                      </div>
-                      <div className="flex justify-between text-sm">
-                        <span className="text-gray-600">
-                          Verification Status:
-                        </span>
-                        <span className="font-medium text-green-600">
-                          Verified
-                        </span>
-                      </div>
-                      <div className="flex justify-between text-sm">
-                        <span className="text-gray-600">Date of Issue:</span>
-                        <span className="font-medium">12/09/2018</span>
-                      </div>
-                    </div>
-                  </div>
-                </div>
-
-                {/* PAN Card */}
-                <div className="border rounded-lg overflow-hidden shadow-sm">
-                  <div className="bg-yellow-50 p-3 border-b">
-                    <h3 className="font-semibold text-yellow-800">PAN Card</h3>
-                  </div>
-                  <div className="p-4">
-                    <div className="aspect-[16/9] bg-gray-100 rounded-lg mb-3 overflow-hidden">
-                      <img
-                        src="/api/placeholder/400/225"
-                        alt="PAN Card"
-                        className="w-full h-full object-cover"
-                      />
-                    </div>
-                    <div className="space-y-2">
-                      <div className="flex justify-between text-sm">
-                        <span className="text-gray-600">PAN Number:</span>
-                        <span className="font-medium">ABCDE1234F</span>
-                      </div>
-                      <div className="flex justify-between text-sm">
-                        <span className="text-gray-600">
-                          Verification Status:
-                        </span>
-                        <span className="font-medium text-green-600">
-                          Verified
-                        </span>
-                      </div>
-                      <div className="flex justify-between text-sm">
-                        <span className="text-gray-600">Name on Card:</span>
-                        <span className="font-medium">Priya Sharma</span>
-                      </div>
-                    </div>
-                  </div>
-                </div>
-
-                {/* Driving License */}
-                <div className="border rounded-lg overflow-hidden shadow-sm">
-                  <div className="bg-green-50 p-3 border-b">
-                    <h3 className="font-semibold text-green-800">
-                      Driving License
-                    </h3>
-                  </div>
-                  <div className="p-4">
-                    <div className="aspect-[16/9] bg-gray-100 rounded-lg mb-3 overflow-hidden">
-                      <img
-                        src="/api/placeholder/400/225"
-                        alt="Driving License"
-                        className="w-full h-full object-cover"
-                      />
-                    </div>
-                    <div className="space-y-2">
-                      <div className="flex justify-between text-sm">
-                        <span className="text-gray-600">License Number:</span>
-                        <span className="font-medium">DL-1420110012345</span>
-                      </div>
-                      <div className="flex justify-between text-sm">
-                        <span className="text-gray-600">Class:</span>
-                        <span className="font-medium">LMV/HMV</span>
-                      </div>
-                      <div className="flex justify-between text-sm">
-                        <span className="text-gray-600">Valid Until:</span>
-                        <span className="font-medium">25/03/2030</span>
-                      </div>
-                      <div className="flex justify-between text-sm">
-                        <span className="text-gray-600">
-                          Verification Status:
-                        </span>
-                        <span className="font-medium text-green-600">
-                          Verified
-                        </span>
-                      </div>
-                    </div>
-                  </div>
-                </div>
-
-                {/* Address Proof */}
-                <div className="border rounded-lg overflow-hidden shadow-sm">
-                  <div className="bg-purple-50 p-3 border-b">
-                    <h3 className="font-semibold text-purple-800">
-                      Address Proof
-                    </h3>
-                  </div>
-                  <div className="p-4">
-                    <div className="aspect-[16/9] bg-gray-100 rounded-lg mb-3 overflow-hidden">
-                      <img
-                        src="/api/placeholder/400/225"
-                        alt="Address Proof"
-                        className="w-full h-full object-cover"
-                      />
-                    </div>
-                    <div className="space-y-2">
-                      <div className="flex justify-between text-sm">
-                        <span className="text-gray-600">Document Type:</span>
-                        <span className="font-medium">Electricity Bill</span>
-                      </div>
-                      <div className="flex justify-between text-sm">
-                        <span className="text-gray-600">Address:</span>
-                        <span className="font-medium">123 Main St, Mumbai</span>
-                      </div>
-                      <div className="flex justify-between text-sm">
-                        <span className="text-gray-600">
-                          Verification Status:
-                        </span>
-                        <span className="font-medium text-green-600">
-                          Verified
-                        </span>
-                      </div>
-                    </div>
-                  </div>
-                </div>
-
-                {/* Police Verification */}
-                <div className="border rounded-lg overflow-hidden shadow-sm">
-                  <div className="bg-red-50 p-3 border-b">
-                    <h3 className="font-semibold text-red-800">
-                      Police Verification
-                    </h3>
-                  </div>
-                  <div className="p-4">
-                    <div className="aspect-[16/9] bg-gray-100 rounded-lg mb-3 overflow-hidden">
-                      <img
-                        src="/api/placeholder/400/225"
-                        alt="Police Verification"
-                        className="w-full h-full object-cover"
-                      />
-                    </div>
-                    <div className="space-y-2">
-                      <div className="flex justify-between text-sm">
-                        <span className="text-gray-600">
-                          Certificate Number:
-                        </span>
-                        <span className="font-medium">PV-2023-45678</span>
-                      </div>
-                      <div className="flex justify-between text-sm">
-                        <span className="text-gray-600">Issued By:</span>
-                        <span className="font-medium">Mumbai Police</span>
-                      </div>
-                      <div className="flex justify-between text-sm">
-                        <span className="text-gray-600">Issue Date:</span>
-                        <span className="font-medium">10/01/2023</span>
-                      </div>
-                      <div className="flex justify-between text-sm">
-                        <span className="text-gray-600">
-                          Verification Status:
-                        </span>
-                        <span className="font-medium text-green-600">
-                          Verified
-                        </span>
-                      </div>
-                    </div>
-                  </div>
-                </div>
-
-                {/* Bank Details */}
-                <div className="border rounded-lg overflow-hidden shadow-sm">
-                  <div className="bg-indigo-50 p-3 border-b">
-                    <h3 className="font-semibold text-indigo-800">
-                      Bank Details
-                    </h3>
-                  </div>
-                  <div className="p-4">
-                    <div className="aspect-[16/9] bg-gray-100 rounded-lg mb-3 overflow-hidden">
-                      <img
-                        src="/api/placeholder/400/225"
-                        alt="Bank Details"
-                        className="w-full h-full object-cover"
-                      />
-                    </div>
-                    <div className="space-y-2">
-                      <div className="flex justify-between text-sm">
-                        <span className="text-gray-600">Bank Name:</span>
-                        <span className="font-medium">SBI</span>
-                      </div>
-                      <div className="flex justify-between text-sm">
-                        <span className="text-gray-600">Account Number:</span>
-                        <span className="font-medium">XXXX XXXX 9012</span>
-                      </div>
-                      <div className="flex justify-between text-sm">
-                        <span className="text-gray-600">IFSC Code:</span>
-                        <span className="font-medium">SBIN0001234</span>
-                      </div>
-                      <div className="flex justify-between text-sm">
-                        <span className="text-gray-600">Account Type:</span>
-                        <span className="font-medium">Savings</span>
-                      </div>
-                    </div>
-                  </div>
-                </div>
-              </div>
-            </div>
-          </div>
+          <DriverProfile/>
         )}
         <DriverManagement />
       </div>

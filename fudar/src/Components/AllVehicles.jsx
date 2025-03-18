@@ -8,7 +8,7 @@ function AllVehicles() {
 
     const allVehiclesDetails = async () => {
         try {
-            const response = await axios.get(`https://fudar-dqqd.onrender.com/api/staffVehicle/all`);
+            const response = await axios.get(`http://localhost:8080/api/staffVehicle/all`);
             setAllVehicles(response.data.vehicles);
         } catch (error) {
             console.log(error);

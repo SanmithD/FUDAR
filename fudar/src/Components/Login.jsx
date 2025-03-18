@@ -21,7 +21,7 @@ const Login = () => {
       setLoading(true);
       
       // Call the login API endpoint
-      const response = await axios.post('https://fudar-dqqd.onrender.com/api/user/login', { // Fixed URL
+      const response = await axios.post('http://localhost:8080/api/user/login', { // Fixed URL
         phoneNumber,
         password
       });
@@ -43,6 +43,8 @@ const Login = () => {
       // } else {
       //   navigate('/login');
       // }
+
+      navigate('/')
       
     } catch (err) {
       setError(err.response?.data?.message || 'Invalid credentials. Please try again.');

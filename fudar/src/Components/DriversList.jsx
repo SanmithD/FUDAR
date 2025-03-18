@@ -12,7 +12,7 @@ function DriversList() {
   useEffect(() => {
     const getAllDrivers = async () => {
       try {
-        const response = await axios.get('https://fudar-dqqd.onrender.com/api/driver/getAllDriver');
+        const response = await axios.get('http://localhost:8080/api/driver/getAllDriver');
         if (response.data.success) {
           setDrivers(response.data.details);
           console.log(response.data)

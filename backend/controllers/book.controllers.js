@@ -19,9 +19,9 @@ export const bookingController = {
         });
       }
 
-      const { driverId } = jwt.verify(token, JWT);
+      const { id } = jwt.verify(token, JWT);
 
-      const driver = await driverModel.findById(driverId);
+      const driver = await driverModel.findById(id);
       if (!driver) {
         return res.status(404).json({
           success: false,
@@ -37,7 +37,7 @@ export const bookingController = {
 
       const newBooking = new bookModel({
         staffVehicle: staffVehicleId,
-        driver: driverId,
+        driver: id,
         vehicleImages,
       });
 
@@ -231,6 +231,10 @@ export const bookingController = {
   } catch (error) {
     res.status(500).json({ message: "Error fetching active bookings", error });
   }
-}
+},
+
+  getOwnSalary : async(req, res) =>{
+
+  }
 
 };

@@ -41,7 +41,7 @@ function DriverDetails() {
   useEffect(() => {
     const fetchDriver = async () => {
       try {
-        const response = await axios.get(`https://fudar-dqqd.onrender.com/api/driver/getInfoById/${id}`);
+        const response = await axios.get(`http://localhost:8080/api/driver/getInfoById/${id}`);
         if (response.data.success) {
           setDriver(response.data.details);
           setSalary(response.data.salary || []);

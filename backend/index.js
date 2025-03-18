@@ -11,9 +11,7 @@ import vehicleRouter from './routes/vehicle.route.js';
 
 const app = express();
 connectDB();
-app.use(cors({
-    origin: 'https://fudar-1.onrender.com'
-}));
+app.use(cors());
 app.use(bodyParser.json());
 
 app.use('/api/user', router );

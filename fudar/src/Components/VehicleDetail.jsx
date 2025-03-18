@@ -14,7 +14,7 @@ export default function VehicleDetail() {
     const fetchVehicle = async () => {
       try {
         setLoading(true);
-        const response = await axios.get(`https://fudar-dqqd.onrender.com/api/staffVehicle/viewStaffVehicle/${id}`);
+        const response = await axios.get(`http://localhost:8080/api/staffVehicle/viewStaffVehicle/${id}`);
         setVehicle(response.data.vehicle);
       } catch (error) {
         console.error("Error fetching vehicle details:", error);

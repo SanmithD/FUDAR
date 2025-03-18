@@ -69,7 +69,7 @@ const postDriverInfo = async (req, res) => {
   try {
     const { id } = jwt.verify(token, JWT);
     const newDriver = new driverModel({
-      id: id,
+      userId: id,
       driverImage,
       driverName,
       driverNumber: [
@@ -835,11 +835,13 @@ const getOwnData = async(req, res) =>{
   const JWT = process.env.JWT_SECRET;
   try {
     const { id } = jwt.verify(token, JWT);
-    const response = await driverModel.findById(id);
+    const response = await driverModel.findOne({ userId: id });
+    const salaryResponse = await bookModel.findOne({ driver: id });
     res.status(200).json({
       success: true,
       message: "Data",
-      response
+      response,
+      salaryResponse
     })
   } catch (error) {
     res.status(500).json({

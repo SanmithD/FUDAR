@@ -19,7 +19,7 @@ export default function Dashboard() {
   // Fetch User Profile
   const getUser = async () => {
     try {
-      const response = await axios.get('https://fudar-dqqd.onrender.com/api/user/profile', {
+      const response = await axios.get('http://localhost:8080/api/user/profile', {
         headers: {
           Authorization: `Bearer ${localStorage.getItem('token')}`
         }
@@ -33,7 +33,7 @@ export default function Dashboard() {
   // Handle Profile Click (for viewing driver info)
   const handleProfile = async () => {
     try {
-      const response = await axios.get('https://fudar-dqqd.onrender.com/api/driver/viewDriverInfo', {
+      const response = await axios.get('http://localhost:8080/api/driver/viewDriverInfo', {
         headers: {
           Authorization: `Bearer ${localStorage.getItem('token')}`
         }
@@ -133,7 +133,7 @@ export default function Dashboard() {
         </div>
 
         {/* Main Dashboard Content */}
-        <div className={`md:pt-24 pt-20 px-4 md:px-8 w-full ${sidebarOpen ? 'opacity-50' : 'opacity-100'} bg-[#F3F4F6]`}>
+        <div className={`md:pt-24 pt-[30px] px-4 md:px-8 w-[100%] flex justify-center  ${sidebarOpen ? 'opacity-50' : 'opacity-100' }  bg-[#F3F4F6]`}>
           <Outlet />
         </div>
       </div>
