@@ -9,35 +9,58 @@ export default function Dashboard() {
   const [animateCards, setAnimateCards] = useState(false);
   const [sidebarOpen, setSidebarOpen] = useState(false);
   const [userData, setUserData] = useState(null);
-  let userName = "John Doe";
 
+  // Handle Logout
   const handleLogout = () => {
-    navigate("/login"); 
     localStorage.removeItem('token');
+    navigate("/login");
   };
 
+  // Fetch User Profile
+  const getUser = async () => {
+    try {
+      const response = await axios.get('https://fudar-dqqd.onrender.com/api/user/profile', {
+        headers: {
+          Authorization: `Bearer ${localStorage.getItem('token')}`
+        }
+      });
+      setUserData(response.data.user.name); // Set user name from response
+    } catch (error) {
+      console.log(error);
+    }
+  };
+
+  // Handle Profile Click (for viewing driver info)
+  const handleProfile = async () => {
+    try {
+      const response = await axios.get('https://fudar-dqqd.onrender.com/api/driver/viewDriverInfo', {
+        headers: {
+          Authorization: `Bearer ${localStorage.getItem('token')}`
+        }
+      });
+      console.log(response.data);
+    } catch (error) {
+      console.log(error);
+    }
+  };
+
+  // UseEffect for fetching user data and animations
   useEffect(() => {
-    const getUser = async() => {
-      try {
-        const response = await axios.get('https://fudar-dqqd.onrender.com/api/user/profile',{
-          headers: {
-            Authorization: `Bearer ${localStorage.getItem('token')}`
-          }
-        });
-        setUserData(response.data.user.name);
-      } catch (error) {
-        console.log(error);
-      }
-    };
-    navigate();
-    getUser();
+    // Check if token exists, redirect to login if not
+    if (!localStorage.getItem('token')) {
+      navigate('/login');
+    } else {
+      getUser();
+    }
+
     const timer = setTimeout(() => {
       setAnimateCards(true);
     }, 300);
-    
-    return () => clearTimeout(timer);
-  }, []);
 
+    return () => clearTimeout(timer);
+  }, [navigate]);
+
+  // Close dropdowns and mobile sidebar
   const closeDropdowns = () => {
     setDropdownOpen(false);
     if (window.innerWidth < 768) {
@@ -45,27 +68,11 @@ export default function Dashboard() {
     }
   };
 
-  const handleProfile = async() => {
-    try {
-      const responsive = await axios.get(`https://fudar-dqqd.onrender.com/api/driver/viewDriverInfo`,{
-        headers: {
-          Authorization: `Bearer ${localStorage.getItem('token')}`
-        }
-      });
-      console.log(responsive.data);
-    } catch (error) {
-      console.log(error);
-    }
-  };
-
   return (
     <div className="flex h-screen bg-gray-100">
       {/* Mobile Header with Menu Button */}
       <div className="md:hidden fixed top-0 left-0 right-0 p-4 flex justify-between items-center bg-white shadow-sm z-20">
-        <button 
-          onClick={() => setSidebarOpen(!sidebarOpen)} 
-          className="text-black"
-        >
+        <button onClick={() => setSidebarOpen(!sidebarOpen)} className="text-black">
           <Menu size={24} />
         </button>
         <h1 className="text-xl font-bold text-gray-800">Staff Management</h1>
@@ -75,22 +82,16 @@ export default function Dashboard() {
         />
       </div>
 
-      {/* Sidebar - Desktop (fixed) and Mobile (slidable) */}
+      {/* Sidebar */}
       <div className={`fixed inset-y-0 left-0 w-64 bg-black shadow-lg z-30 transition-transform duration-300 ease-in-out md:translate-x-0 ${sidebarOpen ? 'translate-x-0' : '-translate-x-full'}`}>
         <div className="flex flex-col h-full">
           <div className="p-4 flex justify-between items-center">
             <h2 className="text-xl font-bold text-white mb-6">Staff Management</h2>
-            <button 
-              className="md:hidden text-white" 
-              onClick={() => setSidebarOpen(false)}
-            >
+            <button className="md:hidden text-white" onClick={() => setSidebarOpen(false)}>
               <X size={24} />
             </button>
           </div>
           <ul className="flex flex-col gap-2 p-4">
-            {/* <li className="flex items-center p-3 text-white hover:bg-gray-500 rounded-md cursor-pointer transition-colors" onClick={() => { navigate("/"); closeDropdowns(); }}>
-              <Users className="mr-2 text-white" /> Dashboard
-            </li> */}
             <li className="flex items-center p-3 text-white hover:bg-gray-500 rounded-md cursor-pointer transition-colors" onClick={() => { navigate("/"); closeDropdowns(); }}>
               <Users className="mr-2 text-white" /> Drivers
             </li>
@@ -112,86 +113,35 @@ export default function Dashboard() {
 
       {/* Main Content */}
       <div className="flex-1 md:pl-64 flex flex-col min-h-screen bg-[#F3F4F6]">
-        {/* Navbar with Welcome Message & Profile Dropdown - Desktop only */}
+        {/* Navbar with Welcome Message & Profile Dropdown */}
         <div className="hidden md:flex fixed top-0 left-64 right-0 p-4 justify-between items-center pr-8 bg-white shadow-sm">
           <h1 className="text-3xl font-bold text-gray-800 pl-6">Staff Management Dashboard</h1>
           <div className="flex items-center">
-            <span className="text-gray-700 text-lg font-medium mr-2">Welcome, {userData} &nbsp;</span>
+            <span className="text-gray-700 text-lg font-medium mr-2">Welcome, {userData || "Loading..."} &nbsp;</span>
             <div className="relative">
-              <UserCircle
-                className="w-12 h-12 text-black cursor-pointer mr-4"
-                onClick={() => setDropdownOpen(!dropdownOpen)}
-              />
+              <UserCircle className="w-12 h-12 text-black cursor-pointer mr-4" onClick={() => setDropdownOpen(!dropdownOpen)} />
 
               {/* Dropdown Menu */}
               {dropdownOpen && (
                 <div className="absolute right-0 mt-2 w-48 bg-white shadow-lg rounded-lg p-2 z-40">
-                  <p className="px-4 py-2 text-gray-700 font-semibold cursor-pointer" onClick={handleProfile}>{userData} &nbsp;</p>
+                  <p className="px-4 py-2 text-gray-700 font-semibold cursor-pointer" onClick={handleProfile}>{userData}</p>
                   <hr />
-                  <button
-                    onClick={handleLogout}
-                    className="w-full text-left px-4 py-2 text-red-600 hover:bg-gray-100 rounded-md"
-                  >
-                    Logout
-                  </button>
+                  <button onClick={handleLogout} className="w-full text-left px-4 py-2 text-red-600 hover:bg-gray-100 rounded-md">Logout</button>
                 </div>
               )}
             </div>
           </div>
         </div>
 
-        {/* Mobile Dropdown Menu */}
-        {dropdownOpen && (
-          <div className="md:hidden fixed right-4 top-16 w-48 bg-white shadow-lg rounded-lg p-2 z-40">
-            <p className="px-4 py-2 text-gray-700 font-semibold">{userName}</p>
-            <hr />
-            <button
-              onClick={handleLogout}
-              className="w-full text-left px-4 py-2 text-red-600 hover:bg-gray-100 rounded-md"
-            >
-              Logout
-            </button>
-          </div>
-        )}
-
         {/* Main Dashboard Content */}
-        <div className={`md:pt-24 pt-20 px-4 md:px-8 w-full ${sidebarOpen ? 'opacity-50' : 'opacity-100'} bg-[#F3F4F6] `}>
-          {/* Animated Cards Section - Responsive */}
-          {/* <div className="flex flex-col md:flex-row md:gap-20 gap-6 justify-center items-center">
-            <div
-              className={`bg-black shadow-lg rounded-lg p-6 w-full md:w-80 text-center cursor-pointer hover:shadow-xl flex flex-col items-center justify-center h-48 md:h-60 transition-all duration-500 ${animateCards ? "opacity-100 transform-none" : "opacity-0 translate-y-12"}`}
-              onClick={() => navigate("/vehicles")}
-              style={{ transitionDelay: "0.1s" }}
-            >
-              <div className="mb-4 bg-gradient-to-r from-blue-500 to-purple-500 p-3 rounded-full">
-                <Truck className="text-white" size={32} />
-              </div>
-              <h2 className="text-xl md:text-2xl font-bold text-white mb-2">Vehicle Fleet</h2>
-              <p className="text-gray-300">Manage your company vehicles</p>
-            </div>
-
-            <div
-              className={`bg-black shadow-lg rounded-lg p-6 w-full md:w-80 text-center cursor-pointer hover:shadow-xl flex flex-col items-center justify-center h-48 md:h-60 transition-all duration-500 ${animateCards ? "opacity-100 transform-none" : "opacity-0 translate-y-12"}`}
-              onClick={() => navigate("/drivers")}
-              style={{ transitionDelay: "0.3s" }}
-            >
-              <div className="mb-4 bg-gradient-to-r from-blue-500 to-purple-500 p-3 rounded-full">
-                <Users className="text-white" size={32} />
-              </div>
-              <h2 className="text-xl md:text-2xl font-bold text-white mb-2">Driver Team</h2>
-              <p className="text-gray-300">Manage your driver personnel</p>
-            </div>
-          </div> */}
+        <div className={`md:pt-24 pt-20 px-4 md:px-8 w-full ${sidebarOpen ? 'opacity-50' : 'opacity-100'} bg-[#F3F4F6]`}>
+          <Outlet />
         </div>
-        <Outlet/>
       </div>
-      
+
       {/* Overlay for mobile when sidebar is open */}
       {sidebarOpen && (
-        <div 
-          className="md:hidden fixed inset-0 bg-black bg-opacity-50 z-20"
-          onClick={() => setSidebarOpen(false)}
-        />
+        <div className="md:hidden fixed inset-0 bg-black bg-opacity-50 z-20" onClick={() => setSidebarOpen(false)} />
       )}
     </div>
   );

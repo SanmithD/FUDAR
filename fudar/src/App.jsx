@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useEffect } from 'react';
 import { Route, Routes, useNavigate } from 'react-router-dom';
 import './App.css';
 import Admin from './Components/Admin.jsx';
@@ -22,39 +22,40 @@ import VehicleManagement from './Components/VehicleManagement .jsx';
 import Vehicles from './Components/Vehicles.jsx';
 
 function App() {
-
   const navigate = useNavigate();
   const token = localStorage.getItem('token');
 
-  if(!token){
-    return navigate('/login')
-  }
+  useEffect(() => {
+    if (!token) {
+      navigate('/login');
+    }
+  }, [token, navigate]);
 
   return (
-      <Routes>
+    <Routes>
       <Route path="/login" element={<Login />} />
       <Route path="/signup" element={<Signup />} />
       <Route path="/" element={<Dashboard />}>
-      <Route path="/main" element={<MainDashboard />} />
-      <Route path="/LoginDrivers" element={<LoginDrivers />} />
-      <Route path="/DriverSignIn" element={<DriverSignIn />} />
-      <Route path="/Register" element={<Register />} />
-      
-      <Route path="/LoginStaff" element={<LoginStaff />} />
-      <Route path="/LoginAdmin" element={< LoginAdmin/>} />
-      
-      <Route path="/" element={<Drivers />} />
-      <Route path="/vehicles" element={<Vehicles />} />
-      <Route path="/vehicle/:id" element={<VehicleDetail />} />
-      <Route path='/newDriver' element={<DriverManagement/>}/>
-      <Route path='/driverDetails/:id' element={<DriverDetails/>}/>
-      <Route path='/allDrivers' element={<DriversList/>}/>
-      <Route path="/pdriver" element={<PDriver />} />
-      <Route path="/vehicleManage" element={<VehicleManagement />} />
-      <Route path="/allVehicles" element={<AllVehicles />} />
-      <Route path="/admin" element={<Admin />} />
+        <Route path="/main" element={<MainDashboard />} />
+        <Route path="/LoginDrivers" element={<LoginDrivers />} />
+        <Route path="/DriverSignIn" element={<DriverSignIn />} />
+        <Route path="/Register" element={<Register />} />
+
+        <Route path="/LoginStaff" element={<LoginStaff />} />
+        <Route path="/LoginAdmin" element={<LoginAdmin />} />
+
+        <Route path="/drivers" element={<Drivers />} />
+        <Route path="/vehicles" element={<Vehicles />} />
+        <Route path="/vehicle/:id" element={<VehicleDetail />} />
+        <Route path="/newDriver" element={<DriverManagement />} />
+        <Route path="/driverDetails/:id" element={<DriverDetails />} />
+        <Route path="/allDrivers" element={<DriversList />} />
+        <Route path="/pdriver" element={<PDriver />} />
+        <Route path="/vehicleManage" element={<VehicleManagement />} />
+        <Route path="/allVehicles" element={<AllVehicles />} />
+        <Route path="/admin" element={<Admin />} />
       </Route>
-      </Routes>
+    </Routes>
   );
 }
 
