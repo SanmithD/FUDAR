@@ -27,7 +27,7 @@ function App() {
     <Routes>
       <Route path="/login" element={<Login />} />
       <Route path="/signup" element={<Signup />} />
-      <Route path="/" element={<Dashboard />}>
+      <Route path="/*" element={<Dashboard />}>
         <Route path="/main" element={<MainDashboard />} />
         <Route path="/LoginDrivers" element={<LoginDrivers />} />
         <Route path="/DriverSignIn" element={<DriverSignIn />} />
@@ -36,7 +36,7 @@ function App() {
         <Route path="/LoginStaff" element={<LoginStaff />} />
         <Route path="/LoginAdmin" element={<LoginAdmin />} />
 
-        <Route path="/drivers" element={<Drivers />} />
+        <Route path="/" element={<Drivers />} />
         <Route path="/vehicles" element={<Vehicles />} />
         <Route path="/vehicle/:id" element={<VehicleDetail />} />
         <Route path="/newDriver" element={<DriverManagement />} />
