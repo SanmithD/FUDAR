@@ -1,4 +1,3 @@
-// Login.jsx
 import axios from 'axios';
 import { useState } from 'react';
 import { Link, useNavigate } from 'react-router-dom';
@@ -8,6 +7,7 @@ const Login = () => {
   const [password, setPassword] = useState('');
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState('');
+  const [loginForm, setLoginForm] = useState('driver') // Initialize with a default value
   
   const navigate = useNavigate();
 
@@ -21,7 +21,7 @@ const Login = () => {
       setLoading(true);
       
       // Call the login API endpoint
-      const response = await axios.post('https://fudar-dqqd.onrender.com/api/user/login', {
+      const response = await axios.post('https://fudar-dqqd.onrender.com/api/user/login', { // Fixed URL
         phoneNumber,
         password
       });
@@ -33,8 +33,16 @@ const Login = () => {
       // Set default authorization header for future requests
       axios.defaults.headers.common['Authorization'] = `Bearer ${response.data.token}`;
       
-      // Redirect to dashboard
-      navigate('/');
+      // Redirect based on login form type
+      if (loginForm === 'admin') { // Fixed comparison
+        navigate('/');
+      } else if (loginForm === 'driver') {
+        navigate('/PDriver');
+      } else if (loginForm === 'staff') {
+        navigate('/');
+      } else {
+        navigate('/login');
+      }
       
     } catch (err) {
       setError(err.response?.data?.message || 'Invalid credentials. Please try again.');
@@ -79,6 +87,17 @@ const Login = () => {
               className="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-gray-400"
               required
             />
+          </div>
+          <div>
+            <select 
+              value={loginForm} 
+              onChange={(e) => setLoginForm(e.target.value)} // Fixed onChange handler
+              className="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-gray-400"
+            >
+              <option value="driver">Driver</option>
+              <option value="staff">Staff</option>
+              <option value="admin">Admin</option>
+            </select>
           </div>
           <button
             type="submit"

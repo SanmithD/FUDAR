@@ -6,7 +6,7 @@ import AllVehicles from './Components/AllVehicles.jsx';
 import Dashboard from './Components/Dashboard.jsx';
 import DriverDetails from './Components/DriverDetails.jsx';
 import DriverManagement from './Components/DriverManagement.jsx';
-import Drivers from './Components/Drivers.jsx';
+// import Drivers from './Components/Drivers.jsx';
 import DriverSignIn from './Components/DriverSignIn.jsx';
 import DriversList from './Components/DriversList.jsx';
 import Login from './Components/Login.jsx';
@@ -27,6 +27,7 @@ function App() {
     <Routes>
       <Route path="/login" element={<Login />} />
       <Route path="/signup" element={<Signup />} />
+      <Route path="/driver" element={<PDriver />} />
       <Route path="/" element={<Dashboard />}>
         <Route path="/main" element={<MainDashboard />} />
         <Route path="/LoginDrivers" element={<LoginDrivers />} />
@@ -36,7 +37,7 @@ function App() {
         <Route path="/LoginStaff" element={<LoginStaff />} />
         <Route path="/LoginAdmin" element={<LoginAdmin />} />
 
-        <Route path="/driver" element={<Drivers />} />
+        {/* <Route path="/driver" element={<Drivers />} /> */}
         <Route path="/vehicles" element={<Vehicles />} />
         <Route path="/vehicle/:id" element={<VehicleDetail />} />
         <Route path="/newDriver" element={<DriverManagement />} />
