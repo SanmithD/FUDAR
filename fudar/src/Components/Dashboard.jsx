@@ -46,7 +46,6 @@ export default function Dashboard() {
 
   // UseEffect for fetching user data and animations
   useEffect(() => {
-    // Check if token exists, redirect to login if not
     if (!localStorage.getItem('token')) {
       navigate('/login');
     } else {

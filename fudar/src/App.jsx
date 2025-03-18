@@ -1,5 +1,5 @@
-import React, { useEffect } from 'react';
-import { Route, Routes, useNavigate } from 'react-router-dom';
+import React from 'react';
+import { Route, Routes } from 'react-router-dom';
 import './App.css';
 import Admin from './Components/Admin.jsx';
 import AllVehicles from './Components/AllVehicles.jsx';
@@ -22,14 +22,6 @@ import VehicleManagement from './Components/VehicleManagement .jsx';
 import Vehicles from './Components/Vehicles.jsx';
 
 function App() {
-  const navigate = useNavigate();
-  const token = localStorage.getItem('token');
-
-  useEffect(() => {
-    if (!token) {
-      navigate('/login');
-    }
-  }, [token, navigate]);
 
   return (
     <Routes>
