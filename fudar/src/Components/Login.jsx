@@ -37,7 +37,7 @@ const Login = () => {
       if (loginForm === 'admin') { // Fixed comparison
         navigate('/');
       } else if (loginForm === 'driver') {
-        navigate('/PDriver');
+        navigate('/driverPage');
       } else if (loginForm === 'staff') {
         navigate('/');
       } else {

@@ -91,7 +91,7 @@ export default function Dashboard() {
             </button>
           </div>
           <ul className="flex flex-col gap-2 p-4">
-            <li className="flex items-center p-3 text-white hover:bg-gray-500 rounded-md cursor-pointer transition-colors" onClick={() => { navigate("/"); closeDropdowns(); }}>
+            <li className="flex items-center p-3 text-white hover:bg-gray-500 rounded-md cursor-pointer transition-colors" onClick={() => { navigate("/driver"); closeDropdowns(); }}>
               <Users className="mr-2 text-white" /> Drivers
             </li>
             <li className="flex items-center p-3 text-white hover:bg-gray-500 rounded-md cursor-pointer transition-colors" onClick={() => { navigate("/vehicles"); closeDropdowns(); }}>
