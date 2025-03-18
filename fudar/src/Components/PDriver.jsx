@@ -1,5 +1,5 @@
+import { Menu, X } from "lucide-react";
 import React, { useState } from "react";
-import { Menu, X, LogOut} from "lucide-react";
 
 const Dashboard = () => {
   const [activeSection, setActiveSection] = useState(null);
@@ -123,7 +123,7 @@ const Dashboard = () => {
       </div>
 
       {/* Sidebar - hidden by default on mobile, shown when toggle is clicked */}
-      <div className={`${isSidebarOpen ? 'block' : 'hidden'} md:block w-full md:w-64 bg-[#8cc745] text-white p-4 md:min-h-screen overflow-y-auto z-10 absolute md:relative top-0 left-0 h-screen md:h-auto`}>
+      <div className={`${isSidebarOpen ? 'block' : 'hidden'} md:block w-full md:w-64 bg-[black] text-white p-4 md:min-h-screen overflow-y-auto z-10 absolute md:relative top-0 left-0 h-screen md:h-auto`}>
         <h2 className="text-xl font-bold mb-4 hidden md:block">Car Rental</h2>
         <button
           onClick={() => handleMenuClick(activeSection === "dashboard" ? null : "dashboard")}
