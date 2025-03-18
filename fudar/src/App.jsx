@@ -1,5 +1,5 @@
 import React from 'react';
-import { Route, Routes } from 'react-router-dom';
+import { Route, Routes, useNavigate } from 'react-router-dom';
 import './App.css';
 import Admin from './Components/Admin.jsx';
 import AllVehicles from './Components/AllVehicles.jsx';
@@ -21,8 +21,15 @@ import VehicleDetail from './Components/VehicleDetail.jsx';
 import VehicleManagement from './Components/VehicleManagement .jsx';
 import Vehicles from './Components/Vehicles.jsx';
 
-
 function App() {
+
+  const navigate = useNavigate();
+  const token = localStorage.getItem('token');
+
+  if(!token){
+    return navigate('/login')
+  }
+
   return (
       <Routes>
       <Route path="/login" element={<Login />} />

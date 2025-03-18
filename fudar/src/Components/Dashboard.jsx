@@ -103,7 +103,7 @@ export default function Dashboard() {
               <Users className="mr-2 text-white" /> Assign Drivers
             </li>
             <li className="flex items-center p-3 text-white hover:bg-gray-500 rounded-md cursor-pointer transition-colors" onClick={() => { navigate("/allVehicles"); closeDropdowns(); }}>
-              <Users className="mr-2 text-white" /> All Vehicles
+              <Truck className="mr-2 text-white" /> All Vehicles
             </li>
           </ul>
         </div>

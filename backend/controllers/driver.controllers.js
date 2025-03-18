@@ -648,7 +648,7 @@ const deleteVehicleById = async (req, res) => {
     console.error("Delete Vehicle Error:", error);
     res.status(500).json({
       success: false,
-      message: "Failed to delete vehicle",
+      message: "Server error",
       error: error.message,
     });
   }
@@ -722,48 +722,58 @@ const assignVehicleToDriver = async (req, res) => {
 };
 
 const unassignVehicleFromDriver = async (req, res) => {
-  const { vehicleId } = req.body;
+  const { vehicleId, _id } = req.params;
 
-  if (!vehicleId) {
-    return res.status(400).json({
-      success: false,
-      message: "Vehicle ID is required",
-    });
+  if (!vehicleId || !_id) {
+      return res.status(400).json({
+          success: false,
+          message: "Vehicle ID and Driver ID are required",
+      });
   }
 
   try {
-    // Find the vehicle by ID
-    const vehicle = await staffVehicleModel.findByIdAndUpdate(vehicleId,{
-      status: 'available'
-    },{new : true});
-    if (!vehicle) {
-      return res.status(404).json({
-        success: false,
-        message: "Vehicle not found",
-      });
-    }
-    await vehicle.save();
+      // Find the vehicle by ID and update its status
+      const vehicle = await staffVehicleModel.findByIdAndUpdate(vehicleId, {
+          status: 'available'
+      }, { new: true });
+      if (!vehicle) {
+          return res.status(404).json({
+              success: false,
+              message: "Vehicle not found",
+          });
+      }
 
-    const response = await bookModel.findOneAndDelete({ staffVehicle: vehicleId });
-    if (!response) {
-      return res.status(404).json({
-        success: false,
-        message: "Vehicle not found",
-      });
-    }
+      // Find the driver by ID and update their status
+      const driver = await driverModel.findByIdAndUpdate(_id, {
+          status: 'available'
+      }, { new: true });
+      if (!driver) {
+          return res.status(404).json({
+              success: false,
+              message: "Driver not found",
+          });
+      }
 
-    res.status(200).json({
-      success: true,
-      message: "Vehicle unassigned from driver successfully",
-      response,
-    });
+      // Optionally, delete any related booking if needed
+      // const response = await bookModel.findOneAndDelete({ staffVehicle: vehicleId });
+      // if (!response) {
+      //   return res.status(404).json({
+      //     success: false,
+      //     message: "Booking not found",
+      //   });
+      // }
+
+      res.status(200).json({
+          success: true,
+          message: "Vehicle unassigned from driver successfully",
+      });
   } catch (error) {
-    console.error("Unassign Vehicle Error:", error);
-    res.status(500).json({
-      success: false,
-      message: "Failed to unassign vehicle",
-      error: error.message,
-    });
+      console.error("Unassign Vehicle Error:", error);
+      res.status(500).json({
+          success: false,
+          message: "Failed to unassign vehicle",
+          error: error.message,
+      });
   }
 };
 

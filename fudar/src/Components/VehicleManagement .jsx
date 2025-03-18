@@ -24,6 +24,7 @@ const VehicleManagement = () => {
   const [assignMode, setAssignMode] = useState(false);
   const [selectedAssignVehicle, setSelectedAssignVehicle] = useState("");
   const [staffVehicleId, setStaffVehicleId] = useState(null);
+  const [driverIdData, setDriverIdData] = useState(null);
 
   useEffect(() => {
     fetchVehicles();
@@ -36,18 +37,24 @@ const VehicleManagement = () => {
       const res = await axios.get("http://localhost:8080/api/staffVehicle/all");
       const allVehicles = res.data.vehicles || [];
       let assignedVehicleIds = [];
-      
+
       try {
-        const bookings = await axios.get("http://localhost:8080/api/book/active");
-        console.log(bookings.data[0].staffVehicle);
+        const bookings = await axios.get(
+          "http://localhost:8080/api/book/active"
+        );
         setStaffVehicleId(bookings.data[0].staffVehicle);
-        assignedVehicleIds = bookings.data.map(booking => booking.staffVehicle.toString());
+        assignedVehicleIds = bookings.data.map((booking) =>
+          booking.staffVehicle.toString()
+        );
       } catch (bookingErr) {
-        console.warn("No active bookings found or endpoint unavailable", bookingErr);
+        console.warn(
+          "No active bookings found or endpoint unavailable",
+          bookingErr
+        );
       }
-  
-      const available = allVehicles.filter(vehicle => 
-        !assignedVehicleIds.includes(vehicle._id.toString())
+
+      const available = allVehicles.filter(
+        (vehicle) => !assignedVehicleIds.includes(vehicle._id.toString())
       );
       setAvailableVehicles(available);
     } catch (err) {
@@ -59,7 +66,7 @@ const VehicleManagement = () => {
     try {
       const res = await axios.get("http://localhost:8080/api/staffVehicle/all");
       setVehicles(res.data.vehicles || []);
-      console.log(res.data)
+      setDriverIdData(res.data.vehicles._id);
     } catch (err) {
       setError("Failed to fetch vehicles: " + err.message);
     }
@@ -67,8 +74,11 @@ const VehicleManagement = () => {
 
   const fetchDrivers = async () => {
     try {
-      const res = await axios.get("http://localhost:8080/api/driver/getAllDriver");
+      const res = await axios.get(
+        "http://localhost:8080/api/driver/getAllDriver"
+      );
       setDrivers(res.data.details || []);
+      setDriverIdData(res.data.details[0]._id);
     } catch (err) {
       console.error("Failed to fetch drivers:", err);
       setError("Failed to fetch drivers");
@@ -104,7 +114,6 @@ const VehicleManagement = () => {
           { headers: { "Content-Type": "multipart/form-data" } }
         );
         setSuccess("Vehicle updated successfully");
-        console.log(response.data)
       }
       resetState();
       fetchVehicles();
@@ -118,7 +127,9 @@ const VehicleManagement = () => {
   const handleDelete = async (id) => {
     if (window.confirm("Delete this vehicle?")) {
       try {
-        await axios.delete(`http://localhost:8080/api/vehicle/unassign/${id}`);
+        await axios.delete(
+          `http://localhost:8080/api/staffVehicle/deleteStaffVehicle/${id}`
+        );
         setSuccess("Vehicle deleted successfully");
         fetchVehicles();
       } catch (err) {
@@ -139,10 +150,10 @@ const VehicleManagement = () => {
         "http://localhost:8080/api/vehicle/staffAssign",
         {
           vehicleId: selectedAssignVehicle,
-          driverId: formData.driverId
+          driverId: formData.driverId,
         }
       );
-      
+
       setSuccess("Vehicle assigned successfully");
       setAssignMode(false);
       setSelectedAssignVehicle("");
@@ -158,19 +169,20 @@ const VehicleManagement = () => {
     }
   };
 
-  const handleUnassignDriver = async (vehicleId) => {
-    try {
-      await axios.post("http://localhost:8080/api/vehicle/unassign", {
-        vehicleId,
-      });
-      setSuccess("Driver unassigned successfully");
-      fetchVehicles();
-      fetchAvailableVehicles();
-      fetchDrivers();
-    } catch (err) {
-      setError("Failed to unassign driver: " + err.message);
-    }
-  };
+  // const handleUnassignDriver = async (vehicleId, driverIdData) => {
+  //   try {
+  //     await axios.put(
+  //       `http://localhost:8080/api/vehicle/unassign/${vehicleId}/driver/${driverIdData}`
+  //     );
+  //     setSuccess("Driver unassigned successfully");
+  //     fetchVehicles();
+  //     fetchAvailableVehicles();
+  //     fetchDrivers();
+  //   } catch (err) {
+  //     setError("Failed to unassign driver: " + err.message);
+  //     console.error("Error unassigning driver:", err);
+  //   }
+  // };
 
   const resetState = () => {
     setFormData({ vehicleType: "", vehicleNumber: "", driverId: "" });
@@ -186,25 +198,27 @@ const VehicleManagement = () => {
 
   return (
     <div className="max-w-4xl mx-auto p-6 bg-gray-100 min-h-screen">
-      <h1 className="text-3xl font-bold mb-6 text-gray-800">Vehicle Management</h1>
-  
+      <h1 className="text-3xl font-bold mb-6 text-gray-800">
+        Vehicle Management
+      </h1>
+
       {error && (
         <div className="bg-red-100 text-red-800 p-4 mb-6 rounded-lg">
           {error}
         </div>
       )}
-  
+
       {success && (
         <div className="bg-green-100 text-green-800 p-4 mb-6 rounded-lg">
           {success}
         </div>
       )}
-  
+
       <div className="mb-6 flex gap-2">
         <button
           onClick={() => setViewMode("list")}
           className={`px-4 py-2 rounded-md transition-colors ${
-            viewMode === "list" 
+            viewMode === "list"
               ? "bg-blue-600 text-white"
               : "bg-gray-200 text-gray-800 hover:bg-gray-300"
           }`}
@@ -214,7 +228,7 @@ const VehicleManagement = () => {
         <button
           onClick={() => setAssignMode(true)}
           className={`px-4 py-2 rounded-md transition-colors ${
-            assignMode 
+            assignMode
               ? "bg-green-600 text-white"
               : "bg-gray-200 text-gray-800 hover:bg-gray-300"
           }`}
@@ -222,13 +236,17 @@ const VehicleManagement = () => {
           Assign Vehicle
         </button>
       </div>
-  
+
       {assignMode && (
         <div className="bg-white p-6 rounded-lg mb-6">
-          <h2 className="text-2xl font-semibold mb-6">Assign Vehicle to Driver</h2>
+          <h2 className="text-2xl font-semibold mb-6">
+            Assign Vehicle to Driver
+          </h2>
           <div className="flex gap-6 mb-6">
             <div className="w-1/2">
-              <label className="block mb-2 font-medium text-gray-700">Select Vehicle</label>
+              <label className="block mb-2 font-medium text-gray-700">
+                Select Vehicle
+              </label>
               <select
                 value={selectedAssignVehicle}
                 onChange={(e) => setSelectedAssignVehicle(e.target.value)}
@@ -242,17 +260,21 @@ const VehicleManagement = () => {
                 ))}
               </select>
             </div>
-  
+
             <div className="w-1/2">
-              <label className="block mb-2 font-medium text-gray-700">Select Driver</label>
+              <label className="block mb-2 font-medium text-gray-700">
+                Select Driver
+              </label>
               <select
                 value={formData.driverId}
-                onChange={(e) => setFormData({ ...formData, driverId: e.target.value })}
+                onChange={(e) =>
+                  setFormData({ ...formData, driverId: e.target.value })
+                }
                 className="w-full p-2 border border-gray-300 rounded-md"
               >
                 <option value="">Select Driver</option>
                 {drivers
-                  .filter(driver => driver.status === "available")
+                  .filter((driver) => driver.status === "available")
                   .map((driver) => (
                     <option key={driver._id} value={driver._id}>
                       {driver.driverName}
@@ -261,7 +283,7 @@ const VehicleManagement = () => {
               </select>
             </div>
           </div>
-  
+
           <div className="flex justify-end gap-2">
             <button
               onClick={handleStaffAssign}
@@ -283,7 +305,7 @@ const VehicleManagement = () => {
           </div>
         </div>
       )}
-  
+
       {viewMode === "list" && (
         <div className="overflow-x-auto">
           <table className="w-full border-collapse">
@@ -297,14 +319,12 @@ const VehicleManagement = () => {
             </thead>
             <tbody>
               {vehicles.map((vehicle) => (
-                <tr
-                  key={vehicle._id}
-                  className="border-b border-gray-200"
-                >
+                <tr key={vehicle._id} className="border-b border-gray-200">
                   <td className="p-4">{vehicle.vehicleType}</td>
                   <td className="p-4">{vehicle.vehicleNumber}</td>
                   <td className="p-4">
-                    {drivers.find((d) => d.vehicle === vehicle._id)?.driverName || "Unassigned"}
+                    {drivers.find((d) => d.vehicle === vehicle._id)
+                      ?.driverName || "Unassigned"}
                   </td>
                   <td className="p-4 flex gap-2">
                     <button
@@ -329,15 +349,14 @@ const VehicleManagement = () => {
           </table>
         </div>
       )}
-  
+
       {viewMode === "form" && selectedVehicle && (
-        <form
-          onSubmit={handleCreateUpdate}
-          className="bg-white p-6 rounded-lg"
-        >
+        <form onSubmit={handleCreateUpdate} className="bg-white p-6 rounded-lg">
           <div className="grid grid-cols-2 gap-6 mb-6">
             <div>
-              <label className="block mb-2 font-medium text-gray-700">Vehicle Type</label>
+              <label className="block mb-2 font-medium text-gray-700">
+                Vehicle Type
+              </label>
               <input
                 type="text"
                 name="vehicleType"
@@ -347,9 +366,11 @@ const VehicleManagement = () => {
                 className="w-full p-2 border border-gray-300 rounded-md"
               />
             </div>
-  
+
             <div>
-              <label className="block mb-2 font-medium text-gray-700">Vehicle Number</label>
+              <label className="block mb-2 font-medium text-gray-700">
+                Vehicle Number
+              </label>
               <input
                 type="text"
                 name="vehicleNumber"
@@ -359,9 +380,11 @@ const VehicleManagement = () => {
                 className="w-full p-2 border border-gray-300 rounded-md"
               />
             </div>
-  
+
             <div>
-              <label className="block mb-2 font-medium text-gray-700">Vehicle Image</label>
+              <label className="block mb-2 font-medium text-gray-700">
+                Vehicle Image
+              </label>
               <input
                 type="file"
                 name="vehicleImage"
@@ -369,9 +392,11 @@ const VehicleManagement = () => {
                 className="w-full"
               />
             </div>
-  
+
             <div>
-              <label className="block mb-2 font-medium text-gray-700">Emission Test</label>
+              <label className="block mb-2 font-medium text-gray-700">
+                Emission Test
+              </label>
               <input
                 type="file"
                 name="emissionTest"
@@ -379,9 +404,11 @@ const VehicleManagement = () => {
                 className="w-full"
               />
             </div>
-  
+
             <div>
-              <label className="block mb-2 font-medium text-gray-700">Vehicle RC</label>
+              <label className="block mb-2 font-medium text-gray-700">
+                Vehicle RC
+              </label>
               <input
                 type="file"
                 name="vehicleRC"
@@ -389,9 +416,11 @@ const VehicleManagement = () => {
                 className="w-full"
               />
             </div>
-  
+
             <div>
-              <label className="block mb-2 font-medium text-gray-700">Vehicle Insurance</label>
+              <label className="block mb-2 font-medium text-gray-700">
+                Vehicle Insurance
+              </label>
               <input
                 type="file"
                 name="vehicleInsurance"
@@ -400,7 +429,7 @@ const VehicleManagement = () => {
               />
             </div>
           </div>
-  
+
           <div className="flex justify-end gap-2">
             <button
               type="submit"
@@ -419,94 +448,98 @@ const VehicleManagement = () => {
           </div>
         </form>
       )}
-  
+
       {viewMode === "details" && selectedVehicle && (
         <div className="bg-white p-6 rounded-lg flex flex-col gap-[20px] ">
-          <div className="flex gap[20px]" >
+          <div className="flex gap[20px]">
+            <div className="flex gap-[20px]">
+              <div className="gap-6 mb-6 flex flex-col w-[30%] ">
+                <h2 className="text-2xl font-semibold mb-6">Vehicle Details</h2>
+                <div>
+                  <p className="font-medium mb-2">
+                    Type: {selectedVehicle.vehicleType}
+                  </p>
+                  <p className="font-medium mb-2">
+                    Number: {selectedVehicle.vehicleNumber}
+                  </p>
+                  <p className="font-medium mb-2">
+                    Assigned Driver:{" "}
+                    {drivers.find((d) => d.vehicle === selectedVehicle._id)
+                      ?.driverName || "None"}
+                  </p>
+                </div>
+              </div>
 
-          <div className="flex gap-[20px]" >
-  
-          <div className="gap-6 mb-6 flex flex-col w-[30%] ">
-          <h2 className="text-2xl font-semibold mb-6">Vehicle Details</h2>
-            <div >
-              <p className="font-medium mb-2">Type: {selectedVehicle.vehicleType}</p>
-              <p className="font-medium mb-2">Number: {selectedVehicle.vehicleNumber}</p>
-              <p className="font-medium mb-2">
-                Assigned Driver:{" "}
-                {drivers.find((d) => d.vehicle === selectedVehicle._id)?.driverName || "None"}
-              </p>
-            </div>
-          </div>
-  
-            <div >
-              <h3 className="font-medium mb-4 text-[30px] ">Documents:</h3>
-              <div className="flex gap-[30px] " >
               <div>
-              <p className="mb-4">
-                Emission Test:{" "}
-                <img
-                  src={selectedVehicle.staffVehicleEmission}
-                  alt={selectedVehicle.staffVehicleEmission}
-                  className="h-48 w-64 object-cover"
-                />
-              </p>
-              <p className="mb-4">
-                Vehicle RC:{" "}
-                <img
-                  src={selectedVehicle.staffVehicleRC}
-                  alt={selectedVehicle.staffVehicleRC}
-                  className="h-48 w-64 object-cover"
-                />
-              </p>
-              <p>
-                Insurance:{" "}
-                <img
-                  src={selectedVehicle.staffVehicleInsurance}
-                  alt={selectedVehicle.staffVehicleInsurance}
-                  className="h-48 w-64 object-cover"
-                />
-              </p>
-              </div>
-              <div>
-              <p className="mb-4">
-                Front View:{" "}
-                <img
-                  src={selectedVehicle.vehicleImage[0].front}
-                  alt={selectedVehicle.vehicleImage.back}
-                  className="h-48 w-64 object-cover"
-                />
-              </p>
-              <p className="mb-4">
-                Back View:{" "}
-                <img
-                  src={selectedVehicle.vehicleImage[0].back}
-                  alt={selectedVehicle.vehicleImage.back}
-                  className="h-48 w-64 object-cover"
-                />
-              </p>
-              <p className="mb-4">
-                Side View:{" "}
-                <img
-                  src={selectedVehicle.vehicleImage[0].side}
-                  alt={selectedVehicle.vehicleImage.side}
-                  className="h-48 w-64 object-cover"
-                />
-              </p>
-              </div>
+                <h3 className="font-medium mb-4 text-[30px] ">Documents:</h3>
+                <div className="flex gap-[30px] ">
+                  <div>
+                    <p className="mb-4">
+                      Emission Test:{" "}
+                      <img
+                        src={selectedVehicle.staffVehicleEmission}
+                        alt={selectedVehicle.staffVehicleEmission}
+                        className="h-48 w-64 object-cover"
+                      />
+                    </p>
+                    <p className="mb-4">
+                      Vehicle RC:{" "}
+                      <img
+                        src={selectedVehicle.staffVehicleRC}
+                        alt={selectedVehicle.staffVehicleRC}
+                        className="h-48 w-64 object-cover"
+                      />
+                    </p>
+                    <p>
+                      Insurance:{" "}
+                      <img
+                        src={selectedVehicle.staffVehicleInsurance}
+                        alt={selectedVehicle.staffVehicleInsurance}
+                        className="h-48 w-64 object-cover"
+                      />
+                    </p>
+                  </div>
+                  <div>
+                    <p className="mb-4">
+                      Front View:{" "}
+                      <img
+                        src={selectedVehicle.vehicleImage[0].front}
+                        alt={selectedVehicle.vehicleImage.back}
+                        className="h-48 w-64 object-cover"
+                      />
+                    </p>
+                    <p className="mb-4">
+                      Back View:{" "}
+                      <img
+                        src={selectedVehicle.vehicleImage[0].back}
+                        alt={selectedVehicle.vehicleImage.back}
+                        className="h-48 w-64 object-cover"
+                      />
+                    </p>
+                    <p className="mb-4">
+                      Side View:{" "}
+                      <img
+                        src={selectedVehicle.vehicleImage[0].side}
+                        alt={selectedVehicle.vehicleImage.side}
+                        className="h-48 w-64 object-cover"
+                      />
+                    </p>
+                  </div>
+                </div>
               </div>
             </div>
           </div>
-  
-          </div>
-          <div className="flex items-center gap-2 mb-6">
+          {/* <div className="flex items-center gap-2 mb-6">
             <select
               value={formData.driverId}
-              onChange={(e) => setFormData({ ...formData, driverId: e.target.value })}
+              onChange={(e) =>
+                setFormData({ ...formData, driverId: e.target.value })
+              }
               className="p-2 border border-gray-300 rounded-md"
             >
               <option value="">Select Driver</option>
               {drivers
-                .filter(driver => driver.status === "available")
+                .filter((driver) => driver.status === "available")
                 .map((driver) => (
                   <option key={driver._id} value={driver._id}>
                     {driver.driverName}
@@ -514,19 +547,18 @@ const VehicleManagement = () => {
                 ))}
             </select>
             <button
-              onClick={() => handleUnassignDriver(staffVehicleId)}
-              className="px-4 py-2 bg-red-600 text-white rounded-md hover:bg-red-700"
+              onClick={() => handleDelete(driverIdData)}
+              className="px-3 py-2 bg-red-600 text-white rounded-md hover:bg-red-700"
             >
-              Unassign Driver
+              Delete
             </button>
-          </div>
+          </div> */}
           <button
             onClick={() => setViewMode("list")}
             className="px-4 py-2 bg-blue-600 text-white rounded-md hover:bg-blue-700"
           >
             Back to List
           </button>
-  
         </div>
       )}
     </div>
