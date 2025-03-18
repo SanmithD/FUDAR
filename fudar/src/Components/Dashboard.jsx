@@ -29,6 +29,7 @@ export default function Dashboard() {
         console.log(error);
       }
     };
+    navigate();
     getUser();
     const timer = setTimeout(() => {
       setAnimateCards(true);
