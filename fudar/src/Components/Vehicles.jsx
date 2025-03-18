@@ -39,7 +39,7 @@ const Vehicles = () => {
     formDataToSend.append('staffVehicleInsurance', formData.staffVehicleInsurance);
 
     try {
-      const response = await axios.post('http://localhost:8080/api/staffVehicle/create', formDataToSend, {
+      const response = await axios.post('https://fudar-dqqd.onrender.com/api/staffVehicle/create', formDataToSend, {
         headers: {
           'Content-Type': 'multipart/form-data',
         },
