@@ -17,13 +17,15 @@ import Signup from './Components/Signup.jsx';
 import VehicleDetail from './Components/VehicleDetail.jsx';
 import VehicleManagement from './Components/VehicleManagement .jsx';
 import Vehicles from './Components/Vehicles.jsx';
+
 function App() {
+
 
   return (
     <Routes>
       <Route path="/login" element={<Login />} />
       <Route path="/signup" element={<Signup />} />
-      <Route path="/driverPage" element={<PDriver />} />
+      <Route path="/driverPage" element={ <PDriver />} />
         <Route path="/main" element={<MainDashboard />} />
       <Route path="/" element={<Dashboard />}>
         <Route path="/DriverSignIn" element={<DriverSignIn />} />

@@ -47,7 +47,7 @@ vehicleRouter.delete("/:id", deleteVehicleById);
 vehicleRouter.post("/assign", assignVehicleToDriver);
 
 // Unassign vehicle from driver
-vehicleRouter.put("/unassign/:vehicleId/driver/:id", unassignVehicleFromDriver);
+vehicleRouter.put("/unassign/:staffVehicle", unassignVehicleFromDriver);
 
 // Get vehicle by driver ID
 vehicleRouter.get("/driver/:driverId", getVehicleByDriverId);

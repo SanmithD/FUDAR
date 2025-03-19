@@ -1,5 +1,5 @@
 import axios from "axios";
-import { Truck, UserCircle, Users, X } from "lucide-react";
+import { Menu, Truck, UserCircle, Users, X } from "lucide-react";
 import { useEffect, useState } from "react";
 import { Outlet, useNavigate } from "react-router-dom";
 
@@ -24,13 +24,12 @@ export default function Dashboard() {
           Authorization: `Bearer ${localStorage.getItem('token')}`
         }
       });
-      setUserData(response.data.user.name); // Set user name from response
+      setUserData(response.data.user.name);
     } catch (error) {
       console.log(error);
     }
   };
 
-  // Handle Profile Click (for viewing driver info)
   const handleProfile = async () => {
     try {
       const response = await axios.get('http://localhost:8080/api/driver/viewDriverInfo', {
@@ -72,7 +71,7 @@ export default function Dashboard() {
   return (
     <div className="flex h-screen bg-gray-100">
       {/* Mobile Header with Menu Button */}
-      {/* <div className="md:hidden fixed top-0 left-0 right-0 p-4 flex justify-between items-center bg-white shadow-sm z-20">
+      <div className="md:hidden fixed top-0 left-0 right-0 p-4 flex justify-between items-center bg-white shadow-sm z-20">
         <button onClick={() => setSidebarOpen(!sidebarOpen)} className="text-black">
           <Menu size={24} />
         </button>
@@ -81,7 +80,7 @@ export default function Dashboard() {
           className="w-8 h-8 text-black cursor-pointer"
           onClick={() => setDropdownOpen(!dropdownOpen)}
         />
-      </div> */}
+      </div>
 
       {/* Sidebar */}
       <div className={`fixed inset-y-0 left-0 w-64 bg-black shadow-lg z-30 transition-transform duration-300 ease-in-out md:translate-x-0 ${sidebarOpen ? 'translate-x-0' : '-translate-x-full'}`}>

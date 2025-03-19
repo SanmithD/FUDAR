@@ -169,20 +169,21 @@ const VehicleManagement = () => {
     }
   };
 
-  // const handleUnassignDriver = async (vehicleId, driverIdData) => {
-  //   try {
-  //     await axios.put(
-  //       `http://localhost:8080/api/vehicle/unassign/${vehicleId}/driver/${driverIdData}`
-  //     );
-  //     setSuccess("Driver unassigned successfully");
-  //     fetchVehicles();
-  //     fetchAvailableVehicles();
-  //     fetchDrivers();
-  //   } catch (err) {
-  //     setError("Failed to unassign driver: " + err.message);
-  //     console.error("Error unassigning driver:", err);
-  //   }
-  // };
+  const handleUnassign = async (id) => {
+    console.log("Booking id ",id)
+    try {
+      await axios.put(
+        `http://localhost:8080/api/vehicle/unassign/${id}`
+      );
+      setSuccess("Driver unassigned successfully");
+      fetchVehicles();
+      fetchAvailableVehicles();
+      fetchDrivers();
+    } catch (err) {
+      setError("Failed to unassign driver: " + err.message);
+      console.error("Error unassigning driver:", err);
+    }
+  };
 
   const resetState = () => {
     setFormData({ vehicleType: "", vehicleNumber: "", driverId: "" });
@@ -529,6 +530,12 @@ const VehicleManagement = () => {
               </div>
             </div>
           </div>
+          <button
+              onClick={() => handleUnassign(selectedVehicle?._id)}
+              className="px-3 py-2 bg-red-600 text-white rounded-md hover:bg-red-700"
+            >
+              Unassign
+            </button>
           {/* <div className="flex items-center gap-2 mb-6">
             <select
               value={formData.driverId}
@@ -545,14 +552,7 @@ const VehicleManagement = () => {
                     {driver.driverName}
                   </option>
                 ))}
-            </select>
-            <button
-              onClick={() => handleDelete(driverIdData)}
-              className="px-3 py-2 bg-red-600 text-white rounded-md hover:bg-red-700"
-            >
-              Delete
-            </button>
-          </div> */}
+            </select>*/}
           <button
             onClick={() => setViewMode("list")}
             className="px-4 py-2 bg-blue-600 text-white rounded-md hover:bg-blue-700"

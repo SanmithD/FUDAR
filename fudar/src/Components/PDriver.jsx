@@ -34,7 +34,6 @@ const Dashboard = () => {
         }
       );
       setProfileData(response.data);
-      console.log("My Data", response.data);
     } catch (error) {
       console.log(error);
     }
@@ -210,7 +209,7 @@ const Dashboard = () => {
                           currentDriver.status === "Paid"
                             ? "bg-green-100 text-green-800"
                             : "bg-yellow-100 text-yellow-800"
-                        }`}
+                        }`} 
                       >
                         {currentDriver.status}
                       </span>

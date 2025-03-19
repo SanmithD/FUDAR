@@ -27,8 +27,7 @@ const Login = () => {
         password
       });
       role = response.data.loggedUser.role;
-      console.log(role)
-      // Store token in localStorage
+      localStorage.setItem('role', role);
       localStorage.setItem('token', response.data.token);
       localStorage.setItem('user', JSON.stringify(response.data.user));
 
