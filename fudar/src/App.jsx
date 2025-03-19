@@ -10,9 +10,6 @@ import Drivers from './Components/Drivers.jsx';
 import DriverSignIn from './Components/DriverSignIn.jsx';
 import DriversList from './Components/DriversList.jsx';
 import Login from './Components/Login.jsx';
-import LoginAdmin from './Components/LoginAdmin.jsx';
-import LoginDrivers from './Components/LoginDrivers.jsx';
-import LoginStaff from './Components/LoginStaff.jsx';
 import MainDashboard from './Components/MainDashboard.jsx';
 import PDriver from './Components/PDriver.jsx';
 import Register from './Components/Register.jsx';
@@ -28,15 +25,10 @@ function App() {
       <Route path="/login" element={<Login />} />
       <Route path="/signup" element={<Signup />} />
       <Route path="/driverPage" element={<PDriver />} />
-      <Route path="/" element={<Dashboard />}>
         <Route path="/main" element={<MainDashboard />} />
-        <Route path="/LoginDrivers" element={<LoginDrivers />} />
+      <Route path="/" element={<Dashboard />}>
         <Route path="/DriverSignIn" element={<DriverSignIn />} />
         <Route path="/Register" element={<Register />} />
-
-        <Route path="/LoginStaff" element={<LoginStaff />} />
-        <Route path="/LoginAdmin" element={<LoginAdmin />} />
-
         <Route path="/driver" element={<Drivers />} />
         <Route path="/vehicles" element={<Vehicles />} />
         <Route path="/vehicle/:id" element={<VehicleDetail />} />
@@ -47,6 +39,7 @@ function App() {
         <Route path="/vehicleManage" element={<VehicleManagement />} />
         <Route path="/allVehicles" element={<AllVehicles />} />
         <Route path="/admin" element={<Admin />} />
+        
       </Route>
     </Routes>
   );

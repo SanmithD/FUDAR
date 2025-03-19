@@ -23,6 +23,7 @@ const userSignup = async(req, res) =>{
     const hashPassword = await bcrypt.hash(password, 10);
     const newUser = new userModel({
       name,
+      role: 'driver',
       phoneNumber,
       password: hashPassword
     });
@@ -30,6 +31,41 @@ const userSignup = async(req, res) =>{
     res.status(200).json({
       success: true,
       message: "Signup success",
+    });
+  } catch (error) {
+    res.status(500).json({
+      success: false,
+      message: "Server error"
+    });
+    console.log(error);
+  }
+}
+
+const updateUser = async(req, res) =>{
+  const { role } = req.body;
+  const { userId } = req.params;
+
+  if(!role){
+    return res.status(400).json({
+      success: false,
+      message: "Please enter all the details"
+    });
+  };
+  const user = await userModel.findById(userId);
+  if(user){
+    return res.status(400).json({
+      success: false,
+      message: "User already exists please login"
+    });
+  }
+  try {
+    const newUser = new userModel.findByIdAndUpdate(userId,{
+      role,
+    },{ new : true });
+    await newUser.save();
+    res.status(200).json({
+      success: true,
+      message: "update success",
     });
   } catch (error) {
     res.status(500).json({
@@ -118,5 +154,5 @@ const userProfile = async(req, res) =>{
   }
 };
 
-export { userLogin, userProfile, userSignup };
+export { updateUser, userLogin, userProfile, userSignup };
 

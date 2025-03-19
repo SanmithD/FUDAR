@@ -1,172 +1,137 @@
 import axios from 'axios';
-import { Search } from 'lucide-react';
-import PropTypes from 'prop-types';
 import { useEffect, useState } from 'react';
-import { useNavigate } from 'react-router-dom';
+import { NavLink } from 'react-router-dom';
 
-const Drivers = () => {
-  const navigate = useNavigate();
+const Driver = () => {
+  const [drivers, setDrivers] = useState([]);
   const [bookings, setBookings] = useState([]);
-  const [searchTerm, setSearchTerm] = useState('');
   const [loading, setLoading] = useState(true);
-  const [vehicleReg, setVehicleReg] = useState(null);
+  const [searchQuery, setSearchQuery] = useState('');
+  const [vehicleMap, setVehicleMap] = useState(new Map());
 
   useEffect(() => {
     const fetchBookings = async () => {
       try {
         const response = await axios.get('http://localhost:8080/api/book/staff/bookings/all');
         setBookings(response.data.bookings || []);
-        setVehicleReg(response.data.bookings[0].staffVehicle.vehicleNumber);
+        console.log(response.data)
+        
+        // Create a map of vehicle numbers by driver ID
+        const vehicleMap = new Map();
+        response.data.bookings.forEach(booking => {
+          if (booking.staffVehicle && booking.driver) {
+            vehicleMap.set(booking.driver._id, booking.staffVehicle.vehicleNumber);
+          }
+        });
+        setVehicleMap(vehicleMap);
       } catch (error) {
         console.error('Error fetching bookings:', error);
-      } finally {
-        setLoading(false);
       }
     };
-    fetchBookings();
+
+    const fetchDrivers = async () => {
+      try {
+        const response = await axios.get('http://localhost:8080/api/driver/getAllDriver');
+        setDrivers(response.data.details || []);
+      } catch (error) {
+        console.error('Error fetching drivers:', error);
+      }
+    };
+
+    Promise.all([fetchBookings(), fetchDrivers()])
+      .finally(() => setLoading(false));
   }, []);
 
-  const filteredBookings = bookings.filter(booking => {
-    const searchLower = searchTerm.toLowerCase();
-    const phoneNumber = booking.driver.driverNumber[0]?.primaryNumber?.toLowerCase() || '';
-    
+  const filteredDrivers = drivers.filter(driver => {
+    const vehicleNumber = vehicleMap.get(driver._id) || '';
+    const searchValue = searchQuery.toLowerCase();
     return (
-      booking.driver.driverName.toLowerCase().includes(searchLower) ||
-      vehicleReg.toLowerCase().includes(searchLower) ||
-      phoneNumber.includes(searchLower)
+      driver.driverName.toLowerCase().includes(searchValue) ||
+      driver.driverNumber[0]?.primaryNumber.includes(searchValue) ||
+      vehicleNumber.includes(searchValue)
     );
   });
 
-  const handleViewDriver = (driverId) => {
-    navigate(`/driverDetails/${driverId}`);
-  };
-
-  if (loading) {
-    return <div className="text-center py-8">Loading drivers...</div>;
-  }
-
   return (
-    <div className="min-h-screen bg-gray-50 p-8 mt-[50px] ">
-      <div className="max-w-6xl mx-auto">
-        {/* Enhanced Search Bar */}
-        <div className="mb-6 bg-white p-4 rounded-lg shadow-sm">
-          <div className="relative">
-            <div className="absolute inset-y-0 left-0 pl-3 flex items-center pointer-events-none">
-              <Search className="h-5 w-5 text-gray-400" />
-            </div>
-            <input
-              type="text"
-              placeholder="Search by name, vehicle number, or phone number"
-              className="w-full pl-10 pr-4 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-gray-400"
-              value={searchTerm}
-              onChange={(e) => setSearchTerm(e.target.value)}
-            />
-          </div>
+    <div className="min-h-screen bg-gray-900 text-white">
+      <div className="container mx-auto p-4">
+        <div className="mb-6">
+          <input
+            type="text"
+            placeholder="Search by name, phone, or vehicle number..."
+            value={searchQuery}
+            onChange={(e) => setSearchQuery(e.target.value)}
+            className="w-full p-2 rounded-md border border-gray-600 bg-gray-800 text-white focus:outline-none focus:border-blue-400"
+          />
         </div>
 
-        {/* Table */}
-        <div className="bg-white rounded-lg shadow-sm overflow-hidden">
-          <div className="overflow-x-auto">
-            <table className="min-w-full divide-y divide-gray-200">
-              {/* Table headers remain same */}
-              <thead className="bg-gray-50">
-                <tr>
-                  <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
-                    Driver
-                  </th>
-                  <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
-                    Phone Number
-                  </th>
-                  <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
-                    Vehicle Number
-                  </th>
-                  <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
-                    Status
-                  </th>
-                  <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
-                    Actions
-                  </th>
-                </tr>
-              </thead>
-
-              <tbody className="bg-white divide-y divide-gray-200">
-                {filteredBookings.map((booking) => (
-                  <tr key={booking._id} className="hover:bg-gray-50">
-                    <td className="px-6 py-4 whitespace-nowrap">
-                      <div className="flex items-center">
-                        <img
-                          src={booking.driver.driverImage}
-                          alt={booking.driver.driverName}
-                          className="h-10 w-10 rounded-full object-cover"
-                        />
-                        <div className="ml-4">
-                          <div className="text-sm font-medium text-gray-900">
-                            {booking.driver.driverName}
-                          </div>
-                        </div>
-                      </div>
-                    </td>
-                    <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-500">
-                      {booking.driver.driverNumber[0]?.primaryNumber}
-                    </td>
-                    <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-500">
-                      {vehicleReg}
-                    </td>
-                    <td className="px-6 py-4 whitespace-nowrap">
-                      <span className={`px-2 py-1 inline-flex text-xs leading-5 font-semibold rounded-full 
-                        ${booking.driver.status === 'assigned' 
-                          ? 'bg-gray-200 text-gray-800' 
-                          : 'bg-gray-100 text-gray-600'}`}>
-                        {booking.driver.status}
-                      </span>
-                    </td>
-                    <td className="px-6 py-4 whitespace-nowrap text-sm font-medium">
-                      <button
-                        onClick={() => handleViewDriver(booking.driver._id)}
-                        className="text-gray-600 hover:text-gray-900"
+        {loading ? (
+          <p className="text-center text-2xl">Loading...</p>
+        ) : (
+          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-4">
+            {filteredDrivers.map(driver => {
+              const vehicleNumber = vehicleMap.get(driver._id) || 'N/A';
+              const vehicleStatus = driver.status || 'N/A';
+              
+              return (
+                <div key={driver._id} className="bg-gray-800 rounded-lg p-4 hover:shadow-lg transition-shadow">
+                  <div className="flex flex-col items-center mb-4">
+                    <img 
+                      src={driver.driverImage} 
+                      alt="Driver"
+                      className="w-24 h-24 rounded-full object-cover mb-3"
+                    />
+                    <h3 className="text-xl font-medium mb-1">{driver.driverName}</h3>
+                    <p className="text-gray-400">{driver.driverNumber[0]?.primaryNumber}</p>
+                  </div>
+                  <div className="flex justify-between w-full">
+                    {/* <div>
+                      <p className="font-medium">Vehicle:</p>
+                      <p className="text-gray-400">{vehicleNumber}</p>
+                    </div> */}
+                    <div>
+                      <p className="font-medium">Status:</p>
+                      <span 
+                        className={`px-2 py-1 rounded ${
+                          vehicleStatus === 'assigned' 
+                            ? 'bg-green-500' 
+                            : 'bg-red-500'
+                        }`}
                       >
-                        View
-                      </button>
-                    </td>
-                  </tr>
-                ))}
-                {filteredBookings.length === 0 && (
-                  <tr>
-                    <td colSpan="5" className="px-6 py-4 text-center text-gray-500">
-                      No drivers found
-                    </td>
-                  </tr>
-                )}
-              </tbody>
-            </table>
+                        {vehicleStatus}
+                      </span>
+                    </div>
+                  </div>
+                  <div className="mt-4 text-center">
+                    <NavLink
+                      to={`/driverDetails/${driver._id}`}
+                      className="text-blue-400 hover:text-blue-300 inline-flex items-center"
+                    >
+                      View Details
+                      <svg
+                        xmlns="http://www.w3.org/2000/svg"
+                        className="h-5 w-5 ml-1"
+                        fill="none"
+                        viewBox="0 0 24 24"
+                        stroke="currentColor"
+                      >
+                        <path
+                          strokeLinecap="round"
+                          strokeLinejoin="round"
+                          strokeWidth={2}
+                          d="M13 9l3 3m0 0l-3 3m3-3H8m13 0a9 9 0 11-18 0 9 9 0 0118 0z"
+                        />
+                      </svg>
+                    </NavLink>
+                  </div>
+                </div>
+              );
+            })}
           </div>
-        </div>
+        )}
       </div>
     </div>
   );
 };
 
-// PropTypes remain same
-Drivers.propTypes = {
-  bookings: PropTypes.arrayOf(
-    PropTypes.shape({
-      _id: PropTypes.string.isRequired,
-      driver: PropTypes.shape({
-        _id: PropTypes.string.isRequired,
-        driverName: PropTypes.string.isRequired,
-        driverImage: PropTypes.string.isRequired,
-        driverNumber: PropTypes.arrayOf(
-          PropTypes.shape({
-            primaryNumber: PropTypes.string.isRequired
-          })
-        ).isRequired,
-        status: PropTypes.string.isRequired
-      }).isRequired,
-      staffVehicle: PropTypes.shape({
-        vehicleNumber: PropTypes.string.isRequired
-      }).isRequired
-    })
-  )
-};
-
-export default Drivers;
+export default Driver;

@@ -21,6 +21,7 @@ const Dashboard = () => {
   const [showBookingDetails, setShowBookingDetails] = useState(false);
   const navigate = useNavigate();
   const [profileData, setProfileData] = useState();
+  const [document, setDocument] = useState(false);
 
   const profile = async () => {
     try {
@@ -41,41 +42,16 @@ const Dashboard = () => {
 
   useEffect(() => {
     profile();
+    setDocument(true);
   }, []);
 
   const toggleSidebar = () => setIsSidebarOpen(!isSidebarOpen);
 
-  const openAdminModal = () => setIsAdminModalOpen(true);
-  const closeAdminModal = () => {
-    setIsAdminModalOpen(false);
-    setPhoneNumber("");
-    setOtp("");
-    setIsOtpSent(false);
-  };
-
-  const handleSendOtp = () => {
-    if (phoneNumber.length === 10) {
-      setIsOtpSent(true);
-    } else {
-      alert("Please enter a valid phone number");
-    }
-  };
-
-  const handleVerifyOtp = () => {
-    if (otp.length === 6) {
-      alert("Admin access granted");
-      closeAdminModal();
-    } else {
-      alert("Invalid OTP");
-    }
-  };
-
-  const openLogoutModal = () => setIsLogoutModalOpen(true);
   const closeLogoutModal = () => setIsLogoutModalOpen(false);
 
   const handleLogout = () => {
-    localStorage.removeItem('token');
-    navigate('/login');
+    localStorage.removeItem("token");
+    navigate("/login");
   };
 
   const handleMenuClick = (section) => {
@@ -100,7 +76,7 @@ const Dashboard = () => {
     <div className="flex flex-col md:flex-row min-h-screen bg-gray-100">
       {/* Mobile Header with hamburger menu */}
       <div className="md:hidden bg-gray-600 text-white p-4 flex justify-between items-center">
-        <h2 className="text-xl font-bold">Car Rental</h2>
+        <h2 className="text-xl font-bold">Fudar</h2>
         <button onClick={toggleSidebar} className="text-white">
           {isSidebarOpen ? <X size={24} /> : <Menu size={24} />}
         </button>
@@ -110,46 +86,23 @@ const Dashboard = () => {
       <div
         className={`${
           isSidebarOpen ? "block" : "hidden"
-        } md:block w-full md:w-64 bg-[#8cc745] text-white p-4 md:min-h-screen overflow-y-auto z-10 absolute md:relative top-0 left-0 h-screen md:h-auto`}
+        } md:block w-full md:w-64 bg-[black] text-white p-4 md:min-h-screen overflow-y-auto z-10 absolute md:relative top-0 left-0 h-screen md:h-auto`}
       >
-        <h2 className="text-xl font-bold mb-4 hidden md:block">Car Rental</h2>
+        <h2 className="text-xl font-bold mb-4 hidden md:block">Fudar</h2>
         <button
           onClick={() =>
-            handleMenuClick(activeSection === "dashboard" ? null : "dashboard")
+            setDocument(true)
           }
-          className="w-full text-left px-4 py-2  rounded hover:bg-green-600"
+          className="w-full text-left px-4 py-2 rounded cursor-pointer hover:bg-gray-400"
         >
-          Dashboard
+          Profile
         </button>
-        {activeSection === "dashboard" && (
-          <div className="ml-4 mt-2 space-y-2">
-            <button
-              onClick={() => handleMenuClick("driver")}
-              className="w-full text-left px-4 py-2  rounded hover:bg-green-600"
-            >
-              Driver
-            </button>
-          </div>
-        )}
-        {activeSection === "driver" && (
-          <div className="ml-4 mt-2 space-y-2">
-            {/* Removed "Available Vehicles" button */}
-            <button
-              onClick={() => handleDriverSectionClick("salary")}
-              className="w-full text-left px-4 py-2 bg-gray-400  rounded hover:bg-green-600"
-            >
-              Salary
-            </button>
-            <button
-              onClick={() => handleDriverSectionClick("documents")}
-              className="w-full text-left px-4 py-2 bg-gray-400 rounded hover:bg-green-600"
-            >
-              Documents
-            </button>
-          </div>
-        )}
-
-        {/* Logout Button - Added at the bottom of sidebar */}
+        <button
+          onClick={() => setDocument(false)}
+          className="w-full text-left px-4 py-2 rounded cursor-pointer hover:bg-gray-400"
+        >
+          Register
+        </button>
       </div>
 
       {/* Main Content */}
@@ -287,7 +240,7 @@ const Dashboard = () => {
                     <div className="p-3 font-medium text-gray-700">Amount</div>
                     <div className="p-3 font-medium text-gray-700">Date</div>
                     <div className="p-3 font-medium text-gray-700">Status</div>
-                  </div>                  
+                  </div>
                 </div>
               </div>
             </div>
@@ -295,10 +248,12 @@ const Dashboard = () => {
         )}
 
         {/* Driver Documents Section */}
-        {activeDriverSection === "documents" && (
-          <DriverProfile/>
-        )}
-        <DriverManagement />
+        {activeDriverSection === "documents" && <DriverProfile />}
+        {activeDriverSection === "register" && <DriverManagement />}
+        {/* {activeDriverSection === "profile" && <DriverProfile />} */}
+
+        { document ? <DriverProfile /> : <DriverManagement /> }
+        
       </div>
     </div>
   );

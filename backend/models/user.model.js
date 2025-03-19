@@ -15,6 +15,11 @@ const userSchema = new mongoose.Schema({
     unique: true,
     trim: true,
   },
+  role:{
+    type: String,
+    enum: ['driver, staff', 'admin'],
+    default: 'driver'
+  },
   createdAt: {
     type: Date,
     default: Date.now,

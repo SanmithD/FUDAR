@@ -272,7 +272,8 @@ const DriverProfile = () => {
                     </div>
 
                     <div className="border border-gray-200 rounded p-3">
-                      <p className="text-sm text-gray-500 mb-2">
+                      <p className="text-sm text-gray-500 mb-2"
+                      >
                         Driving License
                       </p>
                       <div className="bg-gray-100 h-32 rounded flex items-center justify-center">

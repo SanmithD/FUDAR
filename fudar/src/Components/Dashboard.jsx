@@ -1,5 +1,5 @@
 import axios from "axios";
-import { Menu, Truck, UserCircle, Users, X } from "lucide-react";
+import { Truck, UserCircle, Users, X } from "lucide-react";
 import { useEffect, useState } from "react";
 import { Outlet, useNavigate } from "react-router-dom";
 
@@ -46,11 +46,13 @@ export default function Dashboard() {
 
   // UseEffect for fetching user data and animations
   useEffect(() => {
-    if (!localStorage.getItem('token')) {
-      navigate('/login');
-    } else {
-      getUser();
-    }
+    // if (!localStorage.getItem('token')) {
+    //   navigate('/login');
+    // } else {
+    //   getUser();
+    // }
+
+    getUser()
 
     const timer = setTimeout(() => {
       setAnimateCards(true);
@@ -70,7 +72,7 @@ export default function Dashboard() {
   return (
     <div className="flex h-screen bg-gray-100">
       {/* Mobile Header with Menu Button */}
-      <div className="md:hidden fixed top-0 left-0 right-0 p-4 flex justify-between items-center bg-white shadow-sm z-20">
+      {/* <div className="md:hidden fixed top-0 left-0 right-0 p-4 flex justify-between items-center bg-white shadow-sm z-20">
         <button onClick={() => setSidebarOpen(!sidebarOpen)} className="text-black">
           <Menu size={24} />
         </button>
@@ -79,7 +81,7 @@ export default function Dashboard() {
           className="w-8 h-8 text-black cursor-pointer"
           onClick={() => setDropdownOpen(!dropdownOpen)}
         />
-      </div>
+      </div> */}
 
       {/* Sidebar */}
       <div className={`fixed inset-y-0 left-0 w-64 bg-black shadow-lg z-30 transition-transform duration-300 ease-in-out md:translate-x-0 ${sidebarOpen ? 'translate-x-0' : '-translate-x-full'}`}>
@@ -111,16 +113,14 @@ export default function Dashboard() {
       </div>
 
       {/* Main Content */}
-      <div className="flex-1 md:pl-64 flex flex-col min-h-screen bg-[#F3F4F6]">
-        {/* Navbar with Welcome Message & Profile Dropdown */}
-        <div className="hidden md:flex fixed top-0 left-64 right-0 p-4 justify-between items-center pr-8 bg-white shadow-sm">
+      <div className="flex-1 flex flex-col min-h-screen bg-[#F3F4F6]">
+        <div className="hidden md:flex fixed top-0 left-64 right-0 p-4 justify-between items-center pr-8 bg-white shadow-sm z-30">
           <h1 className="text-3xl font-bold text-gray-800 pl-6">Staff Management Dashboard</h1>
           <div className="flex items-center">
             <span className="text-gray-700 text-lg font-medium mr-2">Welcome, {userData || "Loading..."} &nbsp;</span>
             <div className="relative">
               <UserCircle className="w-12 h-12 text-black cursor-pointer mr-4" onClick={() => setDropdownOpen(!dropdownOpen)} />
 
-              {/* Dropdown Menu */}
               {dropdownOpen && (
                 <div className="absolute right-0 mt-2 w-48 bg-white shadow-lg rounded-lg p-2 z-40">
                   <p className="px-4 py-2 text-gray-700 font-semibold cursor-pointer" onClick={handleProfile}>{userData}</p>
@@ -133,7 +133,7 @@ export default function Dashboard() {
         </div>
 
         {/* Main Dashboard Content */}
-        <div className={`md:pt-24 pt-[30px] px-4 md:px-8 w-[100%] flex justify-center  ${sidebarOpen ? 'opacity-50' : 'opacity-100' }  bg-[#F3F4F6]`}>
+        <div className={`md:pt-24 pt-[130px] px-4 md:px-8 w-[100%] flex justify-center  ${sidebarOpen ? 'opacity-50' : 'opacity-100' }  bg-[#F3F4F6]`}>
           <Outlet />
         </div>
       </div>

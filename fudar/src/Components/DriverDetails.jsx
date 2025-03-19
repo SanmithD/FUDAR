@@ -35,6 +35,10 @@ function DriverDetails() {
   const [refreshChart, setRefreshChart] = useState(false);
   const navigate = useNavigate();
   const chartRef = useRef(null);
+  const [role, setRole] = useState('staff');
+  const [isPromoting, setIsPromoting] = useState(false);
+  const [promotionError, setPromotionError] = useState(null);
+  const [promotionSuccess, setPromotionSuccess] = useState(false);
 
   const handleSalaryUpdate = () => setRefreshChart((prev) => !prev);
 
@@ -79,6 +83,24 @@ function DriverDetails() {
     },
   };
 
+  const handlePromote = async () => {
+    setIsPromoting(true);
+    setPromotionError(null);
+    setPromotionSuccess(false);
+    
+    try {
+      const response = await axios.put(`http://localhost:8080/api/user/update/${id}`, { role });
+      setPromotionSuccess(true);
+      // Refresh driver data after successful promotion
+      await fetchDriver();
+    } catch (error) {
+      setPromotionError("Failed to update role. Please try again.");
+      console.error("Promotion error:", error);
+    } finally {
+      setIsPromoting(false);
+    }
+  };
+
   const data = {
     labels: salary.map((item) => item.month),
     datasets: [
@@ -109,7 +131,7 @@ function DriverDetails() {
               Back
             </button>
           </div>
-
+          
           <div className="flex flex-col md:flex-row items-center md:items-start">
             <div className="md:w-1/4 text-center md:text-left mb-6 md:mb-0">
               <a href={driver.driverImage} target="_blank" rel="noopener noreferrer">
@@ -144,7 +166,25 @@ function DriverDetails() {
                   <p className="text-gray-800">{driver.driverBankAddress || "N/A"}</p>
                 </div>
               </div>
-
+              <select
+              value={role}
+              onChange={(e) => setRole(e.target.value)}
+              className="block w-full md:w-auto p-2 border border-gray-300 rounded-md"
+            >
+              <option value="staff">Staff</option>
+              <option value="driver">Driver</option>
+            </select>
+            <button
+              onClick={() => handlePromote}
+              disabled={isPromoting}
+              className={`px-4 py-2 rounded ${
+                isPromoting
+                  ? "bg-gray-400 cursor-not-allowed"
+                  : "bg-blue-500 text-white hover:bg-blue-600"
+              }`}
+            >
+              {isPromoting ? "Promoting..." : "Promote"}
+            </button>
               <div className="mt-6">
                 <h4 className="text-lg font-medium text-black mb-3">Salary History</h4>
                 <div className="space-y-2 h-[150px] overflow-scroll">
@@ -204,6 +244,18 @@ function DriverDetails() {
             <UpdateSalary driver={id} onUpdate={handleSalaryUpdate} />
           </div>
         </div>
+
+        {/* Promotion Feedback */}
+        {promotionSuccess && (
+          <div className="bg-green-100 text-green-800 p-4 text-center mt-4">
+            Role updated successfully!
+          </div>
+        )}
+        {promotionError && (
+          <div className="bg-red-100 text-red-800 p-4 text-center mt-4">
+            {promotionError}
+          </div>
+        )}
       </div>
     </div>
   );
