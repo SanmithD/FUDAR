@@ -197,7 +197,7 @@ const VehicleManagement = () => {
   };
 
   return (
-    <div className="max-w-4xl mx-auto p-6 bg-gray-100 min-h-screen">
+    <div className="max-w-4xl mx-auto p-6 bg-gray-100 min-h-screen md:absolute md:top-[190px] md:left-[270px]">
       <h1 className="text-3xl font-bold mb-6 text-gray-800">
         Vehicle Management
       </h1>

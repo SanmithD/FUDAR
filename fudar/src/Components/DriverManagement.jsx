@@ -164,170 +164,172 @@ const DriverManagement = () => {
   };
 
   return (
-    <div className="min-h-screen bg-white text-black p-4 md:p-6 lg:p-8">
-      <div className="max-w-4xl mx-auto">
-        <h1 className="text-3xl font-bold mb-6 border-b border-black pb-2">
+    <div className="min-h-screen bg-white text-black p-sl md:p-6 lg:p-8 flex items-center justify-center w-full">
+      <div className="w-full mx-auto bg-white border border-black rounded-lg p-6 shadow-lg">
+        <h1 className="text-3xl font-bold mb-6 border-b border-black pb-2 text-center">
           Driver Management
         </h1>
-
+  
         {error && (
-          <div className="mb-4 p-4 bg-white border border-black text-black rounded-lg">
+          <div className="mb-4 p-4 bg-red-100 border border-red-500 text-red-700 rounded-lg">
             {error}
           </div>
         )}
         {success && (
-          <div className="mb-4 p-4 bg-white border border-black text-black rounded-lg">
+          <div className="mb-4 p-4 bg-green-100 border border-green-500 text-green-700 rounded-lg">
             {success}
           </div>
         )}
-
-        <div className="bg-white border border-black rounded-lg p-6">
-          <h2 className="text-xl font-semibold mb-6">
-            {isEditing ? "Update Driver" : "Add New Driver"}
-          </h2>
-
-          <form onSubmit={handleSubmit}>
-            <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
-              {/* Personal Info */}
-              <div className="space-y-4">
-                <div>
-                  <label className="block text-sm font-medium mb-1">Driver Name</label>
-                  <input
-                    type="text"
-                    name="driverName"
-                    value={formData.driverName}
-                    onChange={handleInputChange}
-                    className="w-full p-2 border border-black rounded focus:outline-none focus:ring-2 focus:ring-black"
-                    required
-                  />
-                </div>
-                <div>
-                  <label className="block text-sm font-medium mb-1">Primary Number</label>
-                  <input
-                    type="text"
-                    name="primaryNumber"
-                    value={formData.driverNumber.primaryNumber}
-                    onChange={handleInputChange}
-                    className="w-full p-2 border border-black rounded focus:outline-none focus:ring-2 focus:ring-black"
-                    required
-                  />
-                </div>
-                <div>
-                  <label className="block text-sm font-medium mb-1">Secondary Number</label>
-                  <input
-                    type="text"
-                    name="secondaryNumber"
-                    value={formData.driverNumber.secondaryNumber}
-                    onChange={handleInputChange}
-                    className="w-full p-2 border border-black rounded focus:outline-none focus:ring-2 focus:ring-black"
-                    required
-                  />
-                </div>
+  
+        <h2 className="text-xl font-semibold mb-6 text-center">
+          {isEditing ? "Update Driver" : "Add New Driver"}
+        </h2>
+  
+        <form onSubmit={handleSubmit} className="space-y-6">
+          <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
+            {/* Personal Info */}
+            <div className="space-y-4">
+              <div>
+                <label className="block text-sm font-medium mb-1">Driver Name</label>
+                <input
+                  type="text"
+                  name="driverName"
+                  value={formData.driverName}
+                  onChange={handleInputChange}
+                  className="w-full p-2 border border-black rounded focus:outline-none focus:ring-2 focus:ring-black"
+                  required
+                />
               </div>
-
-              {/* Bank Info */}
-              <div className="space-y-4">
-                <div>
-                  <label className="block text-sm font-medium mb-1">Bank Account Number</label>
-                  <input
-                    type="text"
-                    name="driverBankNumber"
-                    value={formData.driverBankNumber}
-                    onChange={handleInputChange}
-                    className="w-full p-2 border border-black rounded focus:outline-none focus:ring-2 focus:ring-black"
-                    required
-                  />
-                </div>
-                <div>
-                  <label className="block text-sm font-medium mb-1">IFSC Code</label>
-                  <input
-                    type="text"
-                    name="driverIFSC"
-                    value={formData.driverIFSC}
-                    onChange={handleInputChange}
-                    className="w-full p-2 border border-black rounded focus:outline-none focus:ring-2 focus:ring-black"
-                    required
-                  />
-                </div>
-                <div>
-                  <label className="block text-sm font-medium mb-1">Bank Address</label>
-                  <input
-                    type="text"
-                    name="driverBankAddress"
-                    value={formData.driverBankAddress}
-                    onChange={handleInputChange}
-                    className="w-full p-2 border border-black rounded focus:outline-none focus:ring-2 focus:ring-black"
-                    required
-                  />
-                </div>
+              <div>
+                <label className="block text-sm font-medium mb-1">Primary Number</label>
+                <input
+                  type="text"
+                  name="primaryNumber"
+                  value={formData.driverNumber.primaryNumber}
+                  onChange={handleInputChange}
+                  className="w-full p-2 border border-black rounded focus:outline-none focus:ring-2 focus:ring-black"
+                  required
+                />
+              </div>
+              <div>
+                <label className="block text-sm font-medium mb-1">Secondary Number</label>
+                <input
+                  type="text"
+                  name="secondaryNumber"
+                  value={formData.driverNumber.secondaryNumber}
+                  onChange={handleInputChange}
+                  className="w-full p-2 border border-black rounded focus:outline-none focus:ring-2 focus:ring-black"
+                  required
+                />
               </div>
             </div>
-
-            {/* Documents Section */}
-            <div className="mt-8">
-              <h3 className="text-lg font-medium mb-4">Upload Documents</h3>
-              <div className="grid grid-cols-1 sm:grid-cols-2 gap-6">
-                {[
-                  { name: "driverImage", label: "Driver Image" },
-                  { name: "driverAdhaar", label: "Aadhaar Card" },
-                  { name: "driverPan", label: "PAN Card" },
-                  { name: "drivingLicence", label: "Driving License" },
-                ].map((fileType) => (
-                  <div key={fileType.name}>
-                    <label className="block text-sm font-medium mb-1">{fileType.label}</label>
-                    <div
-                      className="border-2 border-black rounded p-4 text-center hover:bg-gray-100 transition-colors"
-                      onDragOver={handleDragOver}
-                      onDrop={(e) => handleDrop(e, fileType.name)}
-                      onClick={() => document.getElementById(fileType.name)?.click()}
-                    >
-                      <input
-                        type="file"
-                        id={fileType.name}
-                        name={fileType.name}
-                        onChange={handleFileChange}
-                        className="hidden"
-                        required={!isEditing}
-                      />
-                      <p className="text-sm">
-                        {files[fileType.name] 
-                          ? files[fileType.name].name 
-                          : "Drag & drop or click to upload"}
-                      </p>
-                    </div>
+  
+            {/* Bank Info */}
+            <div className="space-y-4">
+              <div>
+                <label className="block text-sm font-medium mb-1">Bank Account Number</label>
+                <input
+                  type="text"
+                  name="driverBankNumber"
+                  value={formData.driverBankNumber}
+                  onChange={handleInputChange}
+                  className="w-full p-2 border border-black rounded focus:outline-none focus:ring-2 focus:ring-black"
+                  required
+                />
+              </div>
+              <div>
+                <label className="block text-sm font-medium mb-1">IFSC Code</label>
+                <input
+                  type="text"
+                  name="driverIFSC"
+                  value={formData.driverIFSC}
+                  onChange={handleInputChange}
+                  className="w-full p-2 border border-black rounded focus:outline-none focus:ring-2 focus:ring-black"
+                  required
+                />
+              </div>
+              <div>
+                <label className="block text-sm font-medium mb-1">Bank Address</label>
+                <input
+                  type="text"
+                  name="driverBankAddress"
+                  value={formData.driverBankAddress}
+                  onChange={handleInputChange}
+                  className="w-full p-2 border border-black rounded focus:outline-none focus:ring-2 focus:ring-black"
+                  required
+                />
+              </div>
+            </div>
+          </div>
+  
+          {/* Documents Section */}
+          <div className="mt-8">
+            <h3 className="text-lg font-medium mb-4 text-center">Upload Documents</h3>
+            <div className="grid grid-cols-1 sm:grid-cols-2 gap-6">
+              {[
+                { name: "driverImage", label: "Driver Image" },
+                { name: "driverAdhaar", label: "Aadhaar Card" },
+                { name: "driverPan", label: "PAN Card" },
+                { name: "drivingLicence", label: "Driving License" },
+              ].map((fileType) => (
+                <div key={fileType.name}>
+                  <label className="block text-sm font-medium mb-1">{fileType.label}</label>
+                  <div
+                    className="border-2 border-black rounded p-4 text-center hover:bg-gray-100 transition-colors cursor-pointer"
+                    onDragOver={handleDragOver}
+                    onDrop={(e) => handleDrop(e, fileType.name)}
+                    onClick={() => document.getElementById(fileType.name)?.click()}
+                  >
+                    <input
+                      type="file"
+                      id={fileType.name}
+                      name={fileType.name}
+                      onChange={handleFileChange}
+                      className="hidden"
+                      required={!isEditing}
+                    />
+                    <p className="text-sm">
+                      {files[fileType.name]
+                        ? files[fileType.name].name
+                        : "Drag & drop or click to upload"}
+                    </p>
                   </div>
-                ))}
-              </div>
+                </div>
+              ))}
             </div>
-
-            {/* Buttons */}
-            <div className="mt-8 flex gap-4">
-              <button
-                type="submit"
-                className="px-6 py-2 bg-black text-white rounded border border-black hover:bg-gray-800 transition-colors"
-              >
-                {isEditing ? "Update Driver" : "Add Driver"}
-              </button>
-              <button
-                type="button"
-                onClick={resetForm}
-                className="px-6 py-2 bg-white text-black rounded border border-black hover:bg-gray-200 transition-colors"
-              >
-                Cancel
-              </button>
-            </div>
-          </form>
+          </div>
+  
+          {/* Buttons */}
+          <div className="mt-8 flex flex-col sm:flex-row gap-4 justify-center">
+            <button
+              type="submit"
+              className="w-full sm:w-auto px-6 py-2 bg-black text-white rounded border border-black hover:bg-gray-800 transition-colors"
+            >
+              {isEditing ? "Update Driver" : "Add Driver"}
+            </button>
+            <button
+              type="button"
+              onClick={resetForm}
+              className="w-full sm:w-auto px-6 py-2 bg-white text-black rounded border border-black hover:bg-gray-200 transition-colors"
+            >
+              Cancel
+            </button>
+          </div>
+        </form>
+  
+        <div className="flex justify-center mt-6">
+          <button
+            onClick={() => navigate(-1)}
+            className="w-full sm:w-auto px-6 py-2 bg-white text-black rounded border border-black hover:bg-gray-200 transition-colors"
+          >
+            Back
+          </button>
         </div>
-
-        <button
-          onClick={() => navigate(-1)}
-          className="mt-6 px-6 py-2 bg-white text-black rounded border border-black hover:bg-gray-200 transition-colors"
-        >
-          Back
-        </button>
       </div>
     </div>
   );
+  
+  
 };
 
 export default DriverManagement;

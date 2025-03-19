@@ -7,6 +7,7 @@ const Login = () => {
   const [password, setPassword] = useState('');
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState('');
+  let role;
   const [loginForm, setLoginForm] = useState('driver') // Initialize with a default value
   
   const navigate = useNavigate();
@@ -25,27 +26,21 @@ const Login = () => {
         phoneNumber,
         password
       });
-      
+      role = response.data.loggedUser.role;
+      console.log(role)
       // Store token in localStorage
       localStorage.setItem('token', response.data.token);
       localStorage.setItem('user', JSON.stringify(response.data.user));
-      
-      // Set default authorization header for future requests
-      // axios.defaults.headers.common['Authorization'] = `Bearer ${response.data.token}`;
-      
-      // // Redirect based on login form type
-      // if (loginForm === 'admin') { // Fixed comparison
-      //   navigate('/');
-      // } else if (loginForm === 'driver') {
-      //   navigate('/driverPage');
-      // } else if (loginForm === 'staff') {
-      //   navigate('/');
-      // } else {
-      //   navigate('/login');
-      // }
 
-      navigate('/')
-      
+      if(role === 'staff'){
+        navigate('/')
+      }else if(role === 'admin'){
+        navigate('/main')
+      }else if(role === "driver") {
+        navigate('/driverPage')
+      }else{
+        navigate('/driverPage')
+      } 
     } catch (err) {
       setError(err.response?.data?.message || 'Invalid credentials. Please try again.');
       console.error('Login error:', err);

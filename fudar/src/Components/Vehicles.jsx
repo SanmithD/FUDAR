@@ -52,8 +52,8 @@ const Vehicles = () => {
   };
 
   return (
-    <div className="container mx-auto p-8  text-black">
-      <div className='flex justify-between' >
+    <div className="container mx-auto p-8 md:w-[1000px]  text-black absolute md:top-[50px] md:left-[270px]">
+      <div className='flex justify-center gap-16' >
       <h2 className="text-3xl font-bold mb-4">Create New Staff Vehicle</h2>
       <Link to='/allVehicles' className="text-blue-500 border-2 border-black-500 p-2 text-xl rounded hover:underline mb-8 inline-block">View</Link>
       </div>

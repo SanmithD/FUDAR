@@ -10,13 +10,13 @@ const Driver = () => {
   const [vehicleMap, setVehicleMap] = useState(new Map());
 
   useEffect(() => {
+    // Fetch all bookings
     const fetchBookings = async () => {
       try {
         const response = await axios.get('http://localhost:8080/api/book/staff/bookings/all');
         setBookings(response.data.bookings || []);
-        console.log(response.data)
         
-        // Create a map of vehicle numbers by driver ID
+        // Map vehicle numbers to driver IDs
         const vehicleMap = new Map();
         response.data.bookings.forEach(booking => {
           if (booking.staffVehicle && booking.driver) {
@@ -29,6 +29,7 @@ const Driver = () => {
       }
     };
 
+    // Fetch all drivers
     const fetchDrivers = async () => {
       try {
         const response = await axios.get('http://localhost:8080/api/driver/getAllDriver');
@@ -38,10 +39,11 @@ const Driver = () => {
       }
     };
 
-    Promise.all([fetchBookings(), fetchDrivers()])
-      .finally(() => setLoading(false));
+    // Fetch both drivers and bookings together
+    Promise.all([fetchBookings(), fetchDrivers()]).finally(() => setLoading(false));
   }, []);
 
+  // Filtering logic based on search query
   const filteredDrivers = drivers.filter(driver => {
     const vehicleNumber = vehicleMap.get(driver._id) || '';
     const searchValue = searchQuery.toLowerCase();
@@ -53,59 +55,64 @@ const Driver = () => {
   });
 
   return (
-    <div className="min-h-screen bg-gray-900 text-white">
-      <div className="container mx-auto p-4">
-        <div className="mb-6">
+    <div className="min-h-screen bg-gray-900 text-white flex flex-col items-center md:w-[1270px] md:absolute md:top-[50px] md:left-[259px]">
+      <div className="container-fluid w-full max-w-none h-full">
+
+        {/* Search Bar */}
+        <div className="mb-6 px-2 w-full h-5px">
           <input
             type="text"
             placeholder="Search by name, phone, or vehicle number..."
             value={searchQuery}
             onChange={(e) => setSearchQuery(e.target.value)}
-            className="w-full p-2 rounded-md border border-gray-600 bg-gray-800 text-white focus:outline-none focus:border-blue-400"
+            className="w-full h-5 p-3 rounded-md border border-gray-600 bg-gray-800 text-white focus:outline-none focus:border-blue-400"
           />
         </div>
 
+        {/* Loading State */}
         {loading ? (
           <p className="text-center text-2xl">Loading...</p>
         ) : (
-          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-4">
+          <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 xl:grid-cols-5 gap-3 px-2 w-full">
             {filteredDrivers.map(driver => {
               const vehicleNumber = vehicleMap.get(driver._id) || 'N/A';
               const vehicleStatus = driver.status || 'N/A';
               
               return (
-                <div key={driver._id} className="bg-gray-800 rounded-lg p-4 hover:shadow-lg transition-shadow">
-                  <div className="flex flex-col items-center mb-4">
-                    <img 
-                      src={driver.driverImage} 
-                      alt="Driver"
-                      className="w-24 h-24 rounded-full object-cover mb-3"
-                    />
-                    <h3 className="text-xl font-medium mb-1">{driver.driverName}</h3>
-                    <p className="text-gray-400">{driver.driverNumber[0]?.primaryNumber}</p>
+                <div 
+                  key={driver._id} 
+                  className="bg-gray-800 rounded-lg p-4 flex flex-col items-center shadow-md hover:shadow-lg transition-shadow w-full"
+                >
+                  {/* Driver Image */}
+                  <img 
+                    src={driver.driverImage} 
+                    alt="Driver"
+                    className="w-24 h-24 rounded-full object-cover mb-3"
+                  />
+                  
+                  {/* Driver Name & Phone */}
+                  <h3 className="text-xl font-medium">{driver.driverName}</h3>
+                  <p className="text-gray-400">{driver.driverNumber[0]?.primaryNumber}</p>
+
+                  {/* Status */}
+                  <div className="mt-2">
+                    <p className="font-medium">Status:</p>
+                    <span 
+                      className={`px-3 py-1 rounded text-sm font-semibold ${
+                        vehicleStatus === 'assigned' 
+                          ? 'bg-green-500' 
+                          : 'bg-red-500'
+                      }`}
+                    >
+                      {vehicleStatus}
+                    </span>
                   </div>
-                  <div className="flex justify-between w-full">
-                    {/* <div>
-                      <p className="font-medium">Vehicle:</p>
-                      <p className="text-gray-400">{vehicleNumber}</p>
-                    </div> */}
-                    <div>
-                      <p className="font-medium">Status:</p>
-                      <span 
-                        className={`px-2 py-1 rounded ${
-                          vehicleStatus === 'assigned' 
-                            ? 'bg-green-500' 
-                            : 'bg-red-500'
-                        }`}
-                      >
-                        {vehicleStatus}
-                      </span>
-                    </div>
-                  </div>
-                  <div className="mt-4 text-center">
+
+                  {/* View Details Button */}
+                  <div className="mt-4">
                     <NavLink
                       to={`/driverDetails/${driver._id}`}
-                      className="text-blue-400 hover:text-blue-300 inline-flex items-center"
+                      className="text-blue-400 hover:text-blue-300 flex items-center"
                     >
                       View Details
                       <svg

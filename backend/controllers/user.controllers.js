@@ -41,40 +41,44 @@ const userSignup = async(req, res) =>{
   }
 }
 
-const updateUser = async(req, res) =>{
+const updateUser = async (req, res) => {
   const { role } = req.body;
-  const { userId } = req.params;
+  const { id } = req.params;
 
-  if(!role){
+  if (!role) {
     return res.status(400).json({
       success: false,
-      message: "Please enter all the details"
-    });
-  };
-  const user = await userModel.findById(userId);
-  if(user){
-    return res.status(400).json({
-      success: false,
-      message: "User already exists please login"
+      message: "Please enter all the details",
     });
   }
+
   try {
-    const newUser = new userModel.findByIdAndUpdate(userId,{
-      role,
-    },{ new : true });
-    await newUser.save();
+    const updatedUser = await userModel.findByIdAndUpdate(
+      id,
+      { role },
+      { new: true } // Return the updated document
+    );
+
+    if (!updatedUser) {
+      return res.status(404).json({
+        success: false,
+        message: "User not found",
+      });
+    }
+
     res.status(200).json({
       success: true,
-      message: "update success",
+      message: "Role updated successfully",
     });
   } catch (error) {
     res.status(500).json({
       success: false,
-      message: "Server error"
+      message: "Server error",
+      error: error.message,
     });
     console.log(error);
   }
-}
+};
 
 const userLogin = async(req, res) =>{
   const { phoneNumber, password } = req.body;

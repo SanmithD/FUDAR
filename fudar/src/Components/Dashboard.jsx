@@ -87,12 +87,12 @@ export default function Dashboard() {
       <div className={`fixed inset-y-0 left-0 w-64 bg-black shadow-lg z-30 transition-transform duration-300 ease-in-out md:translate-x-0 ${sidebarOpen ? 'translate-x-0' : '-translate-x-full'}`}>
         <div className="flex flex-col h-full">
           <div className="p-4 flex justify-between items-center">
-            <h2 className="text-xl font-bold text-white mb-6">Staff Management</h2>
+            <h2 className="text-xl font-bold text-white mb-6 mt-8">Staff Management</h2>
             <button className="md:hidden text-white" onClick={() => setSidebarOpen(false)}>
               <X size={24} />
             </button>
           </div>
-          <ul className="flex flex-col gap-2 p-4">
+          <ul className="flex flex-col gap-6 p-4">
             <li className="flex items-center p-3 text-white hover:bg-gray-500 rounded-md cursor-pointer transition-colors" onClick={() => { navigate("/driver"); closeDropdowns(); }}>
               <Users className="mr-2 text-white" /> Drivers
             </li>

@@ -17,7 +17,6 @@ import Signup from './Components/Signup.jsx';
 import VehicleDetail from './Components/VehicleDetail.jsx';
 import VehicleManagement from './Components/VehicleManagement .jsx';
 import Vehicles from './Components/Vehicles.jsx';
-
 function App() {
 
   return (
@@ -35,11 +34,9 @@ function App() {
         <Route path="/newDriver" element={<DriverManagement />} />
         <Route path="/driverDetails/:id" element={<DriverDetails />} />
         <Route path="/allDrivers" element={<DriversList />} />
-        {/* <Route path="/pdriver" element={<PDriver />} /> */}
         <Route path="/vehicleManage" element={<VehicleManagement />} />
         <Route path="/allVehicles" element={<AllVehicles />} />
         <Route path="/admin" element={<Admin />} />
-        
       </Route>
     </Routes>
   );

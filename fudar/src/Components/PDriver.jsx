@@ -246,7 +246,7 @@ const Dashboard = () => {
             </div>
           </div>
         )}
-
+         
         {/* Driver Documents Section */}
         {activeDriverSection === "documents" && <DriverProfile />}
         {activeDriverSection === "register" && <DriverManagement />}
