@@ -164,9 +164,9 @@ const DriverManagement = () => {
   };
 
   return (
-    <div className="min-h-screen bg-white text-black p-sl md:p-6 lg:p-8 flex items-center justify-center w-full">
-      <div className="w-full mx-auto bg-white border border-black rounded-lg p-6 shadow-lg">
-        <h1 className="text-3xl font-bold mb-6 border-b border-black pb-2 text-center">
+    <div className="min-h-screen bg-white  text-black p-sl md:p-6 lg:p-0 flex items-center justify-center  w-full">
+      <div className="w-[90%] px-3 mx-auto bg-white rounded-lg  md:p-20 " >
+        <h1 className="text-3xl font-bold mb-10 border-b border-black pb-2 text-center">
           Driver Management
         </h1>
   
@@ -185,8 +185,8 @@ const DriverManagement = () => {
           {isEditing ? "Update Driver" : "Add New Driver"}
         </h2>
   
-        <form onSubmit={handleSubmit} className="space-y-6">
-          <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
+        <form onSubmit={handleSubmit} className="space-y-6 md:p-20">
+          <div className="grid grid-cols-1 md:grid-cols-2 gap-8">
             {/* Personal Info */}
             <div className="space-y-4">
               <div>
@@ -300,17 +300,17 @@ const DriverManagement = () => {
           </div>
   
           {/* Buttons */}
-          <div className="mt-8 flex flex-col sm:flex-row gap-4 justify-center">
+          <div className="mt-30  flex flex-col sm:flex-row gap-40 justify-center">
             <button
               type="submit"
-              className="w-full sm:w-auto px-6 py-2 bg-black text-white rounded border border-black hover:bg-gray-800 transition-colors"
+              className="w-full p-5 mt-4 sm:w-auto px-6 py-2 bg-black text-white rounded border border-black hover:bg-gray-800 transition-colors"
             >
               {isEditing ? "Update Driver" : "Add Driver"}
             </button>
             <button
               type="button"
               onClick={resetForm}
-              className="w-full sm:w-auto px-6 py-2 bg-white text-black rounded border border-black hover:bg-gray-200 transition-colors"
+              className="w-full sm:w-auto px-6 py-10 bg-white text-black rounded border border-black hover:bg-gray-200 transition-colors"
             >
               Cancel
             </button>

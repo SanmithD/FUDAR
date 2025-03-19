@@ -55,7 +55,7 @@ const Driver = () => {
   });
 
   return (
-    <div className="min-h-screen bg-gray-900 text-white flex flex-col items-center md:w-[1270px] md:absolute md:top-[50px] md:left-[259px]">
+    <div className="min-h-screen text-white flex flex-col items-center md:w-[1270px] md:absolute md:top-[50px] md:left-[259px]">
       <div className="container-fluid w-full max-w-none h-full">
 
         {/* Search Bar */}
@@ -65,7 +65,7 @@ const Driver = () => {
             placeholder="Search by name, phone, or vehicle number..."
             value={searchQuery}
             onChange={(e) => setSearchQuery(e.target.value)}
-            className="w-full h-5 p-3 rounded-md border border-gray-600 bg-gray-800 text-white focus:outline-none focus:border-blue-400"
+            className="w-full h-[50px] p-3 rounded-md border border-gray-600 bg-gray-800 text-white focus:outline-none focus:border-blue-400"
           />
         </div>
 
@@ -73,7 +73,7 @@ const Driver = () => {
         {loading ? (
           <p className="text-center text-2xl">Loading...</p>
         ) : (
-          <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 xl:grid-cols-5 gap-3 px-2 w-full">
+          <div className="grid mt-[20px] grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 xl:grid-cols-5 gap-3 px-2 w-full">
             {filteredDrivers.map(driver => {
               const vehicleNumber = vehicleMap.get(driver._id) || 'N/A';
               const vehicleStatus = driver.status || 'N/A';
@@ -81,7 +81,7 @@ const Driver = () => {
               return (
                 <div 
                   key={driver._id} 
-                  className="bg-gray-800 rounded-lg p-4 flex flex-col items-center shadow-md hover:shadow-lg transition-shadow w-full"
+                  className="bg-gray-200 lg:mt-[30px] rounded-lg p-4 flex flex-col items-center shadow-md hover:shadow-lg transition-shadow w-full"
                 >
                   {/* Driver Image */}
                   <img 
@@ -91,12 +91,12 @@ const Driver = () => {
                   />
                   
                   {/* Driver Name & Phone */}
-                  <h3 className="text-xl font-medium">{driver.driverName}</h3>
-                  <p className="text-gray-400">{driver.driverNumber[0]?.primaryNumber}</p>
+                  <h3 className="text-xl text-black font-medium">{driver.driverName}</h3>
+                  <p className="text-gray-600 text-black ">{driver.driverNumber[0]?.primaryNumber}</p>
 
                   {/* Status */}
                   <div className="mt-2">
-                    <p className="font-medium">Status:</p>
+                    <p className="font-medium text-black">Status:</p>
                     <span 
                       className={`px-3 py-1 rounded text-sm font-semibold ${
                         vehicleStatus === 'assigned' 

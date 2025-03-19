@@ -10,7 +10,7 @@ import {
     Tooltip,
 } from "chart.js";
 import { Line } from "react-chartjs-2";
-import Totaldata from "../Components/Totaldata";
+
 // Register ChartJS components
 ChartJS.register(
   CategoryScale,
@@ -53,7 +53,7 @@ const Admin = () => {
   };
 
   return (
-  <><Totaldata />
+  <>
     <div className="md:absolute md:top-[190px] md:left-[270px]">
       
       <div className="md:w-[1200px] md:h-[600px] w-[400px] h-[200px] bg-black text-white">

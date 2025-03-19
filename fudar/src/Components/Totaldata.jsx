@@ -5,7 +5,7 @@ import { RiMotorbikeFill } from "react-icons/ri";
 const Totaldata = () => {
     return(
         <>
-            <div className="grid grid-cols-1 items-center gap-6 gap-y-4 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 p-3  md:absolute md:top-[50px] md:left-[270px]">
+            <div className="grid grid-cols-1 items-center gap-6 gap-y-4 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 p-3  md:absolute md:top-[150px] md:left-[270px]">
                 <a href="/">
                     <div className="card flex flex-col justify-between cursor-pointer min-h-28 rounded-md shadow-md bg-gray-600 text-black">
                         <div className="mb-2 flex items-center justify-between">

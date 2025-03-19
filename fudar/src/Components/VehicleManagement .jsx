@@ -197,7 +197,7 @@ const VehicleManagement = () => {
   };
 
   return (
-    <div className="max-w-4xl mx-auto p-6 bg-gray-100 min-h-screen md:absolute md:top-[190px] md:left-[270px]">
+    <div className="max-w-4xl mx-auto p-6 bg-gray-100 min-h-screen md:absolute md:top-[80px] md:left-[270px]">
       <h1 className="text-3xl font-bold mb-6 text-gray-800">
         Vehicle Management
       </h1>
@@ -308,9 +308,9 @@ const VehicleManagement = () => {
 
       {viewMode === "list" && (
         <div className="overflow-x-auto">
-          <table className="w-full border-collapse">
+          <table className="w-full border-collapse flex gap-[20px] flex-col ">
             <thead>
-              <tr className="bg-gray-200">
+              <tr className="bg-gray-200 flex gap-[50px] ">
                 <th className="p-4 text-left">Type</th>
                 <th className="p-4 text-left">Number</th>
                 <th className="p-4 text-left">Assigned Driver</th>
@@ -319,7 +319,7 @@ const VehicleManagement = () => {
             </thead>
             <tbody>
               {vehicles.map((vehicle) => (
-                <tr key={vehicle._id} className="border-b border-gray-200">
+                <tr key={vehicle._id} className="border-b border-gray-200 flex gap-[50px] ">
                   <td className="p-4">{vehicle.vehicleType}</td>
                   <td className="p-4">{vehicle.vehicleNumber}</td>
                   <td className="p-4">

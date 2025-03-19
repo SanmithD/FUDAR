@@ -1,7 +1,7 @@
 import { Menu, Truck, UserCircle, Users, X } from "lucide-react";
 import React, { useEffect, useState } from "react";
 import { useNavigate } from "react-router-dom";
-
+import Totaldata from '../Components/Totaldata';
 const MainDashboard = () => {
   const navigate = useNavigate();
   const [isSidebarOpen, setIsSidebarOpen] = useState(false);
@@ -79,6 +79,9 @@ const MainDashboard = () => {
             <li className="flex items-center p-3 text-white hover:bg-gray-500 rounded-md cursor-pointer transition-colors" >
               <Truck className="mr-2 text-white" /> All Vehicles
             </li>
+            <li className="flex items-center p-3 text-white hover:bg-gray-500 rounded-md cursor-pointer transition-colors" >
+              <UserCircle className="mr-2 text-white" /> Add Users
+            </li>
           </ul>
          
         </div>
@@ -98,16 +101,15 @@ const MainDashboard = () => {
                 </div>
        
     </div>
-    <div className="flex-1 flex flex-col items-center justify-center p-4 md:p-6 absolute md:top-[80px] md:left-[350px]">
+    
+    <div className="flex-1 flex flex-col items-center justify-center p-4 md:p-6 absolute md:top-[70px] md:left-[270px]">
+    
         <h1 className="text-4xl md:text-6xl font-bold -mt-1 text-center">
           Welcome to Fudar
         </h1>
-        <img
-          src="/public/Images/fudar_logo.png"
-          alt="Dashboard Visual"
-          className="mt-4 w-64 h-auto md:w-96"
-        />
+        
       </div>
+      <Totaldata />
     </>
   );
 };
