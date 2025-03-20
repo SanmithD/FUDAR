@@ -1,5 +1,5 @@
 import React from 'react';
-import { Route, Routes } from 'react-router-dom';
+import { Navigate, Route, Routes } from 'react-router-dom';
 import './App.css';
 import Admin from './Components/Admin.jsx';
 import AllVehicles from './Components/AllVehicles.jsx';
@@ -18,16 +18,27 @@ import VehicleDetail from './Components/VehicleDetail.jsx';
 import VehicleManagement from './Components/VehicleManagement .jsx';
 import Vehicles from './Components/Vehicles.jsx';
 
+const ProtectedRoute = ({ children }) => {
+  const role = localStorage.getItem('role');
+  if (role === 'driver') {
+    return <Navigate to="/driverPage" replace />;
+  }
+  return children;
+};
+
 function App() {
-
-
   return (
     <Routes>
       <Route path="/login" element={<Login />} />
       <Route path="/signup" element={<Signup />} />
-      <Route path="/driverPage" element={ <PDriver />} />
-        <Route path="/main" element={<MainDashboard />} />
-      <Route path="/" element={<Dashboard />}>
+      <Route path="/driverPage" element={<PDriver />} />
+      <Route path="/main" element={<MainDashboard />} />
+      
+      <Route path="/" element={
+        <ProtectedRoute>
+          <Dashboard />
+        </ProtectedRoute>
+      }>
         <Route path="/DriverSignIn" element={<DriverSignIn />} />
         <Route path="/Register" element={<Register />} />
         <Route path="/driver" element={<Drivers />} />

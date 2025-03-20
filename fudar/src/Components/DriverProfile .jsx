@@ -1,10 +1,29 @@
 import axios from "axios";
 import React, { useEffect, useState } from "react";
+import DriverManagement from "./DriverManagement";
 
 const DriverProfile = () => {
   const [profileData, setProfileData] = useState(null);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState(null);
+  const [salary, setSalary] = useState([]);
+  const [ enterData, setEnterData ] = useState(false);
+
+  const getSalary = async () => {
+    try {
+      const response = await axios.get(
+        "http://localhost:8080/api/user/getOwnSalary",
+        {
+          headers: {
+            Authorization: `Bearer ${localStorage.getItem("token")}`,
+          },
+        }
+      );
+      setSalary(response.data.response.monthlySalaries || []);
+    } catch (error) {
+      console.log(error);
+    }
+  };
 
   useEffect(() => {
     const fetchProfile = async () => {
@@ -18,9 +37,8 @@ const DriverProfile = () => {
           }
         );
         setProfileData(response.data.response);
-        console.log("My Data", response.data.response);
-        console.log("My Data", response.data.salaryResponse);
         setLoading(false);
+        getSalary();
       } catch (error) {
         console.log(error);
         setError("Failed to load profile data");
@@ -53,24 +71,27 @@ const DriverProfile = () => {
 
   if (error || !profileData) {
     return (
-      <div className="min-h-screen bg-gray-100 flex items-center justify-center">
-        <div className="bg-white p-8 rounded-lg shadow-lg">
+      <div className="min-h-screen bg-white flex items-center justify-center">
+        <div className="bg-white p-8 rounded-lg shadow-lg w-full ">
           <p className="text-xl font-medium text-red-500">
             {error || "No profile data available"}
           </p>
           <button
-            onClick={() => window.location.reload()}
+            onClick={() => {window.location.reload(), setEnterData(true)} }
             className="mt-4 px-4 py-2 bg-black text-white rounded hover:bg-gray-800"
           >
             Retry
           </button>
+          <div>
+          { enterData ? <DriverManagement/> : <DriverManagement/> }
+          </div>
         </div>
       </div>
     );
   }
 
   return (
-    <div className="min-h-screen bg-gray-100 py-8">
+    <div className="min-h-screen bg-white py-8">
       <div className="max-w-4xl mx-auto bg-white rounded-lg shadow-lg overflow-hidden">
         {/* Header */}
         <div className="bg-black text-white p-6">
@@ -221,6 +242,23 @@ const DriverProfile = () => {
                   </p>
                 </div>
 
+                <div className="bg-green-50 p-4 rounded-lg border border-green-100">
+                  <h3 className="font-semibold text-green-800 mb-2">
+                    Salary Information
+                  </h3>
+                  <ul className="space-y-2">
+                    {salary.map((data, index) => (
+                      <li
+                        key={index}
+                        className="text-green-700 flex justify-between items-center p-2 rounded hover:bg-green-50 transition-colors"
+                      >
+                        <span>{data.month}</span>
+                        <span>₹{data.amount}</span>
+                      </li>
+                    ))}
+                  </ul>
+                </div>
+
                 {/* Documents Section */}
                 <div className="col-span-2 mt-4">
                   <h3 className="text-lg font-semibold border-b border-gray-200 pb-2 mb-4">
@@ -272,8 +310,7 @@ const DriverProfile = () => {
                     </div>
 
                     <div className="border border-gray-200 rounded p-3">
-                      <p className="text-sm text-gray-500 mb-2"
-                      >
+                      <p className="text-sm text-gray-500 mb-2">
                         Driving License
                       </p>
                       <div className="bg-gray-100 h-32 rounded flex items-center justify-center">

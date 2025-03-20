@@ -45,14 +45,12 @@ export default function Dashboard() {
 
   // UseEffect for fetching user data and animations
   useEffect(() => {
-    // if (!localStorage.getItem('token')) {
-    //   navigate('/login');
-    // } else {
-    //   getUser();
-    // }
-
-    getUser()
-
+    if (!localStorage.getItem('token')) {
+      navigate('/login');
+    } else {
+      getUser();
+    }
+    getUser();
     const timer = setTimeout(() => {
       setAnimateCards(true);
     }, 300);
@@ -69,7 +67,7 @@ export default function Dashboard() {
   };
 
   return (
-    <div className="flex h-screen bg-gray-100">
+    <div className="flex h-screen bg-white">
       {/* Mobile Header with Menu Button */}
       <div className="md:hidden fixed top-0 left-0 right-0 p-4 flex justify-between items-center bg-white shadow-sm z-20">
         <button onClick={() => setSidebarOpen(!sidebarOpen)} className="text-black">
@@ -87,8 +85,8 @@ export default function Dashboard() {
         <div className="flex flex-col h-full">
           <div className="p-4 flex justify-between items-center">
             <h2 className="text-xl font-bold text-white mb-6 mt-8">Staff Management</h2>
-            <button className="md:hidden text-white" onClick={() => setSidebarOpen(false)}>
-              <X size={24} />
+            <button className="md:hidden text-white" >
+              <X size={24} onClick={()=>setSidebarOpen(!sidebarOpen)}/>
             </button>
           </div>
           <ul className="flex flex-col gap-6 p-4">
@@ -107,12 +105,13 @@ export default function Dashboard() {
             <li className="flex items-center p-3 text-white hover:bg-gray-500 rounded-md cursor-pointer transition-colors" onClick={() => { navigate("/allVehicles"); closeDropdowns(); }}>
               <Truck className="mr-2 text-white" /> All Vehicles
             </li>
+            
           </ul>
         </div>
       </div>
 
       {/* Main Content */}
-      <div className="flex-1 flex flex-col min-h-screen bg-[#F3F4F6]">
+      <div className="flex-1 flex flex-col min-h-screen bg-[white]">
         <div className="hidden md:flex fixed top-0 left-64 right-0 p-4 justify-between items-center pr-8 bg-white shadow-sm z-30">
           <h1 className="text-3xl font-bold text-gray-800 pl-6">Staff Management Dashboard</h1>
           <div className="flex items-center">
@@ -132,7 +131,7 @@ export default function Dashboard() {
         </div>
 
         {/* Main Dashboard Content */}
-        <div className={`md:pt-24 pt-[130px] px-4 md:px-8 w-[100%] flex justify-center  ${sidebarOpen ? 'opacity-50' : 'opacity-100' }  bg-[#F3F4F6]`}>
+        <div className={`md:pt-24 pt-[130px] px-4 md:px-8 w-[100%] flex justify-center  ${sidebarOpen ? 'opacity-50' : 'opacity-100' }  bg-white`}>
           <Outlet />
         </div>
       </div>

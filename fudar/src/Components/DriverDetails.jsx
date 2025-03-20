@@ -64,14 +64,13 @@ function DriverDetails() {
     fetchDriver();
   }, [id, refreshChart]);
 
-  // Cleanup chart instance only on unmount
   useEffect(() => {
     return () => {
       if (chartRef.current) {
         chartRef.current.destroy();
       }
     };
-  }, []); // Empty dependency array for mount/unmount only
+  }, []); 
 
   const options = {
     responsive: true,
@@ -140,9 +139,9 @@ function DriverDetails() {
     );
 
   return (
-    <div className="min-h-screen bg-gray-50 absolute md:top-[50px] md:w-[1270px] md:left-[260px]">
+    <div className="min-h-screen bg-white absolute md:top-[50px] md:w-[70%] md:left-[260px] md:p-[20px] ">
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8">
-        <div className="bg-white p-8 rounded-xl shadow-lg border border-gray-200">
+        <div className="bg-white p-8 rounded-xl shadow-lg  ">
           <div className="flex items-center justify-between mb-6">
             <h2 className="text-2xl font-bold text-black">Driver Details</h2>
             <button
@@ -228,7 +227,7 @@ function DriverDetails() {
                 <h4 className="text-lg font-medium text-black mb-3">
                   Salary History
                 </h4>
-                <div className="space-y-2 h-[150px] overflow-scroll">
+                <div className="space-y-2 h-[150px] overflow-scroll overflow-x-hidden">
                   {salary.length > 0 ? (
                     salary.map((item) => (
                       <div

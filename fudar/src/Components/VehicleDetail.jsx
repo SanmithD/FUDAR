@@ -9,6 +9,7 @@ export default function VehicleDetail() {
   const [vehicle, setVehicle] = useState(null);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState(null);
+  const screen = innerWidth;
 
   useEffect(() => {
     const fetchVehicle = async () => {
@@ -44,7 +45,7 @@ export default function VehicleDetail() {
   }
 
   return (
-    <div className="min-h-screen bg-white text-black p-4 md:p-8 flex justify-center">
+    <div className="min-h-screen bg-gray-100 text-black p-4 md:p-8 flex justify-center">
       <div className="max-w-4xl mx-auto">
         {/* Back Button */}
         <button
@@ -56,9 +57,9 @@ export default function VehicleDetail() {
         </button>
 
         {/* Main Container */}
-        <div className="bg-white rounded-lg border border-black overflow-hidden">
+        <div className="bg-gray-200 rounded-lg border border-black overflow-hidden " style={{ marginTop: '50px', marginLeft: screen < 1000 ? '10px' : '50px', padding: '15px' }} >
           {/* Vehicle Images */}
-          <div className="grid grid-cols-1 sm:grid-cols-3 gap-4 p-4">
+          <div className="grid grid-cols-1 sm:grid-cols-3 gap-4 p-4"  >
             {vehicle.vehicleImage?.[0] && (
               <>
                 <div className="relative">

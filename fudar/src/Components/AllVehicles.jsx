@@ -2,7 +2,7 @@ import axios from 'axios';
 import React, { useEffect, useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 
-function AllVehicles() {
+function    AllVehicles() {
     const [allVehicles, setAllVehicles] = useState([]);
     const navigate = useNavigate();
 
@@ -18,12 +18,14 @@ function AllVehicles() {
     useEffect(() => {
         allVehiclesDetails();
     }, []);
+
+    const screen = innerWidth;
     
     return (
-        <div className="min-h-screen bg-gray-100 py-8">
-            <div className="container mx-auto px-4">
-                <h2 className="text-2xl font-bold mb-6 text-gray-800">All Staff Vehicles</h2>
-                <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+        <div className="min-h-screen bg-white">
+            <div className="container mx-auto flex flex-col gap-[30px] " style={{ marginTop: '50px' }} >
+                <h2 className="text-2xl font-bold mb-6 text-gray-800 mt-[50px] " style={{ marginLeft: screen < 1000 ? '20px' : '250px' }} >All Staff Vehicles</h2>
+                <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6 " style={{ marginLeft: screen < 1000 ? '20px' : '250px' }} >
                     {allVehicles.map((vehicle) => (
                         <div key={vehicle._id} className="bg-white rounded-lg shadow-md overflow-hidden cursor-pointer " onClick={()=>navigate(`/vehicle/${vehicle._id}`)} >
                             {vehicle.vehicleImage && vehicle.vehicleImage[0] && (

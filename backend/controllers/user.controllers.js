@@ -1,6 +1,8 @@
 import bcrypt from 'bcrypt';
 import 'dotenv/config';
 import jwt from 'jsonwebtoken';
+import { bookModel } from '../models/book.model.js';
+import { driverModel } from '../models/driver.model.js';
 import userModel from "../models/user.model.js";
 
 const userSignup = async(req, res) =>{
@@ -158,5 +160,54 @@ const userProfile = async(req, res) =>{
   }
 };
 
-export { updateUser, userLogin, userProfile, userSignup };
+const getAllUsers = async(req, res) =>{
+  try {
+    const response = await userModel.find();
+    if(!response){
+      return res.status(404).json({
+        success: false,
+        message: "User not found"
+      })
+    }
+    res.status(200).json({
+      success: true,
+      message: "All Users",
+      response
+    });
+  } catch (error) {
+    res.status(500).json({
+      success: false,
+      message: "Server error"
+    });
+    console.log(error);
+  }
+}
+
+const getUserSalary = async(req, res) =>{
+  const token = req.headers.authorization?.split(" ")[1];
+  const JWT = process.env.JWT_SECRET;
+
+  try {
+    const { id } = jwt.verify(token, JWT);
+    console.log("user id", id);
+    const salary = await driverModel.findOne({ userId: id });
+    console.log("salary", salary)
+    const { _id } = salary;
+    console.log("driver id", _id)
+    const response = await bookModel.findOne({ driver: _id});
+    console.log("salary", response );
+    res.status(200).json({
+      success: true,
+      message: "Driver salary",
+      response
+    })
+  } catch (error) {
+    res.status(500).json({
+      success: false,
+      message: "Server error"
+    })
+  }
+}
+
+export { getAllUsers, getUserSalary, updateUser, userLogin, userProfile, userSignup };
 

@@ -10,6 +10,7 @@ const VehicleManagement = () => {
     vehicleNumber: "",
     driverId: "",
   });
+  const screen = innerWidth;
   const [files, setFiles] = useState({
     vehicleImage: null,
     emissionTest: null,
@@ -198,8 +199,8 @@ const VehicleManagement = () => {
   };
 
   return (
-    <div className="max-w-4xl mx-auto p-6 bg-gray-100 min-h-screen md:absolute md:top-[80px] md:left-[270px]">
-      <h1 className="text-3xl font-bold mb-6 text-gray-800">
+    <div className="max-w-4xl mx-auto p-6 bg-white min-h-screen md:absolute md:top-[70px] md:left-[270px]" style={{ marginTop: screen < 1000 ? '30px' : '20px', padding: screen < 1000 ? '20px' : '20px' }} >
+      <h1 className="text-3xl font-bold mb-6 text-gray-800" style={{ fontSize: screen < 1000 ? '20px' : '36px' }} >
         Vehicle Management
       </h1>
 
@@ -308,38 +309,38 @@ const VehicleManagement = () => {
       )}
 
       {viewMode === "list" && (
-        <div className="overflow-x-auto">
-          <table className="w-full border-collapse flex gap-[20px] flex-col ">
+        <div className="overflow-x-auto" >
+          <table className="w-full border-collapse flex flex-col " style={{ width: screen < 1000 ? '100%' : 'full', gap: screen < 1000 ? '5px' : '20px' }} >
             <thead>
-              <tr className="bg-gray-200 flex gap-[50px] ">
-                <th className="p-4 text-left">Type</th>
-                <th className="p-4 text-left">Number</th>
-                <th className="p-4 text-left">Assigned Driver</th>
-                <th className="p-4 text-left">Actions</th>
+              <tr className="bg-gray-200 flex gap-[50px] " style={{ fontSize: screen < 1000 ? '16px' : '20px', justifyContent: 'space-between' }} >
+                <th className="p-4 text-left" style={{ fontSize: screen < 1000 ? '14px' : '20px' }}>Type</th>
+                <th className="p-4 text-left" style={{ fontSize: screen < 1000 ? '14px' : '20px' }}>Number</th>
+                <th className="p-4 text-left" style={{ fontSize: screen < 1000 ? '14px' : '20px' }}>Assigned Driver</th>
+                <th className="p-4 text-left" style={{ fontSize: screen < 1000 ? '14px' : '20px' }}>Actions</th>
               </tr>
             </thead>
             <tbody>
               {vehicles.map((vehicle) => (
-                <tr key={vehicle._id} className="border-b border-gray-200 flex gap-[50px] ">
-                  <td className="p-4">{vehicle.vehicleType}</td>
-                  <td className="p-4">{vehicle.vehicleNumber}</td>
-                  <td className="p-4">
+                <tr key={vehicle._id} className="border-b border-gray-200 flex" style={{ width: screen < 1000 ? '100%' : 'full', justifyContent: 'space-between' }} >
+                  <td className="p-4 text-left " style={{ fontSize: screen < 1000 ? '14px' : '20px' }} >{vehicle.vehicleType}</td>
+                  <td className="p-4 text-left" style={{ fontSize: screen < 1000 ? '12px' : '20px' }} >{vehicle.vehicleNumber}</td>
+                  <td className="p-4 text-left" style={{ fontSize: screen < 1000 ? '14px' : '20px' }} >
                     {drivers.find((d) => d.vehicle === vehicle._id)
                       ?.driverName || "Unassigned"}
                   </td>
-                  <td className="p-4 flex gap-2">
+                  <td className="flex gap-2 text-right " style={{ fontSize: screen < 1000 ? '14px' : '20px' }} >
                     <button
                       onClick={() => {
                         setSelectedVehicle(vehicle);
                         setViewMode("details");
                       }}
-                      className="px-3 py-2 bg-blue-600 text-white rounded-md hover:bg-blue-700"
+                      className="bg-blue-600 text-white rounded-md hover:bg-blue-700"
                     >
                       View
                     </button>
                     <button
                       onClick={() => handleDelete(vehicle._id)}
-                      className="px-3 py-2 bg-red-600 text-white rounded-md hover:bg-red-700"
+                      className="bg-red-600 text-white rounded-md hover:bg-red-700"
                     >
                       Delete
                     </button>

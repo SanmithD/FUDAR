@@ -164,7 +164,7 @@ const DriverManagement = () => {
   };
 
   return (
-    <div className="min-h-screen bg-white  text-black p-sl md:p-6 lg:p-0 flex items-center justify-center  w-full">
+    <div className="min-h-screen bg-white  text-black p-sl md:p-6 lg:p-0 flex items-center justify-center ">
       <div className="w-[90%] px-3 mx-auto bg-white rounded-lg  md:p-20 " >
         <h1 className="text-3xl font-bold mb-10 border-b border-black pb-2 text-center">
           Driver Management
@@ -300,7 +300,7 @@ const DriverManagement = () => {
           </div>
   
           {/* Buttons */}
-          <div className="mt-30  flex flex-col sm:flex-row gap-40 justify-center">
+          <div className="mt-8  flex flex-col sm:flex-row gap-4 justify-center">
             <button
               type="submit"
               className="w-full p-5 mt-4 sm:w-auto px-6 py-2 bg-black text-white rounded border border-black hover:bg-gray-800 transition-colors"
