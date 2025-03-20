@@ -20,7 +20,7 @@ const Dashboard = () => {
     setDocument(false);
     try {
       const response = await axios.get(
-        `http://localhost:8080/api/driver/getOwn`,
+        `https://fudar-dqqd.onrender.com/api/driver/getOwn`,
         {
           headers: {
             Authorization: `Bearer ${localStorage.getItem("token")}`,

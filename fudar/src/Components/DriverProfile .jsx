@@ -12,7 +12,7 @@ const DriverProfile = () => {
   const getSalary = async () => {
     try {
       const response = await axios.get(
-        "http://localhost:8080/api/user/getOwnSalary",
+        "https://fudar-dqqd.onrender.com/api/user/getOwnSalary",
         {
           headers: {
             Authorization: `Bearer ${localStorage.getItem("token")}`,
@@ -29,7 +29,7 @@ const DriverProfile = () => {
     const fetchProfile = async () => {
       try {
         const response = await axios.get(
-          `http://localhost:8080/api/driver/getOwn`,
+          `https://fudar-dqqd.onrender.com/api/driver/getOwn`,
           {
             headers: {
               Authorization: `Bearer ${localStorage.getItem("token")}`,

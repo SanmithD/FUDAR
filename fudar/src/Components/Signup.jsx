@@ -28,7 +28,7 @@ const Signup = () => {
       setLoading(true);
       
       // Call the signup API endpoint
-      const response = await axios.post('http://localhost:8080/api/user/signup', {
+      const response = await axios.post('https://fudar-dqqd.onrender.com/api/user/signup', {
         name,
         phoneNumber,
         password

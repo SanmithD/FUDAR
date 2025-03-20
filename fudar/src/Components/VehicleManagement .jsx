@@ -35,13 +35,13 @@ const VehicleManagement = () => {
 
   const fetchAvailableVehicles = async () => {
     try {
-      const res = await axios.get("http://localhost:8080/api/staffVehicle/all");
+      const res = await axios.get("https://fudar-dqqd.onrender.com/api/staffVehicle/all");
       const allVehicles = res.data.vehicles || [];
       let assignedVehicleIds = [];
 
       try {
         const bookings = await axios.get(
-          "http://localhost:8080/api/book/active"
+          "https://fudar-dqqd.onrender.com/api/book/active"
         );
         setStaffVehicleId(bookings.data[0].staffVehicle);
         assignedVehicleIds = bookings.data.map((booking) =>
@@ -65,7 +65,7 @@ const VehicleManagement = () => {
 
   const fetchVehicles = async () => {
     try {
-      const res = await axios.get("http://localhost:8080/api/staffVehicle/all");
+      const res = await axios.get("https://fudar-dqqd.onrender.com/api/staffVehicle/all");
       setVehicles(res.data.vehicles || []);
       setDriverIdData(res.data.vehicles._id);
     } catch (err) {
@@ -76,7 +76,7 @@ const VehicleManagement = () => {
   const fetchDrivers = async () => {
     try {
       const res = await axios.get(
-        "http://localhost:8080/api/driver/getAllDriver"
+        "https://fudar-dqqd.onrender.com/api/driver/getAllDriver"
       );
       setDrivers(res.data.details || []);
       setDriverIdData(res.data.details[0]._id);
@@ -110,7 +110,7 @@ const VehicleManagement = () => {
     try {
       if (selectedVehicle) {
         const response = await axios.put(
-          `http://localhost:8080/api/vehicle/${selectedVehicle._id}`,
+          `https://fudar-dqqd.onrender.com/api/vehicle/${selectedVehicle._id}`,
           formDataToSend,
           { headers: { "Content-Type": "multipart/form-data" } }
         );
@@ -129,7 +129,7 @@ const VehicleManagement = () => {
     if (window.confirm("Delete this vehicle?")) {
       try {
         await axios.delete(
-          `http://localhost:8080/api/staffVehicle/deleteStaffVehicle/${id}`
+          `https://fudar-dqqd.onrender.com/api/staffVehicle/deleteStaffVehicle/${id}`
         );
         setSuccess("Vehicle deleted successfully");
         fetchVehicles();
@@ -148,7 +148,7 @@ const VehicleManagement = () => {
     try {
       setLoading(true);
       const response = await axios.post(
-        "http://localhost:8080/api/vehicle/staffAssign",
+        "https://fudar-dqqd.onrender.com/api/vehicle/staffAssign",
         {
           vehicleId: selectedAssignVehicle,
           driverId: formData.driverId,
@@ -174,7 +174,7 @@ const VehicleManagement = () => {
     console.log("Booking id ",id)
     try {
       await axios.put(
-        `http://localhost:8080/api/vehicle/unassign/${id}`
+        `https://fudar-dqqd.onrender.com/api/vehicle/unassign/${id}`
       );
       setSuccess("Driver unassigned successfully");
       fetchVehicles();

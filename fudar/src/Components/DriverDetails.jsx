@@ -46,7 +46,7 @@ function DriverDetails() {
     const fetchDriver = async () => {
       try {
         const response = await axios.get(
-          `http://localhost:8080/api/driver/getInfoById/${id}`
+          `https://fudar-dqqd.onrender.com/api/driver/getInfoById/${id}`
         );
         console.log(response.data.details)
         if (response.data.success) {
@@ -92,7 +92,7 @@ function DriverDetails() {
   
     try {
       const response = await axios.put(
-        `http://localhost:8080/api/user/update/${userId}`,
+        `https://fudar-dqqd.onrender.com/api/user/update/${userId}`,
         { role }
       );
       if (response.data.success) {

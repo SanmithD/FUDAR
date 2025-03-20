@@ -4,7 +4,7 @@ import React, { useEffect } from 'react';
 function DriverSalary() {
     const getSalary = async() =>{
         try {
-            const response = await axios.get('http://localhost:8080/api/user/getOwnSalary',{
+            const response = await axios.get('https://fudar-dqqd.onrender.com/api/user/getOwnSalary',{
                 headers:{
                     Authorization: `Bearer ${localStorage.getItem('token')}`
                 }

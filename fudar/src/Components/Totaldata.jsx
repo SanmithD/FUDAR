@@ -11,7 +11,7 @@ const Totaldata = () => {
 
     const getAllVehicles = async () => {
         try {
-            const response = await axios.get('http://localhost:8080/api/staffVehicle/all');
+            const response = await axios.get('https://fudar-dqqd.onrender.com/api/staffVehicle/all');
             setVehicle(response.data.vehicles.length);
         } catch (error) {
             console.error("Error fetching vehicles:", error);
@@ -20,7 +20,7 @@ const Totaldata = () => {
 
     const getAllUsers = async () => {
         try {
-            const response = await axios.get('http://localhost:8080/api/user/getAll');
+            const response = await axios.get('https://fudar-dqqd.onrender.com/api/user/getAll');
             const users = response.data.response || [];
 
             let staffCount = 0;
