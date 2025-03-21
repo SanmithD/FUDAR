@@ -15,7 +15,7 @@ const Dashboard = () => {
   const navigate = useNavigate();
   const [profileData, setProfileData] = useState();
   const [document, setDocument] = useState(false);
-
+  const [dropdownOpen, setDropdownOpen]=useState(false);
   const profile = async () => {
     setDocument(false);
     try {
@@ -131,7 +131,21 @@ const Dashboard = () => {
             )}
           </div>
         </div>
-        
+        <div className="flex-1 flex flex-col min-h-screen bg-[#F3F4F6]">
+          <div className="hidden md:flex fixed top-0 md:left-64 right-0 p-4 justify-between items-center pr-8 bg-white shadow-sm z-30">
+            <h1 className="text-3xl font-bold text-gray-800 pl-6">Admin Dashboard</h1>
+            <div className="flex items-center">
+              <UserCircle className="w-12 h-12 text-black cursor-pointer mr-4" onClick={() => setDropdownOpen(!dropdownOpen)}/>
+              {dropdownOpen && (
+                <div className="absolute right-0 mt-2 w-48 bg-white shadow-lg rounded-lg p-2 z-40">
+                  <p className="px-4 py-2 text-gray-700 font-semibold cursor-pointer" >{profileData}</p>
+                  <hr />
+                  <button onClick={handleLogout} className="w-full text-left px-4 py-2 text-red-600 hover:bg-gray-100 rounded-md">Logout</button>
+                </div>
+              )}
+            </div>
+          </div>
+          </div>
         {document ? <DriverProfile /> : <DriverManagement />}
       </div>
     </div>
