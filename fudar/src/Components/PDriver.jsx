@@ -1,5 +1,5 @@
 import axios from "axios";
-import { Menu, X, UserCircle } from "lucide-react";
+import { Menu, UserCircle, X } from "lucide-react";
 import React, { useEffect, useState } from "react";
 import { useNavigate } from "react-router-dom";
 import DriverManagement from "./DriverManagement";
@@ -16,6 +16,11 @@ const Dashboard = () => {
   const [profileData, setProfileData] = useState();
   const [document, setDocument] = useState(false);
   const [dropdownOpen, setDropdownOpen]=useState(false);
+
+  if(!localStorage.getItem('token')){
+    navigate('/login')
+  }
+
   const profile = async () => {
     setDocument(false);
     try {
