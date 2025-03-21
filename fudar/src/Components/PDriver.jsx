@@ -31,6 +31,7 @@ const Dashboard = () => {
       setDocument(true);
     } catch (error) {
       setDocument(false);
+      console.log(error);
     }
   };
 
