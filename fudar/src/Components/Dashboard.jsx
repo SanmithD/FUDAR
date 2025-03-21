@@ -58,7 +58,6 @@ export default function Dashboard() {
     return () => clearTimeout(timer);
   }, [navigate]);
 
-  // Close dropdowns and mobile sidebar
   const closeDropdowns = () => {
     setDropdownOpen(false);
     if (window.innerWidth < 768) {
