@@ -1,14 +1,28 @@
-import React, { useState } from 'react';
-
+import { useState, useEffect } from 'react';
+import { Axios } from 'axios';
 const StaffList = () => {
   // Sample staff data
   const [staff, setStaff] = useState([
-    { id: 1, username: 'john_doe' },
-    { id: 2, username: 'jane_smith' },
-    { id: 3, username: 'mike_jones' },
-    { id: 4, username: 'sara_wilson' },
+    { id: 1, Name: 'john_doe', phoneNumber:'xx01166xxx' },
+    // { id: 2, username: 'jane_smith' },
+    // { id: 3, username: 'mike_jones' },
+    // { id: 4, username: 'sara_wilson' },
   ]);
-
+  
+    const getAllStaffs= async () =>
+    {
+      const response = await Axios.get('https://fudar-dqqd.onrender.com/api/user/getAll'); //fetch raw data from mong
+      let users=response.data.response || [];
+      if(users.role=="staff")
+      {
+        setStaff(users.details);
+        console.log(users.details);
+      }
+      
+    }
+    useEffect(() => {
+    getAllStaffs();
+  },[]);
   // Handle delete staff member
   const handleDelete = (staffId) => {
     setStaff(staff.filter(member => member.id !== staffId));
@@ -26,7 +40,10 @@ const StaffList = () => {
                 Staff ID
               </th>
               <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
-                Username
+                Name
+              </th>
+              <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
+                Phone Number
               </th>
               <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
                 Actions
@@ -40,7 +57,10 @@ const StaffList = () => {
                   {member.id}
                 </td>
                 <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-900">
-                  {member.username}
+                  {member.Name}
+                </td>
+                <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-900">
+                  {member.phoneNumber}
                 </td>
                 <td className="px-6 py-4 whitespace-nowrap text-sm">
                   <button
