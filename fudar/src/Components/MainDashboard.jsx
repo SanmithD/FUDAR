@@ -2,19 +2,26 @@ import { Menu, Truck, UserCircle, Users, X } from "lucide-react";
 import React, { useEffect, useState } from "react";
 import { Navigate, useNavigate } from "react-router-dom";
 import { Axios } from "axios";
+import { MdDirectionsBike } from "react-icons/md";
+import {GiFullMotorcycleHelmet} from "react-icons/gi";
+import { FaPeopleGroup, FaPlus } from "react-icons/fa6";
+import { RiMotorbikeFill } from "react-icons/ri";
 import Managestaff from './Managestaff';
 import Totaldata from './Totaldata';
+import Vehicles from "./Vehicles";
 import VehicleManagement from "./VehicleManagement ";
 import DriversList from "./DriversList";
+import Allvehicles from './AllVehicles'
 const MainDashboard = () => {
   const navigate = useNavigate();
   const [isSidebarOpen, setIsSidebarOpen] = useState(false);
   const [dropdownOpen, setDropdownOpen] = useState(false);
   const [document, setDocument] = useState(false);
   const [vehicle, setVehicle] = useState(false);
+  const [allVehicle,setallVehicle]=useState(false);
   const [staff,setStaff]=useState(false);
   const [userData, setUserData] = useState(null);
-
+  const [mgvehicles,setmgVehicles]=useState(false);
   // Removed unused state variables for simplicity
   const handleLogout = () => {
     localStorage.removeItem('token');
@@ -38,20 +45,41 @@ const MainDashboard = () => {
     setDocument(true);
     setVehicle(false);
     setStaff(false);
-    setIsSidebarOpen(false); // Close sidebar on mobile
+    setIsSidebarOpen(false);
+    setmgVehicles(false);
+    setallVehicle(false); 
   }
-
-  const AllVehicles = () => {
-    setVehicle(true);
+  const ManageVehicles = () => {
+    setmgVehicles(true);
     setDocument(false);
+    setVehicle(false);
+    setallVehicle(false); 
     setStaff(false);
     setIsSidebarOpen(false); // Close sidebar on mobile
   }
-
+  const AddVehicles = () => {
+    setVehicle(true);
+    setDocument(false);
+    setStaff(false);
+    setIsSidebarOpen(false);
+    setallVehicle(false); 
+    setmgVehicles(false); // Close sidebar on mobile
+  }
+  const AllVehicles=()=>
+  {
+    setallVehicle(true); 
+    setVehicle(false);
+    setDocument(false);
+    setStaff(false);
+    setmgVehicles(false);
+    setIsSidebarOpen(false);
+  }
   const allStaff = () => {
+    setallVehicle(false); 
     setVehicle(false);
     setDocument(false);
     setStaff(true);
+    setmgVehicles(false);
     setIsSidebarOpen(false); // Close sidebar on mobile
   }
   return (
@@ -91,22 +119,32 @@ const MainDashboard = () => {
             <ul className="flex flex-col gap-6 p-4">
               <li 
                 className="flex items-center p-3 hover:bg-gray-500 rounded-md cursor-pointer" 
+                onClick={AddVehicles}
+              >
+                <FaPlus size={30} className="mr-2" /> Add Vehicles
+              </li>
+              <li 
+                className="flex items-center p-3 hover:bg-gray-500 rounded-md cursor-pointer" 
                 onClick={AllVehicles}
               >
-                <Truck className="mr-2" /> Add Vehicles
+              <RiMotorbikeFill size={30}/> Manage Vehicles
               </li>
+              <li className="flex items-center p-3 text-white hover:bg-gray-500 rounded-md cursor-pointer transition-colors" onClick={ManageVehicles}>
+              <MdDirectionsBike className="mr-2 text-white" size={30}/> Assign Riders
+             
+            </li>
               <li 
                 className="flex items-center p-3 hover:bg-gray-500 rounded-md cursor-pointer" 
                 onClick={Driver}
               >
-                <Users className="mr-2" /> Manage Drivers
+                <GiFullMotorcycleHelmet size={30} className="mr-2" /> Manage Riders
               </li>
               
               <li 
                 className="flex items-center p-3 hover:bg-gray-500 rounded-md cursor-pointer" 
                 onClick={allStaff}
               >
-                <Users className="mr-2" /> Manage staff
+                <FaPeopleGroup className="mr-2" size={30}/> Manage staff
               </li>
               {/* Other menu items */}
             </ul>
@@ -135,6 +173,12 @@ const MainDashboard = () => {
           <DriversList /> 
           </div>
           }
+          { 
+            mgvehicles&&
+          <div className="absolute md:top-[150px] top-[80px] md:left-[10px] top-[360px] md:h-[20%] md:w-[100%]">
+            <VehicleManagement />
+            </div>
+            }
           {staff&&
             <div className="absolute md:top-[190px] top-[360px] w-[100%] md:left-[270px] md:w-[80%]">
              <Managestaff />
@@ -142,10 +186,16 @@ const MainDashboard = () => {
           }
           {vehicle && 
           
-          <div className="absolute md:top-[80px] top-[80px] md:left-[-10px] top-[360px] md:h-[20%] md:w-[100%]">
-          <VehicleManagement />
+          <div className="absolute md:top-[150px] top-[80px] md:left-[10px] left-[40px]  top-[360px] md:h-[20%] md:w-[100%]">
+          <Vehicles />
           
           </div>
+          
+          }
+          { allVehicle&&
+            <div className="absolute md:top-[150px] top-[80px] md:left-[10px] left-[40px]  top-[360px] md:h-[20%] md:w-[100%]">
+            <AllVehicles />
+            </div>
           }
           </div>
       </div>
