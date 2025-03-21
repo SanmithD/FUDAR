@@ -3,7 +3,7 @@ import { Axios } from 'axios';
 const StaffList = () => {
   // Sample staff data
   const [staff, setStaff] = useState([
-    { id: 1, Name: 'john_doe', phoneNumber:'xx01166xxx' },
+    // { id: 1, Name: 'john_doe', phoneNumber:'xx01166xxx' },
     // { id: 2, username: 'jane_smith' },
     // { id: 3, username: 'mike_jones' },
     // { id: 4, username: 'sara_wilson' },
