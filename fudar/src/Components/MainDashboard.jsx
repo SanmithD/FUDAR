@@ -193,7 +193,7 @@ const MainDashboard = () => {
           
           }
           { allVehicle&&
-            <div className="absolute md:top-[150px] top-[80px] md:left-[10px] left-[40px]  top-[360px] md:h-[20%] md:w-[100%]">
+            <div className="absolute md:top-[150px] top-[80px] md:left-[10px]  top-[360px] w-[100%] md:w-[100%]">
             <Allvehicles />
             </div>
           }

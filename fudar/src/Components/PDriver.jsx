@@ -134,7 +134,7 @@ const Dashboard = () => {
         </div>
         <div className="flex-1 flex flex-col min-h-screen bg-[#F3F4F6]">
           <div className="hidden md:flex fixed top-0 md:left-64 right-0 p-4 justify-between items-center pr-8 bg-white shadow-sm z-30">
-            <h1 className="text-3xl font-bold text-gray-800 pl-6">Admin Dashboard</h1>
+           
             <div className="flex items-center">
               <UserCircle className="w-12 h-12 text-black cursor-pointer mr-4" onClick={() => setDropdownOpen(!dropdownOpen)}/>
               {dropdownOpen && (
