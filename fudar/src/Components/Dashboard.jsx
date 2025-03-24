@@ -68,7 +68,7 @@ export default function Dashboard() {
   return (
     <div className="flex h-screen bg-white">
       {/* Mobile Header with Menu Button */}
-      <div className="md:hidden fixed top-0 left-0 right-0 p-4 flex justify-between items-center bg-white shadow-sm z-20">
+      <div className="md:hidden fixed top-0 left-0 right-0 p-4 flex justify-between items-center bg-white shadow-sm z-20" hidden >
         <button onClick={() => setSidebarOpen(!sidebarOpen)} className="text-black">
           <Menu size={24} />
         </button>
