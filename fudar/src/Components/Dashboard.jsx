@@ -75,10 +75,11 @@ export default function Dashboard() {
           <Menu size={24} />
         </button>
         <h1 className="text-xl font-bold text-gray-800">Staff Management</h1>
-        <UserCircle
+        {/* <UserCircle
           className="w-8 h-8 text-black cursor-pointer"
           onClick={() => setDropdownOpen(dropdownOpen)}
-        />
+        /> */}
+        <button onClick={()=>{ localStorage.removeItem('token'), navigate('/login') }} >Logout</button>
       </div>
 
       {/* Sidebar */}
