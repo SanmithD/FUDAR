@@ -9,6 +9,7 @@ const StaffList = () => {
       const response = await axios.get('https://fudar-dqqd.onrender.com/api/user/getAllStaff');
       const users = response.data.data || []; 
       setStaff(users); 
+      console.log(users);
     } catch (error) {
       console.error("Error fetching staff:", error);
     }
