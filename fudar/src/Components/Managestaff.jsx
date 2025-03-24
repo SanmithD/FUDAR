@@ -12,8 +12,8 @@ const StaffList = () => {
     const getAllStaffs= async () =>
     {
       const response = await axios.get('https://fudar-dqqd.onrender.com/api/user/getAllStaff');
-      let users=response.data.response.role || [];
-      console.log(response.data.response.role || [])
+      let users=response.data.response || [];
+      console.log(response.data.response || [])
       if(users ==="staff")
       {
         setStaff(users.details);
