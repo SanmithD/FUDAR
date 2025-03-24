@@ -65,17 +65,19 @@ export default function Dashboard() {
     }
   };
 
+  const screen = innerWidth;
+
   return (
     <div className="flex h-screen bg-white">
       {/* Mobile Header with Menu Button */}
-      <div className="md:hidden fixed top-0 left-0 right-0 p-4 flex justify-between items-center bg-white shadow-sm z-20" hidden >
+      <div className="md:hidden fixed top-0 left-0 right-0 p-4 flex justify-between items-center bg-white shadow-sm z-20" >
         <button onClick={() => setSidebarOpen(!sidebarOpen)} className="text-black">
           <Menu size={24} />
         </button>
         <h1 className="text-xl font-bold text-gray-800">Staff Management</h1>
         <UserCircle
           className="w-8 h-8 text-black cursor-pointer"
-          onClick={() => setDropdownOpen(!dropdownOpen)}
+          onClick={() => setDropdownOpen(dropdownOpen)}
         />
       </div>
 

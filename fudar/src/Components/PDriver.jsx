@@ -71,7 +71,7 @@ const Dashboard = () => {
 
   return (
     <div className="flex flex-col md:flex-row min-h-screen bg-white" style={{ padding: screen < 1000 ? '20px' : '-20px' }}>
-      <div className="md:hidden bg-black text-white p-4 flex justify-between items-center" style={{ display: screen < 1000 ? 'none' : 'none' }}>
+      <div className="md:hidden bg-black text-white p-4 flex justify-between items-center" style={{ display: screen < 1000 ? 'block' : 'none' }}>
         <h2 className="text-xl font-bold">Fudar</h2>
         <button onClick={toggleSidebar} className="text-white">
           {isSidebarOpen ? <X size={24} /> : <Menu size={24} />}
