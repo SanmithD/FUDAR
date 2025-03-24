@@ -19,8 +19,13 @@ const StaffList = () => {
     getAllStaffs();
   }, []);
 
-  const handleDelete = (staffId) => {
-    setStaff(staff.filter(member => member._id !== staffId));
+  const handleDelete = async(staffId) => {
+    try {
+      const response = await axios.delete(`https://fudar-dqqd.onrender.com/api/user/deleteStaff/${staffId}`);
+      getAllStaffs();
+    } catch (error) {
+      console.log(error)
+    }
   };
 
   return (
