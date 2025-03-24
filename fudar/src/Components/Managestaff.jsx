@@ -1,5 +1,5 @@
-import { useState, useEffect } from 'react';
 import { Axios } from 'axios';
+import { useEffect, useState } from 'react';
 const StaffList = () => {
   // Sample staff data
   const [staff, setStaff] = useState([
@@ -11,9 +11,10 @@ const StaffList = () => {
   
     const getAllStaffs= async () =>
     {
-      const response = await Axios.get('https://fudar-dqqd.onrender.com/api/user/getAll'); //fetch raw data from mong
-      let users=response.data.response || [];
-      if(users.role=="staff")
+      const response = await Axios.get('https://fudar-dqqd.onrender.com/api/user/getAll');
+      let users=response.data.response.role || [];
+      console.log(response.data.response.role || [])
+      if(users ==="staff")
       {
         setStaff(users.details);
         console.log(users.details);
