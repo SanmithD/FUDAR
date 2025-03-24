@@ -189,13 +189,9 @@ const getUserSalary = async(req, res) =>{
 
   try {
     const { id } = jwt.verify(token, JWT);
-    console.log("user id", id);
     const salary = await driverModel.findOne({ userId: id });
-    console.log("salary", salary)
     const { _id } = salary;
-    console.log("driver id", _id)
     const response = await bookModel.findOne({ driver: _id});
-    console.log("salary", response );
     res.status(200).json({
       success: true,
       message: "Driver salary",
@@ -209,5 +205,30 @@ const getUserSalary = async(req, res) =>{
   }
 }
 
-export { getAllUsers, getUserSalary, updateUser, userLogin, userProfile, userSignup };
+const getAllStaff = async (req, res) => {
+  try {
+    const staff = await userModel.find({ role: "staff" });
+    
+    if (staff.length === 0) {
+      return res.status(404).json({
+        success: false,
+        message: "No staff members found"
+      });
+    }
+
+    res.status(200).json({
+      success: true,
+      message: "Staff members retrieved successfully",
+      data: staff
+    });
+  } catch (error) {
+    console.error("Error fetching staff:", error);
+    res.status(500).json({
+      success: false,
+      message: "Server error occurred while fetching staff"
+    });
+  }
+};
+
+export { getAllStaff, getAllUsers, getUserSalary, updateUser, userLogin, userProfile, userSignup };
 

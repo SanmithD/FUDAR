@@ -1,4 +1,4 @@
-import { Axios } from 'axios';
+import axios from 'axios';
 import { useEffect, useState } from 'react';
 const StaffList = () => {
   // Sample staff data
@@ -11,7 +11,7 @@ const StaffList = () => {
   
     const getAllStaffs= async () =>
     {
-      const response = await Axios.get('https://fudar-dqqd.onrender.com/api/user/getAll');
+      const response = await axios.get('https://fudar-dqqd.onrender.com/api/user/getAllStaff');
       let users=response.data.response.role || [];
       console.log(response.data.response.role || [])
       if(users ==="staff")
@@ -24,7 +24,6 @@ const StaffList = () => {
     useEffect(() => {
     getAllStaffs();
   },[]);
-  // Handle delete staff member
   const handleDelete = (staffId) => {
     setStaff(staff.filter(member => member.id !== staffId));
   };
@@ -58,7 +57,7 @@ const StaffList = () => {
                   {member.id}
                 </td>
                 <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-900">
-                  {member.Name}
+                  {member.name}
                 </td>
                 <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-900">
                   {member.phoneNumber}
