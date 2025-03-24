@@ -1,31 +1,25 @@
 import axios from 'axios';
 import { useEffect, useState } from 'react';
+
 const StaffList = () => {
-  // Sample staff data
-  const [staff, setStaff] = useState([
-    // { id: 1, Name: 'john_doe', phoneNumber:'xx01166xxx' },
-    // { id: 2, username: 'jane_smith' },
-    // { id: 3, username: 'mike_jones' },
-    // { id: 4, username: 'sara_wilson' },
-  ]);
-  
-    const getAllStaffs= async () =>
-    {
+  const [staff, setStaff] = useState([]);
+
+  const getAllStaffs = async () => {
+    try {
       const response = await axios.get('https://fudar-dqqd.onrender.com/api/user/getAllStaff');
-      let users=response.data.response || [];
-      console.log(response.data.response || [])
-      if(users ==="staff")
-      {
-        setStaff(users.details);
-        console.log(users.details);
-      }
-      
+      const users = response.data.data || []; 
+      setStaff(users); 
+    } catch (error) {
+      console.error("Error fetching staff:", error);
     }
-    useEffect(() => {
+  };
+
+  useEffect(() => {
     getAllStaffs();
-  },[]);
+  }, []);
+
   const handleDelete = (staffId) => {
-    setStaff(staff.filter(member => member.id !== staffId));
+    setStaff(staff.filter(member => member._id !== staffId));
   };
 
   return (
@@ -52,9 +46,9 @@ const StaffList = () => {
           </thead>
           <tbody className="bg-white divide-y divide-gray-200">
             {staff.map((member) => (
-              <tr key={member.id}>
+              <tr key={member._id}>
                 <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-900">
-                  {member.id}
+                  {member._id}
                 </td>
                 <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-900">
                   {member.name}
@@ -64,7 +58,7 @@ const StaffList = () => {
                 </td>
                 <td className="px-6 py-4 whitespace-nowrap text-sm">
                   <button
-                    onClick={() => handleDelete(member.id)}
+                    onClick={() => handleDelete(member._id)}
                     className="text-red-600 hover:text-red-900 font-medium"
                   >
                     Delete
