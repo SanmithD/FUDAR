@@ -151,8 +151,8 @@ const Dashboard = () => {
               )}
             </div>
           </div>
-          </div>
         {document ? <DriverProfile /> : <DriverManagement />}
+          </div>
       </div>
     </div>
   );
