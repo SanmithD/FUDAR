@@ -146,7 +146,12 @@ const MainDashboard = () => {
               >
                 <FaPeopleGroup className="mr-2" size={30}/> Manage staff
               </li>
-              {/* Other menu items */}
+               <li 
+                className="flex items-center p-3 text-red-600 hover:bg-gray-500 rounded-md cursor-pointer" 
+                onClick={handleLogout}
+              >
+                 Logout
+                 </li>
             </ul>
           </div>
         </div>
