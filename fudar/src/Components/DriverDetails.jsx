@@ -112,7 +112,7 @@ function DriverDetails() {
 
   const handleDelete = async() =>{
     try {
-      const response = await axios.delete(`https://fudar-dqqd.onrender.com/api/user/deleteStaff/${id}`);
+      await axios.delete(`https://fudar-dqqd.onrender.com/api/driver/deleteDriverById/${id}`);
       navigate('/allDrivers')
     } catch (error) {
       console.log(error);
