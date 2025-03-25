@@ -15,7 +15,6 @@ import { Line } from "react-chartjs-2";
 import { useNavigate, useParams } from "react-router-dom";
 import UpdateSalary from "./UpdateSalary";
 
-// Register ChartJS components globally, including Filler
 ChartJS.register(
   CategoryScale,
   LinearScale,
@@ -111,6 +110,15 @@ function DriverDetails() {
     }
   };
 
+  const handleDelete = async() =>{
+    try {
+      const response = await axios.delete(`https://fudar-dqqd.onrender.com/api/user/deleteStaff/${id}`);
+      navigate('/allDrivers')
+    } catch (error) {
+      console.log(error);
+    }
+  }
+
   const data = {
     labels: salary.map((item) => item.month),
     datasets: [
@@ -149,6 +157,12 @@ function DriverDetails() {
               className="inline-flex items-center px-4 py-2 border border-gray-300 rounded-md shadow-sm text-sm font-medium text-gray-700 hover:bg-gray-50 transition duration-150 ease-in-out"
             >
               Back
+            </button>
+            <button
+              onClick={handleDelete}
+              className="inline-flex items-center px-4 py-2 border border-gray-300 rounded-md shadow-sm text-sm font-medium text-red-700 hover:bg-gray-50 transition duration-150 ease-in-out"
+            >
+              Delete
             </button>
           </div>
 
