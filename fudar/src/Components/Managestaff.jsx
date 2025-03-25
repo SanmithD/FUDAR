@@ -51,10 +51,10 @@ const StaffList = () => {
             </tr>
           </thead>
           <tbody className="bg-white divide-y divide-gray-200">
-            {staff.map((member) => (
+            {staff.map((member,index) => (
               <tr key={member._id}>
                 <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-900">
-                  {member._id}
+                  {index+1}
                 </td>
                 <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-900">
                   {member.name}
