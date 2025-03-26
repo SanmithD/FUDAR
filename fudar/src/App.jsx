@@ -32,7 +32,7 @@ function App() {
       <Route path="/login" element={<Login />} />
       <Route path="/signup" element={<Signup />} />
       <Route path="/driverPage" element={<PDriver />} />
-      
+      <Route path="/main" element={<MainDashboard />} />
       <Route path="/" element={
         <ProtectedRoute>
           <Dashboard />
@@ -48,7 +48,7 @@ function App() {
         <Route path="/allDrivers" element={<DriversList />} />
         <Route path="/vehicleManage" element={<VehicleManagement />} />
         <Route path="/allVehicles" element={<AllVehicles />} />
-        <Route path="/main" element={<MainDashboard />} />
+        
        
       </Route>
     </Routes>
