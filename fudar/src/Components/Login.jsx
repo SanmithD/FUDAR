@@ -105,7 +105,7 @@ const Login = () => {
             {loading ? 'Logging in...' : 'Login'}
           </button>
         </form>
-        <div className="mt-4 absolute top-[370px] left-[75px] text-center">
+        <div className="mt-4 absolute top-[365px] left-[75px] text-center">
           <span className="text-gray-600">Don't have an account? </span>
           <Link to="/signup" className="text-gray-800 hover:text-gray-600 font-medium">
             Sign Up
