@@ -83,7 +83,7 @@ export default function Dashboard() {
       </div>
 
       {/* Sidebar */}
-      <div className={`fixed inset-y-0 left-0 w-64 bg-black shadow-lg z-30 transition-transform duration-300 ease-in-out md:translate-x-0 ${sidebarOpen ? 'translate-x-0' : '-translate-x-full'}`}>
+      <div className={`fixed inset-y-0 left-0 w-64 bg-green shadow-lg z-30 transition-transform duration-300 ease-in-out md:translate-x-0 ${sidebarOpen ? 'translate-x-0' : '-translate-x-full'}`}>
         <div className="flex flex-col h-full">
           <div className="p-4 flex justify-between items-center">
             <h2 className="text-xl font-bold text-white mb-6 mt-8">Staff Management</h2>

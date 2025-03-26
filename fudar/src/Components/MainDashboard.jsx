@@ -104,8 +104,8 @@ const MainDashboard = () => {
         {/* Sidebar */}
         <div
           className={`fixed inset-y-0 right-0 transform ${
-            isSidebarOpen ? "translate-x-0" : "translate-x-full"
-          } md:relative md:translate-x-0 w-64 bg-black text-white p-4 transition-transform duration-300 md:min-h-screen z-50`}
+            isSidebarOpen ? "translate-x--100" : "translate-x-full"
+          } md:relative md:translate-x-0 w-64 bg-green-400 text-white p-4 transition-transform duration-300 md:min-h-screen z-50`}
         >
           <div className="flex justify-between items-center mb-4 md:hidden">
             <h2 className="text-3xl font-bold">Fudar</h2>
@@ -116,32 +116,32 @@ const MainDashboard = () => {
 
           <h2 className="text-3xl font-bold mb-4 hidden md:block">Fudar</h2>
           <div className="ml-4 mt-2 space-y-2 h-[100%]">
-            <ul className="flex flex-col gap-6 p-4">
+            <ul className="flex flex-col gap-6 p-4 text-[24px]">
               <li 
-                className="flex items-center p-3 hover:bg-gray-500 rounded-md cursor-pointer" 
+                className="flex items-center p-3 gap-x-3 hover:bg-gray-500 rounded-md cursor-pointer" 
                 onClick={AddVehicles}
               >
                 <FaPlus size={30} className="mr-2" /> Add Vehicles
               </li>
               <li 
-                className="flex items-center p-3 hover:bg-gray-500 rounded-md cursor-pointer" 
+                className="flex items-center p-3 gap-x-3 hover:bg-gray-500 rounded-md cursor-pointer" 
                 onClick={AllVehicles}
               >
               <RiMotorbikeFill size={30}/> Manage Vehicles
               </li>
-              <li className="flex items-center p-3 text-white hover:bg-gray-500 rounded-md cursor-pointer transition-colors" onClick={ManageVehicles}>
+              <li className="flex items-center p-3 gap-x-3 text-white hover:bg-gray-500 rounded-md cursor-pointer transition-colors" onClick={ManageVehicles}>
               <MdDirectionsBike className="mr-2 text-white" size={30}/> Assign Riders
              
             </li>
               <li 
-                className="flex items-center p-3 hover:bg-gray-500 rounded-md cursor-pointer" 
+                className="flex items-center p-3 gap-x-3 hover:bg-gray-500 rounded-md cursor-pointer" 
                 onClick={Driver}
               >
                 <GiFullMotorcycleHelmet size={30} className="mr-2" /> Manage Riders
               </li>
               
               <li 
-                className="flex items-center p-3 hover:bg-gray-500 rounded-md cursor-pointer" 
+                className="flex items-center p-3 gap-x-3 hover:bg-gray-500 rounded-md cursor-pointer" 
                 onClick={allStaff}
               >
                 <FaPeopleGroup className="mr-2" size={30}/> Manage staff

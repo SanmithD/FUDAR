@@ -32,7 +32,7 @@ function App() {
       <Route path="/login" element={<Login />} />
       <Route path="/signup" element={<Signup />} />
       <Route path="/driverPage" element={<PDriver />} />
-      <Route path="/main" element={<MainDashboard />} />
+      
       <Route path="/" element={
         <ProtectedRoute>
           <Dashboard />
@@ -51,6 +51,23 @@ function App() {
         
        
       </Route>
+      <Route path="/main" element={
+      <ProtectedRoute>
+        <MainDashboard />
+      </ProtectedRoute>
+    }>
+      {/* Relative to /main */}
+      <Route path="DriverSignIn" element={<DriverSignIn />} />
+      <Route path="Register" element={<Register />} />
+      <Route path="driver" element={<Drivers />} />
+      <Route path="vehicles" element={<Vehicles />} />
+      <Route path="vehicle/:id" element={<VehicleDetail />} />
+      <Route path="newDriver" element={<DriverManagement />} />
+      <Route path="driverDetails/:id" element={<DriverDetails />} />
+      <Route path="allDrivers" element={<DriversList />} />
+      <Route path="vehicleManage" element={<VehicleManagement />} />
+      <Route path="allVehicles" element={<AllVehicles />} />
+    </Route>
     </Routes>
   );
 }
