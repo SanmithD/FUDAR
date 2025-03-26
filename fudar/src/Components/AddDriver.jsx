@@ -20,6 +20,7 @@ function AddDriver() {
                 onChange={(e) =>
                   setNewDriver({ ...newDriver, name: e.target.value })
                 }
+                 
                 className="w-full p-2 border border-gray-300 rounded-md"
               />
             </div>

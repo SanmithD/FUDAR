@@ -185,7 +185,7 @@ const DriverManagement = () => {
           {isEditing ? "Update Driver" : "Add New Driver"}
         </h2>
   
-        <form onSubmit={handleSubmit} className="space-y-6 md:p-20">
+        <form onSubmit={handleSubmit} className="space-y-6 md:p-20 ">
           <div className="grid grid-cols-1 md:grid-cols-2 gap-8">
             {/* Personal Info */}
             <div className="space-y-4">
@@ -197,6 +197,7 @@ const DriverManagement = () => {
                   value={formData.driverName}
                   onChange={handleInputChange}
                   className="w-full p-2 border border-black rounded focus:outline-none focus:ring-2 focus:ring-black"
+                  placeholder='Binod Kumar'
                   required
                 />
               </div>
@@ -219,6 +220,7 @@ const DriverManagement = () => {
                   value={formData.driverNumber.secondaryNumber}
                   onChange={handleInputChange}
                   className="w-full p-2 border border-black rounded focus:outline-none focus:ring-2 focus:ring-black"
+                  placeholder='0808563991'
                   required
                 />
               </div>
@@ -234,6 +236,7 @@ const DriverManagement = () => {
                   value={formData.driverBankNumber}
                   onChange={handleInputChange}
                   className="w-full p-2 border border-black rounded focus:outline-none focus:ring-2 focus:ring-black"
+                  placeholder='0808563991'
                   required
                 />
               </div>
@@ -245,17 +248,19 @@ const DriverManagement = () => {
                   value={formData.driverIFSC}
                   onChange={handleInputChange}
                   className="w-full p-2 border border-black rounded focus:outline-none focus:ring-2 focus:ring-black"
+                  placeholder="IBNPXXXX"
                   required
                 />
               </div>
               <div>
-                <label className="block text-sm font-medium mb-1">Bank Address</label>
+                <label className="block text-sm font-medium mb-1">Bank Name</label>
                 <input
                   type="text"
                   name="driverBankAddress"
                   value={formData.driverBankAddress}
                   onChange={handleInputChange}
                   className="w-full p-2 border border-black rounded focus:outline-none focus:ring-2 focus:ring-black"
+                  placeholder="XYZ Bank"
                   required
                 />
               </div>
@@ -275,7 +280,7 @@ const DriverManagement = () => {
                 <div key={fileType.name}>
                   <label className="block text-sm font-medium mb-1">{fileType.label}</label>
                   <div
-                    className="border-2 border-black rounded p-4 text-center hover:bg-gray-100 transition-colors cursor-pointer"
+                    className="border border-black h-[199px] relative rounded p-4 justify-center items-center  bg-[url('https://external-content.duckduckgo.com/iu/?u=https%3A%2F%2Fpng.pngtree.com%2Fpng-clipart%2F20230818%2Foriginal%2Fpngtree-upload-illustration-image-placeholder-vector-png-image_10479605.png&f=1&nofb=1&ipt=b4e61886430938d7e740459c8a7f68a8eb6f03d56398795f68ae85014682f9b2&ipo=images')] bg-cover bg-center bg-no-repeat text-white transition-colors cursor-pointer"
                     onDragOver={handleDragOver}
                     onDrop={(e) => handleDrop(e, fileType.name)}
                     onClick={() => document.getElementById(fileType.name)?.click()}
@@ -288,7 +293,8 @@ const DriverManagement = () => {
                       className="hidden"
                       required={!isEditing}
                     />
-                    <p className="text-sm">
+                   
+                    <p className="text-sm absolute top-[180px] text-black">
                       {files[fileType.name]
                         ? files[fileType.name].name
                         : "Drag & drop or click to upload"}
@@ -300,17 +306,17 @@ const DriverManagement = () => {
           </div>
   
           {/* Buttons */}
-          <div className="mt-8  flex flex-col sm:flex-row gap-4 justify-center">
+          <div className="mt-8   flex flex-row sm:flex-row gap-4 justify-center" style={{ marginTop: "20px", marginBottom:"20px"}}>
             <button
               type="submit"
-              className="w-full p-5 mt-4 sm:w-auto px-6 py-2 bg-black text-white rounded border border-black hover:bg-gray-800 transition-colors"
+              className="w-full h-[39px] p-5 mt-4 sm:w-auto px-6 py-2 bg-green-400 text-white rounded border border-black hover:bg-gray-800 transition-colors"
             >
               {isEditing ? "Update Driver" : "Add Driver"}
             </button>
             <button
               type="button"
               onClick={resetForm}
-              className="w-full sm:w-auto px-6 py-10 bg-white text-black rounded border border-black hover:bg-gray-200 transition-colors"
+              className="w-full h-[39px] sm:w-auto px-6 py-10 bg-red-500 text-white rounded border border-black hover:bg-gray-200 transition-colors"
             >
               Cancel
             </button>
@@ -320,7 +326,7 @@ const DriverManagement = () => {
         <div className="flex justify-center mt-6">
           <button
             onClick={() => navigate(-1)}
-            className="w-full sm:w-auto px-6 py-2 bg-white text-black rounded border border-black hover:bg-gray-200 transition-colors"
+            className="w-[200px] bg-black text-white h-[32px] px-6 py-2  rounded border border-black hover:bg-gray-200 transition-colors"
           >
             Back
           </button>
