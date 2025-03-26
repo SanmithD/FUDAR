@@ -1,7 +1,7 @@
 import React from 'react';
 import { Navigate, Route, Routes } from 'react-router-dom';
 import './App.css';
-import Admin from './Components/Admin.jsx';
+
 import AllVehicles from './Components/AllVehicles.jsx';
 import Dashboard from './Components/Dashboard.jsx';
 import DriverDetails from './Components/DriverDetails.jsx';
@@ -32,7 +32,6 @@ function App() {
       <Route path="/login" element={<Login />} />
       <Route path="/signup" element={<Signup />} />
       <Route path="/driverPage" element={<PDriver />} />
-      <Route path="/main" element={<MainDashboard />} />
       
       <Route path="/" element={
         <ProtectedRoute>
@@ -49,7 +48,8 @@ function App() {
         <Route path="/allDrivers" element={<DriversList />} />
         <Route path="/vehicleManage" element={<VehicleManagement />} />
         <Route path="/allVehicles" element={<AllVehicles />} />
-        <Route path="/admin" element={<Admin />} />
+        <Route path="/main" element={<MainDashboard />} />
+       
       </Route>
     </Routes>
   );

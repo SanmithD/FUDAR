@@ -50,9 +50,9 @@ const Login = () => {
   };
 
   return (
-    <div className="min-h-screen flex items-center justify-center bg-gray-100">
-      <div className="bg-white p-8 rounded-lg shadow-md w-96">
-        <h2 className="text-2xl font-bold text-gray-800 mb-6 text-center">Login</h2>
+    <div className="min-h-screen flex items-center justify-center bg-gray-100 overflow-x-hidden">
+      <div className="bg-white relative h-[390px] p-8 rounded-lg shadow-md w-96">
+        <h2 className="text-[32px] font-bold text-gray-800 mb-6 text-center">Login</h2>
         
         {error && (
           <div className="bg-red-100 border border-red-400 text-red-700 px-4 py-3 rounded mb-4">
@@ -60,7 +60,7 @@ const Login = () => {
           </div>
         )}
         
-        <form onSubmit={handleSubmit} className="space-y-4">
+        <form onSubmit={handleSubmit}>
           <div>
             <label className="block text-sm font-medium text-gray-700 mb-1">
               Phone Number
@@ -69,6 +69,7 @@ const Login = () => {
               type="tel"
               value={phoneNumber}
               onChange={(e) => setPhoneNumber(e.target.value)}
+              placeholder='0808563991'
               className="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-gray-400"
               required
             />
@@ -81,8 +82,8 @@ const Login = () => {
               type="password"
               value={password}
               onChange={(e) => setPassword(e.target.value)}
-              className="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-gray-400"
-              required
+              className="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-gray-400 "
+              placeholder='XXXXXX'
             />
           </div>
           {/* <div>
@@ -98,13 +99,13 @@ const Login = () => {
           </div> */}
           <button
             type="submit"
-            className="w-full bg-gray-800 text-white py-2 px-4 rounded-md hover:bg-gray-700 transition-colors"
+            className="w-[200px] bg-green-400 h-[32px] absolute left-[80px] text-white py-2 px-4 rounded-md hover:bg-gray-700 transition-colors"
             disabled={loading}
           >
             {loading ? 'Logging in...' : 'Login'}
           </button>
         </form>
-        <div className="mt-4 text-center">
+        <div className="mt-4 absolute top-[360px] left-[75px] text-center">
           <span className="text-gray-600">Don't have an account? </span>
           <Link to="/signup" className="text-gray-800 hover:text-gray-600 font-medium">
             Sign Up

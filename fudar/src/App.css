@@ -3,3 +3,12 @@
     padding: 0;
     box-sizing: border-box;
 }
+label {
+    font-size: 30px;
+}
+input
+{
+    height: 49px;
+    margin-top: 20px;
+    margin-bottom: 20px;
+}
